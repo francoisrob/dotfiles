@@ -63,7 +63,7 @@ local plugins = {
 
   -- To use a extras plugin
   -- { import = "custom.configs.extras.symbols-outline", },
-  { import = "custom.configs.extras.copilot" },
+  -- { import = "custom.configs.extras.copilot" },
   { import = "custom.configs.extras.trouble" },
   { import = "custom.configs.extras.vimbegood"}
 }

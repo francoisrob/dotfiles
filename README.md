@@ -1,6 +1,6 @@
 # Custom Git Config
 
-## zshrc
+## .zshrc
 
 ```bash
 ln -s $PWD/.zshrc ~/.zshrc
