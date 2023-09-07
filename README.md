@@ -17,3 +17,9 @@ ln -s $PWD/.gitconfig ~/.gitconfig
 ```bash
 ln -s $PWD/nvim.lua.custom ~/.config/nvim/lua/custom
 ```
+
+## .zimrc Config
+
+```bash
+ln -s $PWD/.zimrc ~/.zimrc
+```
