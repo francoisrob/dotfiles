@@ -23,3 +23,9 @@ ln -s $PWD/nvim.lua.custom ~/.config/nvim/lua/custom
 ```bash
 ln -s $PWD/.zimrc ~/.zimrc
 ```
+
+## kitty config
+
+```bash
+ln -s $PWD/kitty.conf ~/.config/kitty
+```
