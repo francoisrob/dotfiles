@@ -7,6 +7,15 @@ M.general = {
   },
 }
 
+M.dap = {
+  n = {
+    ["<leader>db"] = {
+      "<cmd> DapToggleBreakpoint <CR>",
+      "Toggle breakpoint"
+    },
+  }
+}
+
 -- Extras example
 -- M.symbols_outline = {
 --   n = {

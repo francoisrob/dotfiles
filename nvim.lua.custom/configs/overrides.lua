@@ -8,6 +8,7 @@ M.treesitter = {
     "css",
     "javascript",
     "typescript",
+    "rust",
     "tsx",
     "c",
     "markdown",
@@ -38,6 +39,9 @@ M.mason = {
     -- c/cpp stuff
     "clangd",
     "clang-format",
+
+    -- Rust stuff
+    "rust-analyzer",
   },
 }
 

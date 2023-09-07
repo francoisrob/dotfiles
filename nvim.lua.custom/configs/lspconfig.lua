@@ -1,10 +1,10 @@
 local on_attach = require("plugins.configs.lspconfig").on_attach
 local capabilities = require("plugins.configs.lspconfig").capabilities
-
-local lspconfig = require "lspconfig"
+local lspconfig = require("lspconfig")
+local util = require "lspconfig/util"
 
 -- if you just want default config for the servers then put them in a table
-local servers = { "html", "cssls", "clangd" }
+local servers = { "html", "cssls", "clangd", "tsserver" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -13,15 +13,15 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-lspconfig.tsserver.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  init_options = {
-    preferences = {
-      disableSuggestions = true,
-    }
-  }
-}
+-- lspconfig.tsserver.setup({
+  -- on_attach = on_attach,
+  -- capabilities = capabilities,
+  -- init_options = {
+    -- preferences = {
+      -- disableSuggestions = true,
+    -- }
+  -- }
+-- })
 
 -- 
 -- lspconfig.pyright.setup { blabla}
