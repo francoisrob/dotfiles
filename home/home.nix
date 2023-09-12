@@ -15,6 +15,7 @@
       })
       kitty
       lazygit
+      gh
       # dev
       nodejs
 
@@ -83,6 +84,7 @@
 
     sessionVariables = {
       EDITOR = "nvim";
+
     };
   };
 
@@ -90,4 +92,5 @@
   # services.dunst = {
     # enable = true;
   # };
+
 }
