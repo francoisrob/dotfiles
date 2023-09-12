@@ -13,6 +13,7 @@ M.treesitter = {
     "c",
     "markdown",
     "markdown_inline",
+    "nix",
   },
   indent = {
     enable = true,
@@ -42,6 +43,9 @@ M.mason = {
 
     -- Rust stuff
     "rust-analyzer",
+
+    -- Nix stuff
+    "nil",
   },
 }
 
