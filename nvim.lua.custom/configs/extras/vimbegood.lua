@@ -1,6 +1,7 @@
+---@type NvPluginSpec
 local spec = {
-  "ThePrimeagen/vim-be-good",
-  cmd = "VimBeGood",
+	"ThePrimeagen/vim-be-good",
+	cmd = "VimBeGood",
 }
 
 return spec
