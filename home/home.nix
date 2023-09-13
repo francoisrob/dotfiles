@@ -9,10 +9,11 @@
     packages = with pkgs; [
       firefox
       btop
-      (pkgs.discord.override {
-        withOpenASAR = true;
-        withVencord = true;
-      })
+      # (pkgs.discord.override {
+      #   withOpenASAR = true;
+      #   withVencord = true;
+      # })
+      webcord-vencord
       kitty
       lazygit
       gh
