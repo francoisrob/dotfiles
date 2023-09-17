@@ -1,5 +1,5 @@
 ---@type NvPluginSpec
-local spec = {
+return {
 	"rcarriga/nvim-notify",
 	event = "VeryLazy",
 	config = function()
@@ -25,5 +25,3 @@ local spec = {
 		})
 	end,
 }
-
-return spec

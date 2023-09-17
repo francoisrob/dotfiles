@@ -5,133 +5,133 @@ if not present then
 end
 
 noice.setup({
-	cmdline = {
-		enabled = true,
-		view = "cmdline_popup",
-		format = {
-			-- cmdline = { pattern = "^:", icon = "󰘳 ", lang = "vim" },
-			-- search_down = { kind = "search", pattern = "^/", icon = "󰩊 ", lang = "regex" },
-			-- search_up = { kind = "search", pattern = "^%?", icon = "󰩊 ", lang = "regex" },
-			-- filter = { pattern = "^:%s*!", icon = "󰻿 ", lang = "bash" },
-			lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
-			help = { pattern = "^:%s*he?l?p?%s+", icon = "󰞋 " },
-		},
-	},
-	popupmenu = {
-		enabled = true, -- enables the Noice popupmenu UI
-		backend = "cmp", -- backend to use to show regular cmdline completions
-	},
-	routes = {
-		{
-			filter = {
-				event = "lsp",
-				any = {
-					{ find = "formatting" },
-					{ find = "Diagnosing" },
-					{ find = "Diagnostics" },
-					{ find = "diagnostics" },
-					{ find = "code_action" },
-					{ find = "Processing full semantic tokens" },
-					{ find = "symbols" },
-					{ find = "completion" },
-				},
-			},
-			opts = { skip = true },
-		},
-		{
-			filter = {
-				event = "notify",
-				any = {
-					-- Neo-tree
-					{ find = "Toggling hidden files: true" },
-					{ find = "Toggling hidden files: false" },
-					{ find = "Operation canceled" },
+	-- cmdline = {
+	-- 	enabled = true,
+	-- 	view = "cmdline_popup",
+	-- 	format = {
+	-- 		-- cmdline = { pattern = "^:", icon = "󰘳 ", lang = "vim" },
+	-- 		-- search_down = { kind = "search", pattern = "^/", icon = "󰩊 ", lang = "regex" },
+	-- 		-- search_up = { kind = "search", pattern = "^%?", icon = "󰩊 ", lang = "regex" },
+	-- 		-- filter = { pattern = "^:%s*!", icon = "󰻿 ", lang = "bash" },
+	-- 		lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
+	-- 		help = { pattern = "^:%s*he?l?p?%s+", icon = "󰞋 " },
+	-- 	},
+	-- },
+	-- popupmenu = {
+	-- 	enabled = true, -- enables the Noice popupmenu UI
+	-- 	backend = "cmp", -- backend to use to show regular cmdline completions
+	-- },
+	-- routes = {
+	-- 	{
+	-- 		filter = {
+	-- 			event = "lsp",
+	-- 			any = {
+	-- 				{ find = "formatting" },
+	-- 				{ find = "Diagnosing" },
+	-- 				{ find = "Diagnostics" },
+	-- 				{ find = "diagnostics" },
+	-- 				{ find = "code_action" },
+	-- 				{ find = "Processing full semantic tokens" },
+	-- 				{ find = "symbols" },
+	-- 				{ find = "completion" },
+	-- 			},
+	-- 		},
+	-- 		opts = { skip = true },
+	-- 	},
+	-- 	{
+	-- 		filter = {
+	-- 			event = "notify",
+	-- 			any = {
+	-- 				-- Neo-tree
+	-- 				{ find = "Toggling hidden files: true" },
+	-- 				{ find = "Toggling hidden files: false" },
+	-- 				{ find = "Operation canceled" },
 
-					-- Telescope
-					{ find = "Nothing currently selected" },
-					{ find = "No information available" },
-					{ find = "Highlight group" },
-					{ find = "no manual entry for" },
-					{ find = "not have parser for" },
+	-- 				-- Telescope
+	-- 				{ find = "Nothing currently selected" },
+	-- 				{ find = "No information available" },
+	-- 				{ find = "Highlight group" },
+	-- 				{ find = "no manual entry for" },
+	-- 				{ find = "not have parser for" },
 
-					-- ts
-					{ find = "_ts_parse_query" },
-				},
-			},
-			opts = { skip = true },
-		},
-		{
-			filter = {
-				event = "msg_show",
-				kind = "",
-				any = {
+	-- 				-- ts
+	-- 				{ find = "_ts_parse_query" },
+	-- 			},
+	-- 		},
+	-- 		opts = { skip = true },
+	-- 	},
+	-- 	{
+	-- 		filter = {
+	-- 			event = "msg_show",
+	-- 			kind = "",
+	-- 			any = {
 
-					-- Edit
-					{ find = "%d+ less lines" },
-					{ find = "%d+ fewer lines" },
-					{ find = "%d+ more lines" },
-					{ find = "%d+ change;" },
-					{ find = "%d+ line less;" },
-					{ find = "%d+ more lines?;" },
-					{ find = "%d+ fewer lines;?" },
-					{ find = '".+" %d+L, %d+B' },
-					{ find = "%d+ lines yanked" },
+	-- 				-- Edit
+	-- 				{ find = "%d+ less lines" },
+	-- 				{ find = "%d+ fewer lines" },
+	-- 				{ find = "%d+ more lines" },
+	-- 				{ find = "%d+ change;" },
+	-- 				{ find = "%d+ line less;" },
+	-- 				{ find = "%d+ more lines?;" },
+	-- 				{ find = "%d+ fewer lines;?" },
+	-- 				{ find = '".+" %d+L, %d+B' },
+	-- 				{ find = "%d+ lines yanked" },
 
-					-- Save
-					{ find = " bytes written" },
+	-- 				-- Save
+	-- 				{ find = " bytes written" },
 
-					-- Redo/Undo
-					{ find = " changes; before #" },
-					{ find = " changes; after #" },
-					{ find = "1 change; before #" },
-					{ find = "1 change; after #" },
+	-- 				-- Redo/Undo
+	-- 				{ find = " changes; before #" },
+	-- 				{ find = " changes; after #" },
+	-- 				{ find = "1 change; before #" },
+	-- 				{ find = "1 change; after #" },
 
-					-- Yank
-					{ find = " lines yanked" },
+	-- 				-- Yank
+	-- 				{ find = " lines yanked" },
 
-					-- Move lines
-					{ find = " lines moved" },
-					{ find = " lines indented" },
+	-- 				-- Move lines
+	-- 				{ find = " lines moved" },
+	-- 				{ find = " lines indented" },
 
-					-- Bulk edit
-					{ find = " fewer lines" },
-					{ find = " more lines" },
-					{ find = "1 more line" },
-					{ find = "1 line less" },
+	-- 				-- Bulk edit
+	-- 				{ find = " fewer lines" },
+	-- 				{ find = " more lines" },
+	-- 				{ find = "1 more line" },
+	-- 				{ find = "1 line less" },
 
-					-- General messages
-					{ find = "Already at newest change" },
-					{ find = "Already at oldest change" },
-					{ find = "E21: Cannot make changes, 'modifiable' is off" },
-				},
-			},
-			opts = { skip = true },
-		},
-	},
+	-- 				-- General messages
+	-- 				{ find = "Already at newest change" },
+	-- 				{ find = "Already at oldest change" },
+	-- 				{ find = "E21: Cannot make changes, 'modifiable' is off" },
+	-- 			},
+	-- 		},
+	-- 		opts = { skip = true },
+	-- 	},
+	-- },
 	lsp = {
 		progress = {
-			enabled = false,
-		},
-		signature = {
 			enabled = true,
-			auto_open = {
-				enabled = true,
-				trigger = true,
-				luasnip = true,
-				throttle = 50,
-			},
-			view = nil, -- when nil, use defaults from documentation
-			opts = {
-				focusable = false,
-				size = {
-					max_height = 15,
-					max_width = 60,
-				},
-				win_options = {
-					wrap = false,
-				},
-			},
 		},
+		-- signature = {
+		-- 	enabled = true,
+		-- 	auto_open = {
+		-- 		enabled = true,
+		-- 		trigger = true,
+		-- 		luasnip = true,
+		-- 		throttle = 50,
+		-- 	},
+		-- 	view = nil, -- when nil, use defaults from documentation
+		-- 	opts = {
+		-- 		focusable = false,
+		-- 		size = {
+		-- 			max_height = 15,
+		-- 			max_width = 60,
+		-- 		},
+		-- 		win_options = {
+		-- 			wrap = false,
+		-- 		},
+		-- 	},
+		-- },
 		documentation = {
 			opts = {
 				border = {

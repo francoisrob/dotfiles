@@ -1,33 +1,33 @@
 
 ## The following lines were added by compinstall
 ####
-zstyle ':completion:*' completer _complete _ignored _approximate
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' max-errors 1
-zstyle ':completion:*' menu select=1
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle :compinstall filename '/home/francois/.zshrc'
+# zstyle ':completion:*' completer _complete _ignored _approximate
+# zstyle ':completion:*' list-colors ''
+# zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+# zstyle ':completion:*' max-errors 1
+# zstyle ':completion:*' menu select=1
+# zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+# zstyle :compinstall filename '/home/francois/.zshrc'
 
-autoload -Uz compinit
+autoload -Uz compinit promptinit
 compinit
+promptinit
+prompt off
 ####
 
-setopt HIST_IGNORE_ALL_DUPS
-bindkey -e
-WORDCHARS=${WORDCHARS//[\/]}
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+# setopt HIST_IGNORE_ALL_DUPS
+# bindkey -e
+# WORDCHARS=${WORDCHARS//[\/]}
+# ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+# ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
-autoload -Uz compinit
-compinit
 HISTFILE=~/.bash_history
 HISTSIZE=1000
 SAVEHIST=1000
-bindkey -v
+# bindkey -v
 
-## Custom
-####
+# Custom
+###
 alias ls='ls --color=auto'
 alias la='ls -a'
 alias ll='ls -alFh'
@@ -46,7 +46,7 @@ alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 alias jctl="journalctl -p 3 -xb"
 
 ## List which processes are using sound
-alias  ls_sound="lsof /dev/snd/*" 
+alias ls_sound="lsof /dev/snd/*" 
 alias rmgitcache="rm -r ~/.cache/git"
 
 ## Miscelaneous Alias

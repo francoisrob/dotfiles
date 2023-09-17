@@ -5,6 +5,7 @@ return {
 	------------------------Override Plugins------------------------
 	{
 		"neovim/nvim-lspconfig",
+		event = "VeryLazy",
 		dependencies = {
 			{
 				"jose-elias-alvarez/null-ls.nvim",
@@ -134,6 +135,12 @@ return {
 		end,
 	},
 	{
+		"numToStr/Comment.nvim",
+		opts = {
+			ignore = "^$",
+		},
+	},
+	{
 		"karb94/neoscroll.nvim",
 		keys = { "<C-d>", "<C-u>" },
 		config = function()
@@ -222,9 +229,24 @@ return {
 			"MunifTanjim/nui.nvim",
 			"rcarriga/nvim-notify",
 		},
-		-- config = function()
-		--   require "custom.configs.noice"
-		-- end,
+		config = function()
+			require("custom.configs.noice")
+		end,
+	},
+	{
+		"rcarriga/nvim-notify",
+		event = "VeryLazy",
+		config = function()
+			dofile(vim.g.base46_cache .. "notify")
+			local notify = require("notify")
+			vim.notify = notify
+			notify.setup({
+				minimum_width = 15,
+				render = "compact",
+				timeout = 2000,
+				animate = true,
+			})
+		end,
 	},
 	{
 		"folke/todo-comments.nvim",
@@ -248,13 +270,6 @@ return {
 		-- config = function()
 		-- 	require("telescope").load_extension("ui-select")
 		-- end,
-	},
-	{
-		"rainbowhxch/beacon.nvim",
-		event = "CursorMoved",
-		cond = function()
-			return not vim.g.neovide
-		end,
 	},
 	{
 		"kdheepak/lazygit.nvim",

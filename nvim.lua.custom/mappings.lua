@@ -1,28 +1,17 @@
 ---@type MappingsTable
-local M = {}
+return {
+	general = {
+		n = {
+			[";"] = { ":", "enter command mode", opts = { nowait = true } },
+		},
+	},
 
-M.general = {
-  n = {
-    [";"] = { ":", "enter command mode", opts = { nowait = true } },
-  },
+	dap = {
+		n = {
+			["<leader>db"] = {
+				"<cmd> DapToggleBreakpoint <CR>",
+				"Toggle breakpoint",
+			},
+		},
+	},
 }
-
-M.dap = {
-  n = {
-    ["<leader>db"] = {
-      "<cmd> DapToggleBreakpoint <CR>",
-      "Toggle breakpoint"
-    },
-  }
-}
-
--- Extras example
--- M.symbols_outline = {
---   n = {
---     ["<leader>cs"] = { "<cmd>SymbolsOutline<cr>", "Symbols Outline" },
---   },
--- }
-
--- more keybinds!
-
-return M
