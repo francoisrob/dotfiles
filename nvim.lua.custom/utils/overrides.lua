@@ -126,7 +126,7 @@ return {
 
 	nvterm = {
 		terminals = {
-			shell = vim.o.shell,
+			shell = "fish",
 			list = {},
 			type_opts = {
 				float = {
