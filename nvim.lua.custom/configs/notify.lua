@@ -20,7 +20,7 @@ local spec = {
 			render = "minimal",
 			stages = "fade",
 			timeout = 2000,
-			top_down = true,
+			-- top_down = true,
 			animate = true,
 		})
 	end,

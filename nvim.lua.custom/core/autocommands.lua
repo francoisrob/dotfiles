@@ -3,6 +3,8 @@ local create_cmd = vim.api.nvim_create_user_command
 local g = vim.g
 local cmd = vim.cmd
 
+g.loaded_netrw = 1
+g.loaded_netrwPlugin = 1
 g.autosave = true
 
 autocmd({ "InsertLeave" }, {

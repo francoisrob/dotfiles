@@ -1,20 +1,23 @@
+local highlights = require("custom.utils.highlights")
+local core = require("custom.utils.core")
+
 ---@type ChadrcConfig
-local M = {}
+local M = {
+	ui = {
+		theme = "catppuccin",
+		theme_toggle = { "catppuccin", "mountain" },
+		nvdash = core.nvdash,
 
--- Path to overriding theme and highlights files
-local highlights = require("custom.highlights")
-
-M.ui = {
-	theme = "catppuccin",
-	theme_toggle = { "catppuccin", "mountain" },
-
-	hl_override = highlights.override,
-	hl_add = highlights.add,
+		hl_override = highlights.override,
+		hl_add = highlights.add,
+	},
+	-- plugins = "custom.plugins",
+	plugins = "custom.plugins",
+	mappings = require("custom.mappings"),
 }
 
-M.plugins = "custom.plugins"
+-- Path to overriding theme and highlights files
 
 -- check core.mappings for table structure
-M.mappings = require("custom.mappings")
 
 return M
