@@ -1,4 +1,3 @@
----@type MappingsTable
 return {
 	general = {
 		n = {

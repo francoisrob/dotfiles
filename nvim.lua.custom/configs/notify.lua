@@ -1,27 +1,16 @@
----@type NvPluginSpec
-return {
-	"rcarriga/nvim-notify",
-	event = "VeryLazy",
-	config = function()
-		-- dofile(vim.g.base46_cache .. "notify")
-		local notify = require("notify")
-		vim.notify = notify
-		print = function(...)
-			local print_safe_args = {}
-			local _ = { ... }
-			for i = 1, #_ do
-				table.insert(print_safe_args, tostring(_[i]))
-			end
-			notify(table.concat(print_safe_args, " "), "info")
-		end
-		notify.setup({
-			level = 2,
-			minimum_width = 15,
-			render = "minimal",
-			stages = "fade",
-			timeout = 2000,
-			-- top_down = true,
-			animate = true,
-		})
-	end,
+local present, notify = pcall(require, "notify")
+if not present then
+  return
+end
+
+dofile(vim.g.base46_cache .. "notify")
+vim.notify = notify
+notify.setup {
+  render = "minimal",
+  stages = "fade_in_slide_out",
+  timeout = 2000,
+  top_down = true,
+  max_width = 300,
+  max_height = 500,
+  animate = true,
 }

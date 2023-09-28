@@ -3,37 +3,66 @@ local overrides = require("custom.utils.overrides")
 ---@type NvPluginSpec[]
 return {
 	------------------------Override Plugins------------------------
+	-- {
+	--   "neovim/nvim-lspconfig",
+	--   dependencies = {
+	--     {
+	--       "nvimtools/none-ls.nvim",
+	--       config = function()
+	--         require "custom.configs.null-ls"
+	--       end,
+	--     },
+	--     {
+	--       "williamboman/mason.nvim",
+	--       opts = overrides.mason,
+	--     },
+	--     "williamboman/mason-lspconfig.nvim",
+	--     {
+	--       "folke/neodev.nvim",
+	--     },
+	--     "pmizio/typescript-tools.nvim",
+	--   },
+
+	--   config = function()
+	--     require "plugins.configs.lspconfig"
+	--     require "custom.configs.lspconfig"
+	--   end,
+	-- },
+	{
+		"jose-elias-alvarez/null-ls.nvim",
+		enabled = false,
+	},
 	{
 		"neovim/nvim-lspconfig",
-		event = "VeryLazy",
 		dependencies = {
 			{
-				"jose-elias-alvarez/null-ls.nvim",
+				"folke/neodev.nvim",
+				config = function()
+					require("neodev").setup({})
+				end,
+			},
+			"pmizio/typescript-tools.nvim",
+			{
+				"nvimtools/none-ls.nvim",
 				config = function()
 					require("custom.configs.null-ls")
 				end,
 			},
-			{
-				"williamboman/mason.nvim",
-				opts = overrides.mason,
-				-- config = function(_, opts)
-				-- 	dofile(vim.g.base46_cache .. "mason")
-				-- 	dofile(vim.g.base46_cache .. "lsp")
-				-- 	require("mason").setup(opts)
-				-- 	-- vim.api.nvim_create_user_command("MasonInstallAll", function()
-				-- 	-- 	vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
-				-- 	-- end, {})
-				-- 	require("custom.configs.lspconfig")
-				-- end,
-			},
-			"williamboman/mason-lspconfig.nvim",
-			{ "folke/neodev.nvim", opts = {} },
 		},
+
 		config = function()
 			require("plugins.configs.lspconfig")
 			require("custom.configs.lspconfig")
 		end,
 	},
+
+	{
+		"stevearc/conform.nvim",
+		config = function()
+			require("custom.configs.conform")
+		end,
+	},
+
 	{
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = {
@@ -54,6 +83,10 @@ return {
 			},
 		},
 		opts = overrides.treesitter,
+	},
+	{
+		"williamboman/mason.nvim",
+		opts = overrides.mason,
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
@@ -112,26 +145,17 @@ return {
 			"js-everts/cmp-tailwind-colors",
 			{
 				"L3MON4D3/LuaSnip",
-				-- config = function(_, opts)
-				-- require("plugins.configs.others").luasnip(opts)
-				-- require("custom.configs.luasnip")
-				-- end,
+				config = function(_, opts)
+					require("plugins.configs.others").luasnip(opts)
+					local luasnip = require("luasnip")
+					luasnip.filetype_extend("javascriptreact", { "html" })
+					luasnip.filetype_extend("typescriptreact", { "html" })
+					require("luasnip/loaders/from_vscode").lazy_load()
+				end,
 			},
 		},
 		config = function(_, opts)
-			dofile(vim.g.base46_cache .. "cmp")
-			local format_kinds = opts.formatting.format
-			opts.formatting.format = function(entry, item)
-				if item.kind == "Color" then
-					item = require("cmp-tailwind-colors").format(entry, item)
-					if item.kind == "Color" then
-						return format_kinds(entry, item)
-					end
-					return item
-				end
-				return format_kinds(entry, item)
-			end
-			require("cmp").setup(opts)
+			require("custom.configs.nvim-cmp")(opts)
 		end,
 	},
 	{
@@ -144,18 +168,15 @@ return {
 		"karb94/neoscroll.nvim",
 		keys = { "<C-d>", "<C-u>" },
 		config = function()
-			require("neoscroll").setup({ mappings = {
-				"<C-u>",
-				"<C-d>",
-			} })
+			require("neoscroll").setup()
 		end,
 	},
 	{
 		"code-biscuits/nvim-biscuits",
 		event = "LspAttach",
-		-- config = function()
-		-- 	require("custom.configs.biscuits")
-		-- end,
+		config = function()
+			require("custom.configs.biscuits")
+		end,
 	},
 	{
 		"rainbowhxch/accelerated-jk.nvim",
@@ -227,25 +248,16 @@ return {
 		event = "VeryLazy",
 		dependencies = {
 			"MunifTanjim/nui.nvim",
-			"rcarriga/nvim-notify",
+			{
+				"rcarriga/nvim-notify",
+				event = "VeryLazy",
+				config = function()
+					require("custom.configs.notify")
+				end,
+			},
 		},
 		config = function()
 			require("custom.configs.noice")
-		end,
-	},
-	{
-		"rcarriga/nvim-notify",
-		event = "VeryLazy",
-		config = function()
-			dofile(vim.g.base46_cache .. "notify")
-			local notify = require("notify")
-			vim.notify = notify
-			notify.setup({
-				minimum_width = 15,
-				render = "compact",
-				timeout = 2000,
-				animate = true,
-			})
 		end,
 	},
 	{
@@ -256,12 +268,19 @@ return {
 		--   dofile(vim.g.base46_cache .. "todo")
 		-- end,
 	},
+	-- {
+	--   "folke/trouble.nvim",
+	--   cmd = { "TroubleToggle", "Trouble" },
+	--   config = function()
+	--     -- require "custom.configs.trouble"
+	--     dofile(vim.g.base46_cache .. "trouble")
+	--   end,
+	-- },
 	{
 		"folke/trouble.nvim",
 		cmd = { "TroubleToggle", "Trouble" },
 		config = function()
-			-- require "custom.configs.trouble"
-			dofile(vim.g.base46_cache .. "trouble")
+			require("trouble").setup()
 		end,
 	},
 	{
@@ -303,14 +322,17 @@ return {
 	},
 	{
 		"VidocqH/lsp-lens.nvim",
-	},
-	{
-		"dnlhc/glance.nvim",
-		cmd = "Glance",
 		config = function()
-			require("glance").setup({})
+			require("lsp-lens").setup()
 		end,
 	},
+	-- {
+	--   "dnlhc/glance.nvim",
+	--   cmd = "Glance",
+	--   config = function()
+	--     require("glance").setup {}
+	--   end,
+	-- },
 
 	------------------------Language Plugins------------------------
 	{
@@ -330,20 +352,20 @@ return {
 			package_manager = "npm",
 		},
 	},
-	{
-		"toppair/peek.nvim",
-		build = "deno task --quiet build:fast",
-		ft = { "markdown", "vimwiki" },
-		config = function()
-			require("peek").setup({
-				autoload = true,
-				close_on_bdelete = true,
-				app = "webview",
-				theme = "dark",
-				filetype = { "markdown" },
-			})
-		end,
-	},
+	-- {
+	-- 	"toppair/peek.nvim",
+	-- 	build = "deno task --quiet build:fast",
+	-- 	ft = { "markdown", "vimwiki" },
+	-- 	config = function()
+	-- 		require("peek").setup({
+	-- 			autoload = true,
+	-- 			close_on_bdelete = true,
+	-- 			app = "webview",
+	-- 			theme = "dark",
+	-- 			filetype = { "markdown" },
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		"dmmulroy/tsc.nvim",
 		cmd = { "TSC" },
@@ -378,25 +400,24 @@ return {
 			require("refactoring").setup()
 		end,
 	},
-
-	{
-		"rust-lang/rust.vim",
-		ft = "rust",
-		init = function()
-			vim.g.rustfmt_autosave = 1
-		end,
-	},
-	{
-		"simrat39/rust-tools.nvim",
-		ft = "rust",
-		dependencies = "neovim/nvim-lspconfig",
-		opts = function()
-			require("custom.configs.rust-tools")
-		end,
-		config = function(_, opts)
-			require("rust-tools").setup(opts)
-		end,
-	},
+	-- {
+	-- 	"rust-lang/rust.vim",
+	-- 	ft = "rust",
+	-- 	init = function()
+	-- 		vim.g.rustfmt_autosave = 1
+	-- 	end,
+	-- },
+	-- {
+	-- 	"simrat39/rust-tools.nvim",
+	-- 	ft = "rust",
+	-- 	dependencies = "neovim/nvim-lspconfig",
+	-- 	opts = function()
+	-- 		require("custom.configs.rust-tools")
+	-- 	end,
+	-- 	config = function(_, opts)
+	-- 		require("rust-tools").setup(opts)
+	-- 	end,
+	-- },
 
 	------------------------WIP------------------------
 	-- {

@@ -14,7 +14,7 @@ autocmd({ "InsertLeave" }, {
 			vim.notify(string.format(" File autosaved at %s", os.date("%I:%M:%S %p")), 2, {
 				title = "Autosave",
 				on_open = function()
-					cmd("silent w")
+					cmd("noautocmd w")
 				end,
 			})
 		end
