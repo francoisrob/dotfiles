@@ -3,31 +3,6 @@ local overrides = require("custom.utils.overrides")
 ---@type NvPluginSpec[]
 return {
 	------------------------Override Plugins------------------------
-	-- {
-	--   "neovim/nvim-lspconfig",
-	--   dependencies = {
-	--     {
-	--       "nvimtools/none-ls.nvim",
-	--       config = function()
-	--         require "custom.configs.null-ls"
-	--       end,
-	--     },
-	--     {
-	--       "williamboman/mason.nvim",
-	--       opts = overrides.mason,
-	--     },
-	--     "williamboman/mason-lspconfig.nvim",
-	--     {
-	--       "folke/neodev.nvim",
-	--     },
-	--     "pmizio/typescript-tools.nvim",
-	--   },
-
-	--   config = function()
-	--     require "plugins.configs.lspconfig"
-	--     require "custom.configs.lspconfig"
-	--   end,
-	-- },
 	{
 		"jose-elias-alvarez/null-ls.nvim",
 		enabled = false,
@@ -36,18 +11,18 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			{
-				"folke/neodev.nvim",
-				config = function()
-					require("neodev").setup({})
-				end,
-			},
-			"pmizio/typescript-tools.nvim",
-			{
 				"nvimtools/none-ls.nvim",
 				config = function()
 					require("custom.configs.null-ls")
 				end,
 			},
+			-- {
+			-- 	"folke/neodev.nvim",
+			-- 	config = function()
+			-- 		require("neodev").setup({})
+			-- 	end,
+			-- },
+			"pmizio/typescript-tools.nvim",
 		},
 
 		config = function()
