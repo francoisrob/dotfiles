@@ -13,3 +13,4 @@ set PATH $HOME/.local/bin $HOME/bin $HOME/go/bin $DENO_INSTALL/bin $PATH
 # if status is-interactive
 #     # Commands to run in interactive sessions can go here
 # end
+starship init fish | source
