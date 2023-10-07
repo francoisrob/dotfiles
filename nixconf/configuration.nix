@@ -11,14 +11,11 @@
     ];
 
   # Bootloader.
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-  };
-  
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -26,14 +23,9 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking = {
-    hostName = "nixos"; # Define your hostname.
-    wireless.iwd.enable = true;
-    networkmanager = {
-      enable = true;
-      wifi.backend = "iwd";
-    };
-  };
+  networking.wireless.iwd.enable = true;
+  networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
 
   # Set your time zone.
   time.timeZone = "Africa/Johannesburg";
@@ -48,24 +40,15 @@
   #};
 
   # Configure console keymap
-  console = {  
-    keyMap = "us";
-    font = "Lat2-Terminus16";
-  };
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users = {
-    defaultUserShell = pkgs.fish;
-    users.francois = {
-      isNormalUser = true;
-      description = "Francois";
-      extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner"];
-      packages = with pkgs; [];
-    };
-  };
+  console.keyMap = "us";
+  console.font = "Lat2-Terminus16";
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.francois = {
+    isNormalUser = true;
+    description = "Francois";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [];
   };
 
   # Allow unfree packages
@@ -89,16 +72,11 @@
   #  wget
   git
   dunst
-  libnotify
   unzip
   wget
   python3
   gcc
-  ripgrep
-  wayland
   cargo
-  cliphist
-  stow
   ];
 
   environment.sessionVariables = {
@@ -112,36 +90,31 @@
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.  
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
   programs = {
-    mtr.enable = true;
     hyprland = {
       enable = true;
-      enableNvidiaPatches = true;
       xwayland.enable = true;
-    };
-    neovim = {
-      enable = true;
-      defaultEditor = true;
     };
     light.enable = true;
     fish.enable = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
   };
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; })
+    (nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; });
   ];
+
+  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   hardware = {
     opengl.enable = true;
-    nvidia.modesetting.enable = true;
   };
 
   services = {
@@ -152,12 +125,6 @@
         defaultSession = "hyprland";
       };
     };
-    pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        jack.enable = true;
-      };
   };
 
   sound.enable = true;
@@ -174,11 +141,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system = {
-    autoUpgrade = {
-      enable = true;
-      channel = "https://nixos.org/channel/nixos-unstable";
-    };
-    stateVersion = "23.05"; # Did you read the comment?
-  };
+  system.stateVersion = "23.05"; # Did you read the comment?
+
 }
