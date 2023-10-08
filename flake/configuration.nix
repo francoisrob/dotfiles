@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ ... }:
 # let
 
   # packages = pkgs.callPackage ./packages { inherit inputs; };

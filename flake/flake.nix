@@ -55,7 +55,6 @@
                   backupFileExtension = "home-manager-backup";
                   users.francois = import ./home/home.nix ;
                   extraSpecialArgs = {
-                      isNvidia = true;
                       inherit hyprland;
                       inherit inputs;
                     };
