@@ -7,7 +7,8 @@ return {
         ensure_installed = {
             "stylua",
             "shfmt",
-            "codelldb"
+            "codelldb",
+            "nil"
             -- "flake8",
         },
     },

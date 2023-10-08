@@ -7,58 +7,24 @@
     stateVersion = "23.05";
 
     packages = with pkgs; [
-      firefox
       btop
       webcord-vencord
       kitty
       lazygit
       gh
+      stylua
       lf
       starship
       nodejs
       rofi-wayland
       swww
+      neofetch
+      slack
       networkmanagerapplet
-      wl-clipboard
-      
       (waybar.overrideAttrs (oldAttrs: {
         mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
        })
       )
-
-    # #User Apps
-    # celluloid
-    # discord
-    # librewolf
-    # cool-retro-term
-    # bibata-cursors
-    # vscode
-    # lollypop
-    #
-    # #utils
-    # ranger
-    # wlr-randr
-    # gnumake
-    # catimg
-    # curl
-    # appimage-run
-    # xflux
-    # dunst
-    # pavucontrol
-
-    # cava
-    # neovim
-    # nano
-    # rofi
-    # nitch
-    # wget
-    # grim
-    # slurp
-    # pamixer
-    # mpc-cli
-    # tty-clock
-    # exa
-    # btop
     ];
 
     file = {
@@ -75,13 +41,18 @@
 
     sessionVariables = {
       EDITOR = "nvim";
-
     };
   };
 
   programs.home-manager.enable = true;
   # services.dunst = {
-    # enable = true;
+  #   enable = true;
   # };
-
+  # wayland.windowManager.sway = {
+  #     enable = true;
+  #     config = rec {
+  #         modifier = "Mod4";
+  #         terminal = "kitty";
+  #       };
+  #   };
 }

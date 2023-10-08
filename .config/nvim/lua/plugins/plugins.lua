@@ -3,4 +3,8 @@ return {
   { "nvim-tree/nvim-web-devicons", lazy = true },
   { "theHamsta/nvim-dap-virtual-text", opts = {} },
   { "MunifTanjim/nui.nvim" },
+	{
+		"kdheepak/lazygit.nvim",
+		cmd = "LazyGit",
+	},
 }
