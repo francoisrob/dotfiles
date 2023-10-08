@@ -135,11 +135,6 @@
       enableSSHSupport = true;
     };
   };
-
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "DroidSansMono" ]; })
-  ];
-
   hardware = {
     opengl.enable = true;
     nvidia.modesetting.enable = true;
