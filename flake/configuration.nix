@@ -1,15 +1,6 @@
 { ... }:
-# let
-
-  # packages = pkgs.callPackage ./packages { inherit inputs; };
-
-# in
 {
   imports = [
-    # ./nix
-
-    # ./system
-    # ./system/audio.nix
     ./system/desktop.nix
     ./system/fonts.nix
     # ./system/keyboard.nix

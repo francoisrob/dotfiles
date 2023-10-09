@@ -16,10 +16,6 @@
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
-      # pkgs = import nixpkgs {
-      #   inherit system;
-      #   config.allowUnfree = true;
-      # };
       overlays = {
         unstable = import nixpkgs-unstable {
           system = system;
