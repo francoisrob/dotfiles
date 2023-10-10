@@ -4,7 +4,7 @@
 swww init &
 
 # set wallpaper
-swww img ~/Wallpapers/mountain.jpg &
+swww img ~/Wallpapers/mocha_mountain.jpg &
 # NetworkManager Applet
 nm-applet --indicator &
 blueman-tray &
