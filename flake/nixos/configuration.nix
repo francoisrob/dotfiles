@@ -66,7 +66,6 @@
     systemPackages = with pkgs; [
       wayland
       vim
-      git
       udiskie
       libnotify
       unzip

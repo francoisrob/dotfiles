@@ -46,5 +46,11 @@
       font = "Fira Code Normal 9";
     };
   };
-  programs.home-manager.enable = true;
+  programs = {
+    git = {
+      enable = true;
+      lfs.enable = true;
+    };
+    home-manager.enable = true;
+  };
 }
