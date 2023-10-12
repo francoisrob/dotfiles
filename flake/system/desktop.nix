@@ -1,29 +1,25 @@
-{ ... }:
 {
+  inputs,
+  pkgs,
+  ...
+}: {
   programs = {
     hyprland = {
       enable = true;
-      xwayland.enable = true;
+      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     };
   };
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "intel" ];
-    deviceSection = ''
-      Option "DRI" "3"
-      Option "TearFree" "true"
-      '';
-    libinput = {
+
+  services = {
+    xserver = {
       enable = true;
-      touchpad.disableWhileTyping = true;
-      mouse.naturalScrolling = false;
-    };
-    layout = "us";
-    xkbVariant = "";
-    displayManager = {
-      lightdm = {
-        enable = true;
+      displayManager = {
+        sddm = {
+          enable = true;
+          wayland.enable = true;
+          theme = "catppuccin-mocha";
         };
+      };
     };
   };
 }

@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   virtualisation = {
     docker.rootless = {
       enable = true;
@@ -12,5 +11,5 @@
     Delegate = "cpu cpuset io memory pids";
   };
 
-  users.users.francois.extraGroups = [ "libvirtd" "kvm" ];
+  users.users.francois.extraGroups = ["libvirtd" "kvm"];
 }

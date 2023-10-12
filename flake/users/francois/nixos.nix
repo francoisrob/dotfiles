@@ -1,12 +1,11 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    supportedFilesystems = [ "ntfs" ];
+    supportedFilesystems = ["ntfs"];
   };
 
   networking = {
@@ -21,23 +20,9 @@
   time.timeZone = "Africa/Johannesburg";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  console = {  
+  console = {
     keyMap = "us";
     font = "Lat2-Terminus16";
-  };
-
-  users = {
-    defaultUserShell = pkgs.fish;
-    users.francois = {
-      isNormalUser = true;
-      description = "Francois";
-      extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" "storage"];
-    };
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-wlr ];
   };
 
   nixpkgs.config = {
@@ -47,6 +32,8 @@
       enableAdobeFlash = true;
     };
   };
+
+  environment.localBinInPath = true;
 
   nix = {
     settings = {
@@ -66,7 +53,6 @@
     systemPackages = with pkgs; [
       wayland
       vim
-      udiskie
       libnotify
       unzip
       wget
@@ -81,9 +67,15 @@
 
       firefox
       chromium
+      noto-fonts
+      (callPackage ../../configs/sddm-catppuccin.nix {}).catppuccin-flavour
     ];
-    pathsToLink = [ "/libexec" ];
+    pathsToLink = ["/libexec"];
   };
+
+  fonts.packages = with pkgs; [
+    (nerdfonts.override {fonts = [ "JetBrainsMono" "DroidSansMono" ];})
+  ];
 
   security = {
     polkit.enable = true;
@@ -108,27 +100,31 @@
 
   hardware = {
     bluetooth = {
-        enable = true;
-        powerOnBoot = true;
-      };
+      enable = true;
+      powerOnBoot = true;
+    };
     opengl.enable = true;
   };
 
   sound.enable = true;
   services = {
+    # File mounting
+    gvfs.enable = true;
     udisks2.enable = true;
+    devmon.enable = true;
+
     flatpak.enable = true;
     blueman.enable = true;
     openssh.enable = true;
     dbus.enable = true;
     pipewire = {
-        enable = true;
-        audio.enable = true;
-        pulse.enable = true;
-        wireplumber.enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        jack.enable = true;
+      enable = true;
+      audio.enable = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      jack.enable = true;
     };
   };
 
@@ -138,5 +134,12 @@
       channel = "https://nixos.org/channel/nixos-unstable";
     };
     stateVersion = "23.05";
+  };
+
+  users.users.francois = {
+    isNormalUser = true;
+    description = "Francois";
+    extraGroups = ["networkmanager" "wheel" "video" "audio" "lp" "scanner" "storage"];
+    shell = pkgs.fish;
   };
 }
