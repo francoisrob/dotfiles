@@ -33,7 +33,6 @@ in
           inputs = inputs;
         };
       }
-
       {
         config._module.args = {
           currentSystem = system;

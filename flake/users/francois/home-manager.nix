@@ -5,22 +5,23 @@
   ...
 }: let
   isLinux = pkgs.stdenv.isLinux;
-  pointerCursor = let getFrom = url: hash: name: {
-        name = name;
-        size = 24;
-        package = pkgs.runCommand "moveUp" {} ''
-          mkdir -p $out/share/icons
-          ln -s ${pkgs.fetchzip {
-            url = url;
-            hash = hash;
-          }} $out/share/icons/${name}
-        '';
-      };
-    in
-      getFrom
-      "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
-      "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
-      "Catppuccin-Mocha-Light-Cursors";
+  pointerCursor = let
+    getFrom = url: hash: name: {
+      name = name;
+      size = 24;
+      package = pkgs.runCommand "moveUp" {} ''
+        mkdir -p $out/share/icons
+        ln -s ${pkgs.fetchzip {
+          url = url;
+          hash = hash;
+        }} $out/share/icons/${name}
+      '';
+    };
+  in
+    getFrom
+    "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
+    "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
+    "Catppuccin-Mocha-Light-Cursors";
 in {
   xdg.enable = true;
 

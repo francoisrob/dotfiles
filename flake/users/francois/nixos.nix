@@ -25,12 +25,21 @@
     font = "Lat2-Terminus16";
   };
 
-  nixpkgs.config = {
-    allowUnfree = true;
-    firefox = {
-      enableGoogleTalkPlugin = true;
-      enableAdobeFlash = true;
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      firefox = {
+        enableGoogleTalkPlugin = true;
+        enableAdobeFlash = true;
+      };
     };
+    overlays = [
+      (self: super: {
+        mpv = super.mpv.override {
+          scripts = [self.mpvScripts.mpris];
+        };
+      })
+    ];
   };
 
   environment.localBinInPath = true;
@@ -65,6 +74,7 @@
       cargo
       ripgrep
       pavucontrol
+      mpv
 
       firefox
       chromium
@@ -76,8 +86,8 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-    (nerdfonts.override {fonts = [ "JetBrainsMono" "DroidSansMono" ];})
-  ];
+      (nerdfonts.override {fonts = ["JetBrainsMono" "DroidSansMono"];})
+    ];
   };
 
   security = {

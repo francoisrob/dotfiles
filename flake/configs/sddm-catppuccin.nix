@@ -1,7 +1,14 @@
 {
+  pkgs,
   stdenv,
   fetchFromGitHub,
-}: {
+}: let
+  imgLink = "https://github.com/francoisrob/dotfiles/blob/main/resources/mocha_mountain.jpg";
+  image = pkgs.fetchurl {
+    url = imgLink;
+    hash = "sha256-69Z+Z9M8uHnCtpOmhqGvh+HE7IRg4tm3+TvnP6EeylM=";
+  };
+in {
   catppuccin-flavour = stdenv.mkDerivation {
     name = "catppuccin-flavour";
     pname = "catppuccin-flavour";
@@ -9,6 +16,8 @@
     installPhase = ''
       mkdir -p $out/share/sddm/themes
       cp -aR $src/src/* $out/share/sddm/themes/
+      chmod -R a=r,u+w,a+X $out/share/sddm/themes/catppuccin-mocha/backgrounds
+      cp -r ${image} $out/share/sddm/themes/catppuccin-mocha/backgrounds/wall.jpg
     '';
     src = fetchFromGitHub {
       owner = "catppuccin";

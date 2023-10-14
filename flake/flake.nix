@@ -1,11 +1,8 @@
 {
- description = "Frannas Flakkas";
+  description = "Frannas Flakkas";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    # nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-    # devenv.url = "github:cachix/devenv/latest";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
