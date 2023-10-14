@@ -5,6 +5,22 @@
   ...
 }: let
   isLinux = pkgs.stdenv.isLinux;
+  pointerCursor = let getFrom = url: hash: name: {
+        name = name;
+        size = 24;
+        package = pkgs.runCommand "moveUp" {} ''
+          mkdir -p $out/share/icons
+          ln -s ${pkgs.fetchzip {
+            url = url;
+            hash = hash;
+          }} $out/share/icons/${name}
+        '';
+      };
+    in
+      getFrom
+      "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
+      "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
+      "Catppuccin-Mocha-Light-Cursors";
 in {
   xdg.enable = true;
 
@@ -12,7 +28,6 @@ in {
     username = "francois";
     homeDirectory = "/home/francois";
     stateVersion = "23.05";
-
     packages = with pkgs; [
       btop
       webcord-vencord
@@ -22,6 +37,7 @@ in {
       stylua
       lf
 
+      mako
       pcmanfm
       gwenview
 
@@ -32,7 +48,6 @@ in {
       hyprpicker
       wf-recorder
       wl-clipboard
-      xclip
 
       mongodb-compass
       volta
@@ -58,51 +73,12 @@ in {
       NIX_LD_LIBRARY_PATH = lib.makeLibraryPath (with pkgs; [stdenv.cc.cc openssl]);
       NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
     };
-
-    pointerCursor = let
-      getFrom = url: hash: name: {
-        gtk.enable = true;
-        x11.enable = true;
-        name = name;
-        size = 24;
-        package = pkgs.runCommand "moveUp" {} ''
-          mkdir -p $out/share/icons
-          ln -s ${pkgs.fetchzip {
-            url = url;
-            hash = hash;
-          }} $out/share/icons/${name}
-        '';
-      };
-    in
-      getFrom
-      "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
-      "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
-      "Catppuccin-Mocha-Light-Cursors";
+    pointerCursor = pointerCursor;
   };
 
-  # xdg.configFile = {
-  #   "i3/config".text = builtins.readFile ./i3;
-  #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-  #
-  #   # tree-sitter parsers
-  #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
-  #   "nvim/queries/proto/folds.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/folds.scm";
-  #   "nvim/queries/proto/highlights.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/highlights.scm";
-  #   "nvim/queries/proto/textobjects.scm".source =
-  #     ./textobjects.scm;
-  # } // (if isLinux then {
-  #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
-  # } else {});
-
-  # programs.fish = {
-  #   enable = true;
-  # };
-
-  programs.kitty = {
-    #   enable = true;
-    extraConfig = builtins.readFile ./kitty;
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.fhs;
   };
 
   services.gpg-agent = {
@@ -112,13 +88,6 @@ in {
     maxCacheTtl = 31536000;
   };
 
-  services = {
-    mako = {
-      enable = true;
-      font = "JetBrainsMono 10";
-    };
-  };
-
   gtk = {
     enable = true;
     theme = {
@@ -126,7 +95,7 @@ in {
       package = pkgs.catppuccin-gtk.override {
         accents = ["pink"];
         size = "compact";
-        tweaks = ["rimless" "black"];
+        tweaks = ["rimless"];
         variant = "mocha";
       };
     };
@@ -134,6 +103,7 @@ in {
       package = pkgs.papirus-icon-theme;
       name = "Papirus-Dark";
     };
+    cursorTheme = pointerCursor;
   };
 
   programs = {
@@ -143,6 +113,4 @@ in {
     };
     home-manager.enable = true;
   };
-
-  # xresources.extraConfig = builtins.readFile ./Xresources;
 }

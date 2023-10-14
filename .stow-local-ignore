@@ -1,6 +1,6 @@
 \.git
 \.gitignore
-\.unfinished
+\resources
 
 ^/README.*
 ^/LICENSE.*

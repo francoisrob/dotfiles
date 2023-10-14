@@ -5,7 +5,6 @@ return {
     name = "catppuccin",
     opts = {
       integrations = {
-        alpha = true,
         cmp = true,
         flash = true,
         gitsigns = true,

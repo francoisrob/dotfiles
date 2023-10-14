@@ -1,7 +1,7 @@
 require("lazy").setup {
   spec = {
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    { import = "lazyvim.plugins.extras.formatting.conform" },
+    { "LazyVim/LazyVim",                                    import = "lazyvim.plugins" },
+    -- { import = "lazyvim.plugins.extras.formatting.conform" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.rust" },

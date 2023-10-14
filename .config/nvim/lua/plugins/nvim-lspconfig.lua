@@ -3,7 +3,7 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     { "folke/neoconf.nvim", cmd = "Neoconf", config = false, dependencies = { "nvim-lspconfig" } },
-    { "folke/neodev.nvim", opts = {} },
+    { "folke/neodev.nvim",  opts = {} },
     "mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     { "hrsh7th/cmp-nvim-lsp" },
@@ -40,7 +40,9 @@ return {
     -- add any global capabilities here
     capabilities = {},
     -- Automatically format on save
-    autoformat = true,
+    g = {
+      autoformat = true,
+    },
     -- Enable this to show formatters used in a notification
     -- Useful for debugging formatter issues
     format_notify = false,
@@ -109,7 +111,7 @@ return {
     ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
     setup = {
       ruff_lsp = function()
-        require("lazyvim.util").on_attach(function(client, _)
+        require("lazyvim.util").lsp.on_attach(function(client, _)
           if client.name == "ruff_lsp" then
             -- Disable hover in favor of Pyright
             client.server_capabilities.hoverProvider = false

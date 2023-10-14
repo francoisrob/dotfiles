@@ -5,7 +5,7 @@ return {
   cmd = "ConformInfo",
   init = function()
     require("lazyvim.util").on_very_lazy(function()
-      require("lazyvim.plugins.lsp.format").custom_format = function(buf)
+      require("lazyvim.util.format").custom_format = function(buf)
         return require("conform").format { bufnr = buf }
       end
     end)

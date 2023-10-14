@@ -9,7 +9,7 @@
   };
 
   networking = {
-    hostName = "nixos"; # Define your hostname.
+    hostName = "nixos";
     wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
@@ -58,6 +58,7 @@
       wget
       stow
       killall
+      gnumake
 
       python3
       gcc
@@ -72,10 +73,12 @@
     ];
     pathsToLink = ["/libexec"];
   };
-
-  fonts.packages = with pkgs; [
+  fonts = {
+    fontDir.enable = true;
+    packages = with pkgs; [
     (nerdfonts.override {fonts = [ "JetBrainsMono" "DroidSansMono" ];})
   ];
+  };
 
   security = {
     polkit.enable = true;
