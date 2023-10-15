@@ -3,7 +3,7 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     { "folke/neoconf.nvim", cmd = "Neoconf", config = false, dependencies = { "nvim-lspconfig" } },
-    { "folke/neodev.nvim",  opts = {} },
+    { "folke/neodev.nvim", opts = {} },
     "mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     { "hrsh7th/cmp-nvim-lsp" },
@@ -122,7 +122,7 @@ return {
       eslint = function()
         vim.api.nvim_create_autocmd("BufWritePre", {
           callback = function(event)
-            if not require("lazyvim.plugins.lsp.format").enabled() then
+            if not require("lazyvim.util").format.enabled() then
               -- exit early if autoformat is not enabled
               return
             end
