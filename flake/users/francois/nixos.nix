@@ -116,7 +116,6 @@
       enable = true;
       powerOnBoot = true;
     };
-    opengl.enable = true;
   };
 
   sound.enable = true;
