@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    stable.url = "github:nixos/nixpkgs/nixos-23.05";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,6 +22,13 @@
     ...
   } @ inputs: let
     overlays = [
+      (final: prev: {nwg-displays = prev.nwg-displays.override {hyprlandSupport = true;};})
+      (final: _prev: {
+        stable = import inputs.stable {
+          system = final.system;
+          config.allowunfree = true;
+        };
+      })
     ];
     mkSystem = import ./lib/mksystem.nix {
       inherit overlays nixpkgs inputs;

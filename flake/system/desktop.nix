@@ -3,14 +3,12 @@
   pkgs,
   ...
 }: {
-  programs = {
-    hyprland = {
-      enable = true;
-      xwayland.enable = true;
-      enableNvidiaPatches = false;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-    };
+  programs.hyprland = {
+    enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    xwayland.enable = true;
   };
+
   services = {
     xserver = {
       enable = true;
@@ -19,6 +17,7 @@
           enable = true;
           wayland.enable = true;
           theme = "catppuccin-mocha";
+          autoNumlock = true;
         };
       };
     };

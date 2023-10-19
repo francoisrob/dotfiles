@@ -37,6 +37,18 @@ in {
       gh
       stylua
       lf
+      libreoffice-fresh
+
+      stable.chromium
+      #
+      nwg-displays
+      ffmpeg
+      nix-index
+      prefetch-npm-deps
+      nix-prefetch-git
+      nix-prefetch
+
+      discord
 
       mako
       pcmanfm
@@ -54,8 +66,13 @@ in {
       volta
       wofi
       swww
-      neofetch
+      fastfetch
       networkmanagerapplet
+
+      ncdu
+      waypaper
+
+      sqlitebrowser
 
       (inputs.hyprland-contrib.packages.${pkgs.system}.grimblast)
       (
@@ -73,6 +90,11 @@ in {
       PAGER = "less -FirSwX";
       NIX_LD_LIBRARY_PATH = lib.makeLibraryPath (with pkgs; [stdenv.cc.cc openssl]);
       NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+      NIXOS_OZONE_WL = "1";
+      # GDK_BACKEND = "wayland";
+      # VISUAL = "nvim";
+      # MANPAGER = "nvim +Man!";
+      # TERMINAL = "kitty";
     };
     pointerCursor = pointerCursor;
   };
@@ -82,11 +104,13 @@ in {
     package = pkgs.vscode.fhs;
   };
 
-  services.gpg-agent = {
-    enable = isLinux;
-    # pinentryFlavor = "tty";
-    defaultCacheTtl = 31536000;
-    maxCacheTtl = 31536000;
+  services = {
+    gpg-agent = {
+      enable = isLinux;
+      # pinentryFlavor = "tty";
+      defaultCacheTtl = 31536000;
+      maxCacheTtl = 31536000;
+    };
   };
 
   gtk = {

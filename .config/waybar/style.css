@@ -38,11 +38,12 @@ window#waybar {
 #pulseaudio,
 #tray,
 #mode {
-  margin-right: 0px;
-  /* border: 1px solid red; */
+  margin: 0;
+  padding: 0;
 }
 
 #clock {
+  margin: 0 10px 0 10px;
   font-weight: bold;
 }
 

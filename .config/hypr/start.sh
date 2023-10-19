@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
-# Initialize wallpaper daemon
-swww init &
+# swww init &
+# swww img ~/Wallpapers/mocha_mountain.jpg &
 
-# set wallpaper
-swww img ~/Wallpapers/mocha_mountain.jpg &
-# NetworkManager Applet
+waypaper --restore &
+
+waybar &
+
 nm-applet --indicator &
-blueman-tray &
+blueman-applet &
+# blueman-tray &
 
 # The bar
-waybar &
 
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP &
 # dbus-update-activation-environment --systemd --all

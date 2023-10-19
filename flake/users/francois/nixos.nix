@@ -6,7 +6,6 @@
       efi.canTouchEfiVariables = true;
     };
     supportedFilesystems = ["ntfs"];
-    kernelModules = ["i2c-dev" "ddcci_backlight"];
   };
   console = {
     keyMap = "us";
@@ -18,6 +17,7 @@
       vim
       libnotify
       unzip
+      zip
       wget
       stow
       killall
@@ -32,7 +32,6 @@
       pavucontrol
       mpv
 
-      chromium
       noto-fonts
       (callPackage ../../configs/sddm-catppuccin.nix {}).catppuccin-flavour
     ];
@@ -48,13 +47,19 @@
   hardware = {
     opengl = {
       enable = true;
-      driSupport = true;
       driSupport32Bit = true;
+      driSupport = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        vaapiIntel
+      ];
     };
     bluetooth = {
       enable = true;
       powerOnBoot = true;
     };
+    # https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800/11
+    i2c.enable = true;
   };
   networking = {
     hostName = "nixos";
@@ -85,6 +90,9 @@
         enableGoogleTalkPlugin = true;
         enableAdobeFlash = true;
       };
+      packageOverrides = pkgs: {
+        vaapiIntel = pkgs.vaapiIntel.override {enableHybridCodec = true;};
+      };
     };
     overlays = [
       (self: super: {
@@ -112,16 +120,6 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
-
-    doas.enable = true;
-    sudo.enable = false;
-    doas.extraRules = [
-      {
-        users = ["francois"];
-        keepEnv = true;
-        persist = true;
-      }
-    ];
   };
   sound.enable = true;
   services = {
@@ -133,7 +131,10 @@
     flatpak.enable = true;
     blueman.enable = true;
     openssh.enable = true;
-    dbus.enable = true;
+    dbus = {
+      enable = true;
+      packages = with pkgs; [blueman];
+    };
     pipewire = {
       enable = true;
       audio.enable = true;
