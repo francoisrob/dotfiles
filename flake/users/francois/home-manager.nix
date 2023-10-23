@@ -4,7 +4,6 @@
   pkgs,
   ...
 }: let
-  isLinux = pkgs.stdenv.isLinux;
   pointerCursor = let
     getFrom = url: hash: name: {
       name = name;
@@ -23,21 +22,21 @@
     "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
     "Catppuccin-Mocha-Light-Cursors";
 in {
-  xdg.enable = true;
-
   home = {
     username = "francois";
     homeDirectory = "/home/francois";
     stateVersion = "23.05";
     packages = with pkgs; [
       btop
-      webcord-vencord
+      stable.webcord-vencord
+      git-filter-repo
       kitty
       lazygit
       gh
       stylua
       lf
       libreoffice-fresh
+      firefox-wayland
 
       stable.chromium
       #
@@ -47,8 +46,6 @@ in {
       prefetch-npm-deps
       nix-prefetch-git
       nix-prefetch
-
-      discord
 
       mako
       pcmanfm
@@ -62,7 +59,6 @@ in {
       wf-recorder
       wl-clipboard
 
-      mongodb-compass
       volta
       wofi
       swww
@@ -91,6 +87,8 @@ in {
       NIX_LD_LIBRARY_PATH = lib.makeLibraryPath (with pkgs; [stdenv.cc.cc openssl]);
       NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
       NIXOS_OZONE_WL = "1";
+      MOZ_ENABLE_WAYLAND = 1;
+      XDG_CURRENT_DESKTOP = "Hyprland"; 
       # GDK_BACKEND = "wayland";
       # VISUAL = "nvim";
       # MANPAGER = "nvim +Man!";
@@ -103,15 +101,26 @@ in {
     enable = true;
     package = pkgs.vscode.fhs;
   };
-
+  
   services = {
+spotifyd = {
+   enable = true;
+   settings =
+     {
+       global = {
+         username = "";
+         password = "";
+       };
+     }
+   ;
+ };
     gpg-agent = {
-      enable = isLinux;
-      # pinentryFlavor = "tty";
+      enable = true;
       defaultCacheTtl = 31536000;
       maxCacheTtl = 31536000;
     };
   };
+
 
   gtk = {
     enable = true;

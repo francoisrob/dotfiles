@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{pkgs, ...}:
+{
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -13,6 +14,7 @@
   };
   environment = {
     systemPackages = with pkgs; [
+      docker-compose
       wayland
       vim
       libnotify
@@ -86,10 +88,6 @@
   nixpkgs = {
     config = {
       allowUnfree = true;
-      firefox = {
-        enableGoogleTalkPlugin = true;
-        enableAdobeFlash = true;
-      };
       packageOverrides = pkgs: {
         vaapiIntel = pkgs.vaapiIntel.override {enableHybridCodec = true;};
       };
@@ -158,5 +156,13 @@
     description = "Francois";
     extraGroups = ["networkmanager" "wheel" "video" "audio" "lp" "scanner" "storage"];
     shell = pkgs.fish;
+  };
+  xdg = {
+    portal = {
+      enable = true;
+      # extraPortals = with pkgs; [
+      #   xdg-desktop-portal-gtk
+      # ];
+    };
   };
 }
