@@ -14,6 +14,7 @@
   };
   environment = {
     systemPackages = with pkgs; [
+      gnome.adwaita-icon-theme
       docker-compose
       wayland
       vim
@@ -47,15 +48,6 @@
     ];
   };
   hardware = {
-    opengl = {
-      enable = true;
-      driSupport32Bit = true;
-      driSupport = true;
-      extraPackages = with pkgs; [
-        intel-media-driver
-        vaapiIntel
-      ];
-    };
     bluetooth = {
       enable = true;
       powerOnBoot = true;
@@ -88,9 +80,6 @@
   nixpkgs = {
     config = {
       allowUnfree = true;
-      packageOverrides = pkgs: {
-        vaapiIntel = pkgs.vaapiIntel.override {enableHybridCodec = true;};
-      };
     };
     overlays = [
       (self: super: {

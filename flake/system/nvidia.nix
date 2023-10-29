@@ -7,12 +7,6 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11 ];
 
   hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-
     nvidia = {
       modesetting.enable = true;
 
