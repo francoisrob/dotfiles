@@ -15,11 +15,24 @@
       displayManager = {
         sddm = {
           enable = true;
-          wayland.enable = true;
+          # wayland.enable = true;
           theme = "catppuccin-mocha";
           autoNumlock = true;
         };
       };
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    xdg-desktop-portal-gtk
+  ];
+
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        # xdg-desktop-portal-gtk
+      ];
     };
   };
 }

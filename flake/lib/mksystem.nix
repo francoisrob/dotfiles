@@ -7,7 +7,7 @@
   user,
 }: let
   machineConfig = ../machines/${name}.nix;
-  hardwareConfig = ../machines/hardware/dell-intel.nix;
+  hardwareConfig = ../machines/hardware/${name}.nix;
 
   userOSConfig = ../users/${user}/nixos.nix;
   userHMConfig = ../users/${user}/home-manager.nix;
@@ -21,10 +21,12 @@ in
 
     modules = [
       {nixpkgs.overlays = overlays;}
-      hardwareConfig
       machineConfig
+      hardwareConfig
+
       userOSConfig
       userConfig
+
       home-manager.home-manager
       {
         home-manager.useGlobalPkgs = true;

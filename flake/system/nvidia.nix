@@ -1,22 +1,27 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: {
-  boot.kernelParams = ["nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
-  boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11 ];
+  boot.kernelParams = [
+    "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+    # "module_blacklist=i915"
+  ];
+  boot.extraModulePackages = [config.boot.kernelPackages.nvidia_x11];
 
   hardware = {
     nvidia = {
       modesetting.enable = true;
 
       powerManagement.enable = true;
-      powerManagement.finegrained = false;
+      # powerManagement.finegrained = false;
       open = false;
       nvidiaSettings = true;
 
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # package = config.boot.kernelPackages.nvidiaPackages.stable;
       prime = {
+        # sync.enable = true;
         offload = {
           enable = true;
           enableOffloadCmd = true;
@@ -26,9 +31,13 @@
         nvidiaBusId = "PCI:1:0:0";
       };
     };
+
+    opengl.extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+    ];
   };
 
-  services.xserver.videoDrivers = ["nvidia" "intel"];
+  services.xserver.videoDrivers = ["nvidia"];
 
   programs.hyprland.enableNvidiaPatches = true;
 
@@ -50,4 +59,3 @@
     };
   };
 }
-

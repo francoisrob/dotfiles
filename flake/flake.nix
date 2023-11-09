@@ -22,6 +22,7 @@
     ...
   } @ inputs: let
     overlays = [
+      (final: prev: {nerdfonts = prev.nerdfonts.override {fonts = ["JetBrainsMono"];};})
       (final: prev: {nwg-displays = prev.nwg-displays.override {hyprlandSupport = true;};})
       (final: _prev: {
         stable = import inputs.stable {

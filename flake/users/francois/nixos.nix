@@ -1,5 +1,4 @@
-{pkgs, ...}:
-{
+{pkgs, ...}: {
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -14,7 +13,20 @@
   };
   environment = {
     systemPackages = with pkgs; [
-      gnome.adwaita-icon-theme
+      vimix-gtk-themes
+      vimix-icon-theme
+
+      qt5ct
+      libsForQt5.qtstyleplugins
+      libsForQt5.qt5.qtwayland
+
+      xdg-user-dirs
+
+      acpi
+      fastfetch
+      libva-utils
+      pciutils
+
       docker-compose
       wayland
       vim
@@ -26,6 +38,7 @@
       killall
       gnumake
       glxinfo
+      openssl
 
       brightnessctl
       python3
@@ -44,7 +57,7 @@
   fonts = {
     fontDir.enable = true;
     packages = with pkgs; [
-      (nerdfonts.override {fonts = ["JetBrainsMono" "DroidSansMono"];})
+      nerdfonts
     ];
   };
   hardware = {
@@ -61,6 +74,20 @@
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
+    };
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [80 443 4200 3000];
+      allowedUDPPortRanges = [
+        {
+          from = 4000;
+          to = 4007;
+        }
+        {
+          from = 8000;
+          to = 8010;
+        }
+      ];
     };
   };
   i18n.defaultLocale = "en_US.UTF-8";
@@ -93,8 +120,8 @@
     nix-ld.enable = true;
     mtr.enable = true;
     neovim = {
-      viAlias = true;
-      vimAlias = true;
+      # viAlias = true;
+      # vimAlias = true;
       enable = true;
       defaultEditor = true;
     };
@@ -111,6 +138,7 @@
   sound.enable = true;
   services = {
     # File mounting
+    tumbler.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
     devmon.enable = true;
@@ -149,9 +177,10 @@
   xdg = {
     portal = {
       enable = true;
-      # extraPortals = with pkgs; [
-      #   xdg-desktop-portal-gtk
-      # ];
+    };
+    mime = {
+      enable = true;
+      defaultApplications = {};
     };
   };
 }
