@@ -27,8 +27,18 @@ in {
     homeDirectory = "/home/francois";
     stateVersion = "23.05";
     packages = with pkgs; [
+      gnome.gnome-calculator
+      # gnome.adwaita-icon-theme
+      gnome.nautilus
+
+      xfce.thunar
+      xfce.thunar-volman
+
+      inkscape
+      okular
       btop
-      stable.webcord-vencord
+      # stable.webcord-vencord
+      discord
       git-filter-repo
       kitty
       lazygit
@@ -37,6 +47,8 @@ in {
       lf
       libreoffice-fresh
       firefox-wayland
+
+      gimp-with-plugins
 
       stable.chromium
       #
@@ -47,8 +59,10 @@ in {
       nix-prefetch-git
       nix-prefetch
 
+      pass-wayland
+
       mako
-      pcmanfm
+      # pcmanfm
       gwenview
 
       obs-studio
@@ -62,7 +76,6 @@ in {
       volta
       wofi
       swww
-      fastfetch
       networkmanagerapplet
 
       ncdu
@@ -88,7 +101,12 @@ in {
       NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
       NIXOS_OZONE_WL = "1";
       MOZ_ENABLE_WAYLAND = 1;
-      XDG_CURRENT_DESKTOP = "Hyprland"; 
+
+      GDK_BACKEND = "wayland";
+      VISUAL = "nvim";
+      MANPAGER = "nvim +Man!";
+      TERMINAL = "kitty";
+      # XDG_CURRENT_DESKTOP = "Hyprland";
       # GDK_BACKEND = "wayland";
       # VISUAL = "nvim";
       # MANPAGER = "nvim +Man!";
@@ -101,7 +119,7 @@ in {
     enable = true;
     package = pkgs.vscode.fhs;
   };
-  
+
   services = {
 spotifyd = {
    enable = true;
@@ -121,7 +139,6 @@ spotifyd = {
     };
   };
 
-
   gtk = {
     enable = true;
     theme = {
@@ -134,10 +151,18 @@ spotifyd = {
       };
     };
     iconTheme = {
-      package = pkgs.papirus-icon-theme;
-      name = "Papirus-Dark";
+      package = pkgs.vimix-icon-theme;
+      name = "Vimix";
     };
     cursorTheme = pointerCursor;
+  };
+
+  qt = {
+    platformTheme = "gtk";
+    enable = true;
+    style.name = "Fusion";
+
+    style.package = pkgs.adwaita-qt6;
   };
 
   programs = {

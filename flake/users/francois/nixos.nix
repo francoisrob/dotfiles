@@ -70,10 +70,10 @@
   };
   networking = {
     hostName = "nixos";
-    wireless.iwd.enable = true;
+    # wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
-      wifi.backend = "iwd";
+      # wifi.backend = "iwd";
     };
     firewall = {
       enable = true;
@@ -134,6 +134,10 @@
   security = {
     polkit.enable = true;
     rtkit.enable = true;
+    acme = {
+      acceptTerms = true;
+      defaults.email = "francoisdprob@gmail.com";
+    };
   };
   sound.enable = true;
   services = {
@@ -158,6 +162,14 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       jack.enable = true;
+    };
+    nginx = {
+      enable = true;
+      virtualHosts."venueverse.net" = {
+        addSSL = true;
+        enableACME = true;
+        root = "/var/www/myhost.org";
+      };
     };
   };
   system = {
