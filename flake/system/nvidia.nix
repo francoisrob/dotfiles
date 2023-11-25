@@ -14,14 +14,15 @@
     nvidia = {
       modesetting.enable = true;
 
-      powerManagement.enable = true;
+      # powerManagement.enable = true;
       # powerManagement.finegrained = false;
+
       open = false;
       nvidiaSettings = true;
 
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+
       prime = {
-        # sync.enable = true;
         offload = {
           enable = true;
           enableOffloadCmd = true;
@@ -37,25 +38,32 @@
     ];
   };
 
+  # environment = {
+  #   sessionVariables = {
+  #     WLR_NO_HARDWARE_CURSORS = "1"; # fixes disappearing cursor
+  #     NIXOS_OZONE_WL = "1"; # tells electron apps to use wayland
+  #   };
+  # };
+
   services.xserver.videoDrivers = ["nvidia"];
 
   programs.hyprland.enableNvidiaPatches = true;
 
-  specialisation = {
-    on-the-go.configuration = {
-      system.nixos.tags = ["on-the-go"];
-      hardware.nvidia = {
-        prime.offload.enable = lib.mkForce true;
-        prime.offload.enableOffloadCmd = lib.mkForce true;
-        prime.sync.enable = lib.mkForce false;
-      };
-    };
-    external-display.configuration = {
-      system.nixos.tags = ["external-display"];
-      hardware.nvidia = {
-        prime.offload.enable = lib.mkForce false;
-        powerManagement.enable = lib.mkForce false;
-      };
-    };
-  };
+  # specialisation = {
+  #   on-the-go.configuration = {
+  #     system.nixos.tags = ["on-the-go"];
+  #     hardware.nvidia = {
+  #       prime.offload.enable = lib.mkForce true;
+  #       prime.offload.enableOffloadCmd = lib.mkForce true;
+  #       prime.sync.enable = lib.mkForce false;
+  #     };
+  #   };
+  #   external-display.configuration = {
+  #     system.nixos.tags = ["external-display"];
+  #     hardware.nvidia = {
+  #       prime.offload.enable = lib.mkForce false;
+  #       powerManagement.enable = lib.mkForce false;
+  #     };
+  #   };
+  # };
 }

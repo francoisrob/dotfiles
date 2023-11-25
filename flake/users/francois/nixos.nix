@@ -163,15 +163,16 @@
       alsa.support32Bit = true;
       jack.enable = true;
     };
-    nginx = {
-      enable = true;
-      virtualHosts."venueverse.net" = {
-        addSSL = true;
-        enableACME = true;
-        root = "/var/www/myhost.org";
-      };
-    };
+    # nginx = {
+    #   enable = true;
+    #   virtualHosts."venueverse.net" = {
+    #     addSSL = true;
+    #     enableACME = true;
+    #     root = "/var/www/myhost.org";
+    #   };
+    # };
   };
+
   system = {
     autoUpgrade = {
       enable = true;

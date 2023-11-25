@@ -34,10 +34,11 @@ in {
       xfce.thunar
       xfce.thunar-volman
 
+      # ngrok
       inkscape
       okular
       btop
-      # stable.webcord-vencord
+      webcord-vencord
       discord
       git-filter-repo
       kitty
@@ -121,17 +122,15 @@ in {
   };
 
   services = {
-spotifyd = {
-   enable = true;
-   settings =
-     {
-       global = {
-         username = "";
-         password = "";
-       };
-     }
-   ;
- };
+    spotifyd = {
+      enable = true;
+      settings = {
+        global = {
+          username = "";
+          password = "";
+        };
+      };
+    };
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 31536000;

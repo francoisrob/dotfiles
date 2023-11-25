@@ -16,7 +16,7 @@ return {
                     local ok, err = pcall(vim.cmd.cprev)
                     if not ok then
                         vim.notify(err, vim.log.levels.ERROR)
-                    end
+                    end<
                 end
             end,
             desc = "Previous trouble/quickfix item",
