@@ -7,10 +7,10 @@ set fish_home ~/.config/fish
 # source $fish_home/environment.private.fish
 # source $fish_home/abbrs.fish
 
-set VOLTA_HOME "/home/francois/.volta"
-set PATH $HOME/.local/bin $HOME/bin $VOLTA_HOME/bin $PATH
 
 # if status is-interactive
 #     # Commands to run in interactive sessions can go here
 # end
 starship init fish | source
+set -gx VOLTA_HOME "$HOME/.volta"
+set -gx PATH "$VOLTA_HOME/bin" $PATH

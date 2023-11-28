@@ -1,68 +1,75 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "JetBrainsMono";
+  font-family: "Noto Serif Myanmar";
   font-size: 12px;
+  /* min-height: 0; */
+  color: #ebdbb2;
 }
 
 window#waybar {
-  background-color: rgb(30, 30, 46);
-  color: white;
+    border-bottom-style: inset;
+    /* border-bottom: 2px solid #689d6a; */
+    background: #1d2021;
 }
 
-#window {
-  font-weight: 600;
-  font-family: "Noto Serif Myanmar";
+#workspaces, #clock, #custom-music, #window { 
+    font-weight: 800;
 }
 
-/* #workspaces { */
-/*   border-radius: 10px; */
-/*   background: darkblue; */
-/*   margin: 5px; */
-/* } */
-#workspaces button {
-  background: transparent;
-  color: white;
-  /* border: 2px solid red; */
+#workspaces button label{
+    color: #689d6a;
 }
-
+#workspaces button.focused label {
+    color: #1d2021;
+}
 #workspaces button.focused {
-  color: green;
-  background-color: red;
-  /* border-top: 2px solid #c9545d; */
+    background: #689d6a; 
 }
 
-#clock,
-#battery,
-#backlight,
-#pulseaudio,
-#tray,
 #mode {
-  margin: 0;
-  padding: 0;
+    background-color: #cc241d;
+    color: white;
+}
+
+#clock, #backlight,  #battery, #cpu, #memory, #network, #pulseaudio, #tray, #mode, #idle_inhibitor {
+    padding: 0 5px;
+    margin: 0 10px;
+}
+
+
+#idle_inhibitor {
+    padding: 0 10px;
+}
+
+#idle_inhibitor.activated {
+    background-color: #689d6a;
+    color: #1d2021;
+}
+
+
+#custom-music {
+    color: #b8bb26;
+    margin: 0 15px;
+    padding: 0 20px;
+    border-bottom: 4px solid #b8bb26;
+
 }
 
 #clock {
-  margin: 0 10px 0 10px;
-  font-weight: bold;
+    margin: 0;
+    color: #fabd2f;
 }
 
-#battery icon {
-  color: red;
+
+#network.disconnected {
+    color: #cc241d;
+    border-bottom: 4px solid #cc241d;
 }
 
-@keyframes blink {
-  to {
-    background-color: #ffffff;
-    color: black;
-  }
-}
 
-/* #battery.warning:not(.charging) { */
-/*   color: white; */
-/*   animation-name: blink; */
-/*   animation-duration: 0.5s; */
-/*   animation-timing-function: linear; */
-/*   animation-iteration-count: infinite; */
-/*   animation-direction: alternate; */
-/* } */
+#pulseaudio.muted {
+    padding: 0 20px;
+    color: #cc241d;
+    border-bottom: 4px solid #cc241d;
+}

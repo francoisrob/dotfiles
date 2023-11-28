@@ -1,72 +1,79 @@
 {
     "layer": "top",
     "position": "top",
-    //"height": 24, // Waybar height (to be removed for auto height)
-    "width": 1920, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
-    // Choose the order of the modules
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["tray", "pulseaudio", "backlight", "battery", "clock"],
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    "height": 30,
+    "modules-left": ["hyprland/workspaces", "custom/music"],
+    "modules-center": ["hyprland/window", "hyprland/mode"],
+    "modules-right": ["tray", "pulseaudio", "battery", "network", "backlight", "clock"],
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "❰<span color=\"#ebdbb2\"> {name} </span>❱", 
+        "format-icons": {
+            "1:web": "www",
+            "2:code": "",
+            "3:term": "",
+            "4:work": "",
+            "5:music": "",
+            "6:docs": "",
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
     },
 
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon}",
-        "format-charging": "{capacity}% 󰂄",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "states": {
-          "warning": 30,
-          "critical": 15
-        },
-        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    "hyprland/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+
+    "tray": {
+        "icon-size": 14,
+        "spacing": 10
+    },
+    "clock": {
+      "format": "{:%Y-%m-%d - %H:%M}",
+      "format-alt": "{:%A, %B %d at %I:%M %p}"
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "on-click": "alacritty -t 'Floating Terminal' -e htop"
+    },
+
+    "memory": {
+        "interval": 30,
+        "format": "{used:0.1f}/{total:0.1f}G "
+    },
+
+    "network": {
+        // "interface": "wlp2s0", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ifname}: {ipaddr} ",
+        "format-disconnected": "Disconnected ⚠"
     },
     "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon}󰂯 {format_source}",
-        "format-bluetooth-muted": "󰍬{icon}󰂯 {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% 󰍬",
-        "format-source-muted": "󰍭",
+        //"scroll-step": 1,
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": "",
         "format-icons": {
-            "headphone": "󰋋",
-            "hands-free": "󱍞",
-            "headset": "󰋎",
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", "", ""]
+            "default": ["", ""]
         },
         "on-click": "pavucontrol"
     },
-    "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    },
-    "tray": {
-        // "icon-size": 21,
-        "spacing": 10
-    },
+    "custom/music": {
+    "format": "  {}",
+    "max-length": 60,
+    "interval": 5, // Remove this if your script is endless and write in loop
+    "exec": "$HOME/.config/waybar/mediaplayer.sh 2> /dev/null", // Script in resources folder
+	"tooltip": false,
+	"on-click": "playerctl play-pause",
+	"on-scroll-up": "playerctl previous",
+	"on-scroll-down": "playerctl next"
+    }
 }
-
-
