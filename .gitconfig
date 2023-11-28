@@ -1,3 +1,9 @@
 [user]
 	email = 67432234+francoisrob@users.noreply.github.com
 	name = Francois Robbertze
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
