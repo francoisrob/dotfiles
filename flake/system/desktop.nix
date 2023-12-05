@@ -16,7 +16,7 @@
         sddm = {
           enable = true;
           # wayland.enable = true;
-          theme = "catppuccin-mocha";
+          # theme = "catppuccin-mocha";
           autoNumlock = true;
         };
       };
@@ -30,10 +30,10 @@
   xdg = {
     portal = {
       enable = true;
-      # extraPortals = with pkgs; [
+      extraPortals = with pkgs; [
         # xdg-desktop-portal-hyprland
-        # xdg-desktop-portal-gtk
-      # ];
+        xdg-desktop-portal-gtk
+      ];
     };
   };
 }

@@ -4,23 +4,23 @@
   pkgs,
   ...
 }: let
-  pointerCursor = let
-    getFrom = url: hash: name: {
-      name = name;
-      size = 24;
-      package = pkgs.runCommand "moveUp" {} ''
-        mkdir -p $out/share/icons
-        ln -s ${pkgs.fetchzip {
-          url = url;
-          hash = hash;
-        }} $out/share/icons/${name}
-      '';
-    };
-  in
-    getFrom
-    "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
-    "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
-    "Catppuccin-Mocha-Light-Cursors";
+ pointerCursor = let
+   getFrom = url: hash: name: {
+     name = name;
+     size = 24;
+     package = pkgs.runCommand "moveUp" {} ''
+       mkdir -p $out/share/icons
+       ln -s ${pkgs.fetchzip {
+         url = url;
+         hash = hash;
+       }} $out/share/icons/${name}
+     '';
+   };
+ in
+   getFrom
+   "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
+   "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
+   "Catppuccin-Mocha-Light-Cursors";
 in {
   home = {
     username = "francois";
@@ -28,33 +28,25 @@ in {
     stateVersion = "23.05";
     packages = with pkgs; [
       gnome.gnome-calculator
-      # gnome.adwaita-icon-theme
-      gnome.nautilus
 
       xfce.thunar
       xfce.thunar-volman
 
-      # ngrok
-      inkscape
-      okular
-      btop
-      webcord-vencord
-      discord
-      git-filter-repo
       kitty
-      lazygit
-      gh
-      stylua
-      lf
-      libreoffice-fresh
+
+      webcord-vencord
+      stable.chromium
       firefox-wayland
 
+      inkscape
+      gwenview
       gimp-with-plugins
-
-      stable.chromium
-      #
-      nwg-displays
+      okular
       ffmpeg
+      libreoffice-fresh
+
+      btop
+
       nix-index
       prefetch-npm-deps
       nix-prefetch-git
@@ -62,27 +54,27 @@ in {
 
       pass-wayland
 
-      mako
-      # pcmanfm
-      gwenview
-
       obs-studio
       starship
 
+      swww
+      mako
       cliphist
-      hyprpicker
       wf-recorder
       wl-clipboard
-
-      volta
-      wofi
-      swww
+      nwg-displays
       networkmanagerapplet
 
       ncdu
       waypaper
 
+      # Develop
+      gh
+      git-filter-repo
+      lazygit
+      nodejs_20
       sqlitebrowser
+      stylua
 
       (inputs.hyprland-contrib.packages.${pkgs.system}.grimblast)
       (
@@ -94,24 +86,17 @@ in {
 
     sessionVariables = {
       LANG = "en_US.UTF-8";
+      LANGUAGE="en_US";
       LC_CTYPE = "en_US.UTF-8";
       LC_ALL = "en_US.UTF-8";
-      EDITOR = "nvim";
-      PAGER = "less -FirSwX";
-      NIX_LD_LIBRARY_PATH = lib.makeLibraryPath (with pkgs; [stdenv.cc.cc openssl]);
-      NIX_LD = lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
       NIXOS_OZONE_WL = "1";
       MOZ_ENABLE_WAYLAND = 1;
-
       GDK_BACKEND = "wayland";
+
+      EDITOR = "nvim";
       VISUAL = "nvim";
       MANPAGER = "nvim +Man!";
       TERMINAL = "kitty";
-      # XDG_CURRENT_DESKTOP = "Hyprland";
-      # GDK_BACKEND = "wayland";
-      # VISUAL = "nvim";
-      # MANPAGER = "nvim +Man!";
-      # TERMINAL = "kitty";
     };
     pointerCursor = pointerCursor;
   };
@@ -119,6 +104,14 @@ in {
   programs.vscode = {
     enable = true;
     package = pkgs.vscode.fhs;
+  };
+
+  programs.rofi = {
+    enable = true;
+    package = pkgs.rofi-wayland;
+    plugins = [pkgs.rofi-emoji];
+    configPath = ".config/rofi/config.rasi";
+    theme = "gruvbox.rasi";
   };
 
   services = {
@@ -140,20 +133,33 @@ in {
 
   gtk = {
     enable = true;
+   #theme = {
+    # name = "Catppuccin-Mocha-Compact-Pink-Dark";
+    # package = pkgs.catppuccin-gtk.override {
+    #   accents = ["pink"];
+    #   size = "compact";
+    #   tweaks = ["rimless"];
+    #   variant = "mocha";
+    # };
+   #};
     theme = {
-      name = "Catppuccin-Mocha-Compact-Pink-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        accents = ["pink"];
-        size = "compact";
-        tweaks = ["rimless"];
-        variant = "mocha";
-      };
+      name = "Juno";
+      package = pkgs.juno-theme;
     };
     iconTheme = {
-      package = pkgs.vimix-icon-theme;
-      name = "Vimix";
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
     };
-    cursorTheme = pointerCursor;
+    gtk3.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
+    gtk4.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
   };
 
   qt = {

@@ -13,12 +13,9 @@
   };
   environment = {
     systemPackages = with pkgs; [
-      vimix-gtk-themes
-      vimix-icon-theme
-
-      qt5ct
-      libsForQt5.qtstyleplugins
-      libsForQt5.qt5.qtwayland
+      # qt5ct
+      # libsForQt5.qtstyleplugins
+      # libsForQt5.qt5.qtwayland
 
       xdg-user-dirs
 
@@ -27,9 +24,7 @@
       libva-utils
       pciutils
 
-      docker-compose
       wayland
-      vim
       libnotify
       unzip
       zip
@@ -39,17 +34,17 @@
       gnumake
       glxinfo
       openssl
-
       brightnessctl
+      pavucontrol
+      mpv
+
+      # Developer
       python3
       gcc
       cargo
       ripgrep
-      pavucontrol
-      mpv
 
       noto-fonts
-      (callPackage ../../configs/sddm-catppuccin.nix {}).catppuccin-flavour
     ];
     pathsToLink = ["/libexec"];
     localBinInPath = true;
@@ -70,10 +65,10 @@
   };
   networking = {
     hostName = "nixos";
-    # wireless.iwd.enable = true;
+    wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
-      # wifi.backend = "iwd";
+      wifi.backend = "iwd";
     };
     firewall = {
       enable = true;
@@ -116,12 +111,11 @@
       })
     ];
   };
+
+  powerManagement.powertop.enable = true;
   programs = {
-    nix-ld.enable = true;
     mtr.enable = true;
     neovim = {
-      # viAlias = true;
-      # vimAlias = true;
       enable = true;
       defaultEditor = true;
     };
@@ -150,6 +144,21 @@
     flatpak.enable = true;
     blueman.enable = true;
     openssh.enable = true;
+    
+    # Power
+    upower.enable = true;
+    thermald.enable = true;
+    system76-scheduler.settings.cfsProfiles.enable = true;
+    tlp = {
+      enable = true;
+      settings = {
+        CPU_BOOST_ON_AC = 1;
+        CPU_BOOST_ON_BAT = 0;
+        CPU_SCALING_GOVERNOR_ON_AC = "performance";
+        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      };
+    };
+
     dbus = {
       enable = true;
       packages = with pkgs; [blueman];
@@ -163,14 +172,6 @@
       alsa.support32Bit = true;
       jack.enable = true;
     };
-    # nginx = {
-    #   enable = true;
-    #   virtualHosts."venueverse.net" = {
-    #     addSSL = true;
-    #     enableACME = true;
-    #     root = "/var/www/myhost.org";
-    #   };
-    # };
   };
 
   system = {
