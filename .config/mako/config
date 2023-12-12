@@ -1,23 +1,48 @@
-format=<b>%a ⏵</b> %s\n%b
-sort=-time
-output=DP-2
-layer=overlay
-width=300
-height=110
-margin=5
-padding=0,5,10
+font=DejaVu Sans 10
+background-color=#1b1b1b
+text-color=#d4be98
+width=400
+height=200
+outer-margin=0
+margin=10
+padding=10
 border-size=1
-border-radius=5
-icons=0
-default-timeout=5000
-ignore-timeout=1
+border-color=#a9b665
+progress-color=over #89b482
+icons=1
+format=<b>%a ⏵</b> %s\n%b
+text-alignment=left
+default-timeout=10
+ignore-timeout=0
+group-by=none
+anchor=top-right
+
+[urgency=low]
+border-color=#a9b665
+background-color=#282828
+
+[urgency=normal]
+border-color=#d8a657
+background-color=#45403d
+
+[urgency=critical]
+border-color=#ea6962
+background-color=#32302f
+
+# sort=-time
+# output=DP-2
+# layer=overlay
+# padding=0,5,10
+# border-size=1
+# border-radius=0
+# icons=1
+# default-timeout=10000
+# ignore-timeout=1
 
 # Colors
 
-background-color=#1e1e2e
-text-color=#cdd6f4
-border-color=#89b4fa
-progress-color=over #313244
+# border-color=#89b4fa
+# progress-color=over #313244
 
-[urgency=high]
-border-color=#fab387
+# [urgency=high]
+# border-color=#fab387

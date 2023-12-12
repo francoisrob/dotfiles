@@ -18,12 +18,11 @@
   outputs = {
     self,
     nixpkgs,
-    home-manager,
     ...
   } @ inputs: let
     overlays = [
-      (final: prev: {nerdfonts = prev.nerdfonts.override {fonts = ["JetBrainsMono"];};})
-      (final: prev: {nwg-displays = prev.nwg-displays.override {hyprlandSupport = true;};})
+      (final: prev: { nerdfonts = prev.nerdfonts.override { fonts = [ "JetBrainsMono" ]; }; })
+      (final: prev: { nwg-displays = prev.nwg-displays.override { hyprlandSupport = true; }; })
       (final: _prev: {
         stable = import inputs.stable {
           system = final.system;
@@ -31,12 +30,12 @@
         };
       })
       (final: prev: {
-      steam = prev.steam.override ({ extraPkgs ? pkgs': [], ... }: {
-        extraPkgs = pkgs': (extraPkgs pkgs') ++ (with pkgs'; [
-          libgdiplus
-        ]);
-      });
-    })
+        steam = prev.steam.override ({ extraPkgs ? pkgs': [], ... }: {
+          extraPkgs = pkgs': (extraPkgs pkgs') ++ (with pkgs'; [
+            libgdiplus
+          ]);
+        });
+      })
     ];
     mkSystem = import ./lib/mksystem.nix {
       inherit overlays nixpkgs inputs;

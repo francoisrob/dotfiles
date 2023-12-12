@@ -11,27 +11,33 @@
 
   services = {
     xserver = {
-      enable = true;
-      displayManager = {
-        sddm = {
+        enable = true;
+        excludePackages = with pkgs; [
+          xterm
+        ];
+        libinput = {
           enable = true;
-          # wayland.enable = true;
-          # theme = "catppuccin-mocha";
-          autoNumlock = true;
         };
+    };
+    greetd = {
+      enable = true;
+      settings = rec {
+        initial_session = {
+          # command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd Hyprland";
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+          user = "francois";
+        };
+        default_session = initial_session;
       };
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    xdg-desktop-portal-gtk
-  ];
-
   xdg = {
     portal = {
       enable = true;
+      wlr.enable = true;
+      config.common.default = "gtk";
       extraPortals = with pkgs; [
-        # xdg-desktop-portal-hyprland
         xdg-desktop-portal-gtk
       ];
     };

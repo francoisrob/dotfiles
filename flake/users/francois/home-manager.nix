@@ -3,25 +3,8 @@
   lib,
   pkgs,
   ...
-}: let
- pointerCursor = let
-   getFrom = url: hash: name: {
-     name = name;
-     size = 24;
-     package = pkgs.runCommand "moveUp" {} ''
-       mkdir -p $out/share/icons
-       ln -s ${pkgs.fetchzip {
-         url = url;
-         hash = hash;
-       }} $out/share/icons/${name}
-     '';
-   };
- in
-   getFrom
-   "https://github.com/catppuccin/cursors/releases/download/v0.2.0/Catppuccin-Mocha-Light-Cursors.zip"
-   "sha256-evV5fBi8QYIEvd3ISGHo1NtJg4JdEH7dX1Sr3m5ODls="
-   "Catppuccin-Mocha-Light-Cursors";
-in {
+}: 
+{
   home = {
     username = "francois";
     homeDirectory = "/home/francois";
@@ -29,13 +12,16 @@ in {
     packages = with pkgs; [
       gnome.gnome-calculator
 
-      xfce.thunar
-      xfce.thunar-volman
+      starship
 
-      kitty
-
+      # discord
+      (discord.override {
+        # remove any overrides that you don't want
+        withOpenASAR = true;
+        withVencord = true;
+      })
       webcord-vencord
-      stable.chromium
+
       firefox-wayland
 
       inkscape
@@ -45,7 +31,6 @@ in {
       ffmpeg
       libreoffice-fresh
 
-      btop
 
       nix-index
       prefetch-npm-deps
@@ -55,13 +40,13 @@ in {
       pass-wayland
 
       obs-studio
-      starship
 
       swww
       mako
       cliphist
-      wf-recorder
       wl-clipboard
+
+      wf-recorder
       nwg-displays
       networkmanagerapplet
 
@@ -72,7 +57,7 @@ in {
       gh
       git-filter-repo
       lazygit
-      nodejs_20
+      # volta
       sqlitebrowser
       stylua
 
@@ -98,7 +83,6 @@ in {
       MANPAGER = "nvim +Man!";
       TERMINAL = "kitty";
     };
-    pointerCursor = pointerCursor;
   };
 
   programs.vscode = {
@@ -115,15 +99,6 @@ in {
   };
 
   services = {
-    spotifyd = {
-      enable = true;
-      settings = {
-        global = {
-          username = "";
-          password = "";
-        };
-      };
-    };
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 31536000;
@@ -133,15 +108,6 @@ in {
 
   gtk = {
     enable = true;
-   #theme = {
-    # name = "Catppuccin-Mocha-Compact-Pink-Dark";
-    # package = pkgs.catppuccin-gtk.override {
-    #   accents = ["pink"];
-    #   size = "compact";
-    #   tweaks = ["rimless"];
-    #   variant = "mocha";
-    # };
-   #};
     theme = {
       name = "Juno";
       package = pkgs.juno-theme;
@@ -163,11 +129,9 @@ in {
   };
 
   qt = {
-    platformTheme = "gtk";
     enable = true;
-    style.name = "Fusion";
-
-    style.package = pkgs.adwaita-qt6;
+    platformTheme = "gtk2";
+    style = "gtk2";
   };
 
   programs = {

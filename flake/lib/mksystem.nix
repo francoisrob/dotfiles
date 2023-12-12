@@ -21,6 +21,7 @@ in
 
     modules = [
       {nixpkgs.overlays = overlays;}
+
       machineConfig
       hardwareConfig
 

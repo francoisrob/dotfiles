@@ -2,21 +2,52 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
+      timeout = 5;
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
     supportedFilesystems = ["ntfs"];
+
+    # PLYMOUTH
+    consoleLogLevel = 0;
+    initrd.verbose = false;
+    plymouth.enable = true;
+    kernelParams = [ 
+      "quiet"
+      "splash" 
+      "rd.systemd.show_status=false" 
+      "rd.udev.log_level=3" 
+      "udev.log_priority=3" 
+      "boot.shell_on_fail" 
+    ];
   };
   console = {
+    colors = [
+      "1b1b1b"
+      "0e363e"
+      "34381b"
+      "374141"
+      "402120"
+      "4c3432"
+      "4f422e"
+      "504945"
+      "7daea3"
+      "a9b665"
+      "89b482"
+      "ea6962"
+      "d3869b"
+      "d8a657"
+      "a89984"
+      "ddc7a1"
+    ];
     keyMap = "us";
-    font = "Lat2-Terminus16";
+    enable = true;
+    earlySetup = true;
+    packages = with pkgs; [ terminus_font ];
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
   };
   environment = {
     systemPackages = with pkgs; [
-      # qt5ct
-      # libsForQt5.qtstyleplugins
-      # libsForQt5.qt5.qtwayland
-
       xdg-user-dirs
 
       acpi
@@ -24,14 +55,19 @@
       libva-utils
       pciutils
 
-      wayland
-      libnotify
-      unzip
-      zip
+      wayland # Needed for Hyprland
+      libnotify # Needed for dunst
+      unzip # Needed for unzip
+      gnome.file-roller # Needed for zip
+
+      btop
+
       wget
       stow
       killall
-      gnumake
+
+      kitty
+
       glxinfo
       openssl
       brightnessctl
@@ -39,6 +75,7 @@
       mpv
 
       # Developer
+      gnumake
       python3
       gcc
       cargo
@@ -70,6 +107,7 @@
       enable = true;
       wifi.backend = "iwd";
     };
+    nameservers = ["8.8.8.8"];
     firewall = {
       enable = true;
       allowedTCPPorts = [80 443 4200 3000];
@@ -85,7 +123,6 @@
       ];
     };
   };
-  i18n.defaultLocale = "en_US.UTF-8";
   nix = {
     settings = {
       auto-optimise-store = true;
@@ -114,6 +151,7 @@
 
   powerManagement.powertop.enable = true;
   programs = {
+    nix-ld.enable = true;
     mtr.enable = true;
     neovim = {
       enable = true;
@@ -124,8 +162,19 @@
       enable = true;
       enableSSHSupport = true;
     };
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-archive-plugin 
+        thunar-volman
+        thunar-media-tags-plugin
+      ];
+    };
   };
   security = {
+    sudo = {
+      enable = true;
+    };
     polkit.enable = true;
     rtkit.enable = true;
     acme = {
@@ -166,10 +215,12 @@
     pipewire = {
       enable = true;
       audio.enable = true;
+      alsa = {
+          enable = true;
+          support32Bit = true;
+      };
       pulse.enable = true;
       wireplumber.enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
       jack.enable = true;
     };
   };
@@ -177,14 +228,18 @@
   system = {
     autoUpgrade = {
       enable = true;
+      allowReboot = true;
       channel = "https://nixos.org/channel/nixos-unstable";
     };
     stateVersion = "23.05";
   };
+
   time.timeZone = "Africa/Johannesburg";
+  i18n.defaultLocale = "en_US.UTF-8";
+
   users.users.francois = {
     isNormalUser = true;
-    description = "Francois";
+    description = "Francois Robbertze";
     extraGroups = ["networkmanager" "wheel" "video" "audio" "lp" "scanner" "storage"];
     shell = pkgs.fish;
   };
