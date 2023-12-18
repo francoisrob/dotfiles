@@ -7,8 +7,6 @@ map("n", "<C-c>", "<cmd> %y+ <CR>") -- copy whole filecontent
 
 -- nvimtree
 map("n", "<C-n>", "<cmd> Neotree toggle <CR>")
-map("v", "<leader>/", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
--- comment.nvim
 map("n", "<leader>/", function()
   require("Comment.api").toggle.linewise.current()
 end)
