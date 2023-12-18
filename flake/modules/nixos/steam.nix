@@ -1,5 +1,5 @@
 # NEEDS hardware accelaration
-{ pkgs, lib, ...}:
+{ pkgs, lib, ... }:
 {
   environment.systemPackages = with pkgs; [
     steam

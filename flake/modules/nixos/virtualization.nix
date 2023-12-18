@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   virtualisation = {
     docker.rootless = {
       enable = true;
@@ -9,7 +9,7 @@
       qemu = {
         swtpm.enable = true;
         ovmf.enable = true;
-        ovmf.packages = [pkgs.OVMFFull.fd];
+        ovmf.packages = [ pkgs.OVMFFull.fd ];
       };
     };
     spiceUSBRedirection.enable = true;
@@ -18,7 +18,7 @@
     Delegate = "cpu cpuset io memory pids";
   };
   programs.dconf.enable = true;
-  users.users.francois.extraGroups = ["libvirtd" "kvm" "docker"];
+  users.users.francois.extraGroups = [ "libvirtd" "kvm" "docker" ];
 
   services.spice-vdagentd.enable = true;
   environment.systemPackages = with pkgs; [

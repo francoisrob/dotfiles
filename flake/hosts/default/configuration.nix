@@ -1,4 +1,18 @@
-{pkgs, ...}: {
+{ pkgs, inputs, ... }:
+{
+  imports = [
+    ./hardware-configuration.nix
+    ../../modules/nixos/desktop.nix
+    ../../modules/nixos/virtualization.nix
+    ../../modules/nixos/hardware-acceleration.nix
+    ../../modules/nixos/steam.nix
+    ../../modules/nixos/nvidia.nix
+
+    ../../modules/nixos/thunar.nix
+    ../../modules/nixos/fonts.nix
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -6,46 +20,21 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    supportedFilesystems = ["ntfs"];
-
+    # supportedFilesystems = [ "ntfs" ];
     # PLYMOUTH
     consoleLogLevel = 0;
     initrd.verbose = false;
     plymouth.enable = true;
-    kernelParams = [ 
+    kernelParams = [
       "quiet"
-      "splash" 
-      "rd.systemd.show_status=false" 
-      "rd.udev.log_level=3" 
-      "udev.log_priority=3" 
-      "boot.shell_on_fail" 
+      "splash"
+      "rd.systemd.show_status=false"
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
+      "boot.shell_on_fail"
     ];
   };
-  console = {
-    colors = [
-      "1b1b1b"
-      "0e363e"
-      "34381b"
-      "374141"
-      "402120"
-      "4c3432"
-      "4f422e"
-      "504945"
-      "7daea3"
-      "a9b665"
-      "89b482"
-      "ea6962"
-      "d3869b"
-      "d8a657"
-      "a89984"
-      "ddc7a1"
-    ];
-    keyMap = "us";
-    enable = true;
-    earlySetup = true;
-    packages = with pkgs; [ terminus_font ];
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
-  };
+
   environment = {
     systemPackages = with pkgs; [
       xdg-user-dirs
@@ -58,15 +47,15 @@
       wayland # Needed for Hyprland
       libnotify # Needed for dunst
       unzip # Needed for unzip
-      gnome.file-roller # Needed for zip
 
-      btop
+      stable.btop
 
       wget
       stow
       killall
 
       kitty
+      rofi-wayland
 
       glxinfo
       openssl
@@ -80,18 +69,13 @@
       gcc
       cargo
       ripgrep
-
-      noto-fonts
+      nil
+      nixpkgs-fmt
     ];
-    pathsToLink = ["/libexec"];
+    pathsToLink = [ "/libexec" ];
     localBinInPath = true;
   };
-  fonts = {
-    fontDir.enable = true;
-    packages = with pkgs; [
-      nerdfonts
-    ];
-  };
+
   hardware = {
     bluetooth = {
       enable = true;
@@ -100,6 +84,7 @@
     # https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800/11
     i2c.enable = true;
   };
+
   networking = {
     hostName = "nixos";
     wireless.iwd.enable = true;
@@ -107,10 +92,10 @@
       enable = true;
       wifi.backend = "iwd";
     };
-    nameservers = ["8.8.8.8"];
+    nameservers = [ "8.8.8.8" ];
     firewall = {
       enable = true;
-      allowedTCPPorts = [80 443 4200 3000];
+      allowedTCPPorts = [ 80 443 4200 3000 ];
       allowedUDPPortRanges = [
         {
           from = 4000;
@@ -123,12 +108,11 @@
       ];
     };
   };
+
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = ["nix-command" "flakes"];
-      substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+      experimental-features = [ "nix-command" "flakes" ];
     };
     gc = {
       automatic = true;
@@ -136,17 +120,23 @@
       options = "--delete-older-than 7d";
     };
   };
+
   nixpkgs = {
     config = {
       allowUnfree = true;
     };
-    overlays = [
-      (self: super: {
-        mpv = super.mpv.override {
-          scripts = [self.mpvScripts.mpris];
-        };
-      })
-    ];
+  };
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = {
+      inherit pkgs;
+      inherit inputs;
+    };
+    users = {
+      "francois" = import ./home.nix;
+    };
   };
 
   powerManagement.powertop.enable = true;
@@ -162,15 +152,8 @@
       enable = true;
       enableSSHSupport = true;
     };
-    thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [
-        thunar-archive-plugin 
-        thunar-volman
-        thunar-media-tags-plugin
-      ];
-    };
   };
+
   security = {
     sudo = {
       enable = true;
@@ -183,17 +166,16 @@
     };
   };
   sound.enable = true;
+
   services = {
     # File mounting
-    tumbler.enable = true;
-    gvfs.enable = true;
     udisks2.enable = true;
     devmon.enable = true;
 
     flatpak.enable = true;
     blueman.enable = true;
     openssh.enable = true;
-    
+
     # Power
     upower.enable = true;
     thermald.enable = true;
@@ -210,14 +192,15 @@
 
     dbus = {
       enable = true;
-      packages = with pkgs; [blueman];
+      packages = with pkgs; [ blueman ];
     };
+
     pipewire = {
       enable = true;
       audio.enable = true;
       alsa = {
-          enable = true;
-          support32Bit = true;
+        enable = true;
+        support32Bit = true;
       };
       pulse.enable = true;
       wireplumber.enable = true;
@@ -226,11 +209,11 @@
   };
 
   system = {
-    autoUpgrade = {
-      enable = true;
-      allowReboot = true;
-      channel = "https://nixos.org/channel/nixos-unstable";
-    };
+    # autoUpgrade = {
+    #   enable = true;
+    #   allowReboot = true;
+    #   channel = "https://nixos.org/channel/nixos-unstable";
+    # };
     stateVersion = "23.05";
   };
 
@@ -240,7 +223,7 @@
   users.users.francois = {
     isNormalUser = true;
     description = "Francois Robbertze";
-    extraGroups = ["networkmanager" "wheel" "video" "audio" "lp" "scanner" "storage"];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" "storage" ];
     shell = pkgs.fish;
   };
   xdg = {
@@ -249,7 +232,7 @@
     };
     mime = {
       enable = true;
-      defaultApplications = {};
+      defaultApplications = { };
     };
   };
 }

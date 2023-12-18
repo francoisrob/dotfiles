@@ -4,85 +4,108 @@
   min-height: 0;
   margin: 0;
   padding: 0;
-  font-family: "Noto Serif Myanmar";
-  color: #ddc7a1;
+  font-family: "Ubuntu", "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
+  font-size: 12px;
 }
+
+/* Colors */
+@define-color base            #191724;
+@define-color surface         #1f1d2e;
+@define-color overlay         #26233a;
+
+@define-color muted           #6e6a86;
+@define-color subtle          #908caa;
+@define-color text            #e0def4;
+
+@define-color love            #eb6f92;
+@define-color gold            #f6c177;
+@define-color rose            #ebbcba;
+@define-color pine            #31748f;
+@define-color foam            #9ccfd8;
+@define-color iris            #c4a7e7;
+
+@define-color highlightLow    #21202e;
+@define-color highlightMed    #403d52;
+@define-color highlightHigh   #524f67;
 
 window#waybar {
-  background-color: rgba(40, 40, 40, 0.5);
+  background-color: @base;
 }
 
-#workspaces,
-#clock,
-#custom-music,
-#window {
-  font-weight: 600;
+.modules-left {
+  background-image: linear-gradient(
+    to top right,
+    @highlightLow 0%,
+    @highlightMed 90%
+  );
+  border-radius: 0 4px 4px 0;
 }
 
+/* workspaces */
 #workspaces {
-  margin: 0 1px;
-  border-radius: 4px;
-  border: 1px solid #689d6a;
+  padding: 0 4px 0 4px;
 }
-
-#workspaces button label {
-  padding: 0 10px;
-  color: #ddc7a1;
+#workspaces button {
+  background-color: inherit;
+  margin: 2px 0 2px 0;
 }
-
+#workspaces button box {
+  padding: 2px 12px 2px 12px;
+}
+#workspaces button box label {
+  color: @text;
+  font-weight: 500;
+}
 #workspaces button.active {
-  background: #a9b665;
+  background-image: linear-gradient(to top right, @love 50%, @gold 100%);
+  border-radius: 4px;
+}
+#workspaces button.active box {
+}
+#workspaces button.active box label {
+  color: @base;
+  font-weight: bold;
 }
 
-#workspaces button.active label {
-  color: #1b1b1b;
-}
-
-#workspaces button:hover {
-  background: #32302f;
-}
-#workspaces button.focused label {
-  color: #1d2021;
-}
-#workspaces button.focused {
-  background: #e78a4e;
-}
-
-#clock,
-#backlight,
-#battery,
-#cpu,
-#memory,
-#network,
-#pulseaudio,
-#tray,
-#mode,
-#idle_inhibitor {
-  padding: 0 5px;
-  margin: 0 10px;
-}
-
-#idle_inhibitor {
-  padding: 0 10px;
-}
-
-#idle_inhibitor.activated {
-  background-color: #689d6a;
-  color: #1d2021;
+label#window {
+  color: @text;
+  font-weight: bold;
 }
 
 #clock {
-  margin: 0;
-  color: #fabd2f;
+  background-color: @base;
+  padding: 0 8px 0 8px;
+  /* border-radius: 0 8px 8px 0; */
+  border-radius: 8px;
+  margin: 2px;
+  font-family: "Ubuntu";
+  font-size: 14px;
+  font-weight: 600;
+  color: @text;
 }
 
-#network.disconnected {
-  color: #cc241d;
-  border-bottom: 4px solid #cc241d;
+#tray {
+  margin: 0 8px 0 8px;
+  padding: 4px 8px 4px 8px;
+  /* background-color: @base; */
+  /* border-radius: 0 0 8px 8px; */
+}
+#tray menu {
+  background-color: @base;
+}
+#battery {
+  padding: 4px 16px 4px 8px;
+  background-color: @base;
+  color: @text;
 }
 
-#pulseaudio.muted {
-  padding: 0 20px;
-  color: #cc241d;
-  border-bottom: 4px solid #cc241d;
+#backlight {
+  padding: 4px 8px 4px 8px;
+  background-color: @base;
+  color: @text;
+}
+#pulseaudio {
+  padding: 4px 0px 4px 0px;
+  background-color: @base;
+  color: @text;
 }

@@ -1,7 +1,4 @@
-{pkgs, ...}: {
-  # nixpkgs.config.packageOverride = pkgs: {
-  #   vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  # };
+{ pkgs, ... }: {
   hardware.opengl = {
     enable = true;
 
@@ -11,11 +8,11 @@
     extraPackages = with pkgs; [
       # Vulkan
       intel-compute-runtime
-      
+
       # VA-API
       intel-media-driver
       # vaapiIntel # Older i965 driver
-      
+
       # vaapiVdpau
       # libvdpau-va-gl
     ];

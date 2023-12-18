@@ -1,8 +1,12 @@
+{ inputs, pkgs, ... }:
 {
-  inputs,
-  pkgs,
-  ...
-}: {
+  nix = {
+    settings = {
+      substituters = [ "https://hyprland.cachix.org" ];
+      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+    };
+  };
+
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
@@ -11,20 +15,19 @@
 
   services = {
     xserver = {
+      enable = true;
+      excludePackages = with pkgs; [
+        xterm
+      ];
+      libinput = {
         enable = true;
-        excludePackages = with pkgs; [
-          xterm
-        ];
-        libinput = {
-          enable = true;
-        };
+      };
     };
     greetd = {
       enable = true;
       settings = rec {
         initial_session = {
-          # command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd Hyprland";
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+          command = "${pkgs.hyprland}/bin/Hyprland";
           user = "francois";
         };
         default_session = initial_session;
