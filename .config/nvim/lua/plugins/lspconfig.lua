@@ -35,7 +35,16 @@ return {
             }
           },
         },
-      }
+      },
+      cssls = {
+        filetypes = { "css", "scss", "less", "sass" },
+      },
+      html = {
+        filetypes = { "html" },
+      },
+      jsonls = {
+        filetypes = { "json" },
+      },
     },
 
     ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>

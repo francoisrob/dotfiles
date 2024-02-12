@@ -4,6 +4,9 @@ opts = {
     "eslint_d",
     "prettierd",
     "tailwindcss-language-server",
+    "css-lsp",
+    "html-lsp",
+    "json-lsp",
   }
 }
 }
