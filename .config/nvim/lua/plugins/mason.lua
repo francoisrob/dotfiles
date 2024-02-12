@@ -1,8 +1,9 @@
-return {
-  "williamboman/mason.nvim",
-  -- opts = function(_, opts)
-  --   vim.list_extend(opts.ensure_installed, {
-  --     "nil",
-  --   })
-  -- end,
+return { "williamboman/mason.nvim",
+opts = {
+  ensure_installed = {
+    "eslint_d",
+    "prettierd",
+    "tailwindcss-language-server",
+  }
+}
 }
