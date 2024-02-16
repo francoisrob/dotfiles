@@ -4,12 +4,10 @@ return {
     event = "LazyFile",
     opts = {
       linters_by_ft = {
-        javascript = { "eslint" },
-        typescript = { "eslint" },
+        typescript = { "eslint_d" },
         -- ['*'] = { 'global linter' },
         -- ['_'] = { 'fallback linter' },
       },
     },
   },
 }
-

@@ -10,12 +10,28 @@ return {
       statusline = false,
     },
     config = {
+      project = {
+        enable = true,
+        limit = 8,
+        icon = '󰏓 ',
+        label = 'Recent Projects',
+        action = 'Telescope find_files cwd='
+      },
+      mru = {
+        limit = 10,
+        icon = ' ',
+        label = 'Most Recent Files',
+        cwd_only = false
+      },
       week_header = {
         enable = true
       },
       packages = { enable = false },
       shortcut = {
-        { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+        { action = "Telescope find_files", desc = "Find file", icon = " ", group = 'Number', key = "f" },
+        { action = "ene | startinsert", desc = "New file", icon = " ", group = 'String', key = "n" },
+        { action = 'Lazy update', desc = 'Update', icon = "󰊳 ", group = 'Statement', key = 'u' },
+        { action = "qa", desc = "Quit", icon = " ", group = 'Error', key = "q" },
       },
       footer = { "" }
     }

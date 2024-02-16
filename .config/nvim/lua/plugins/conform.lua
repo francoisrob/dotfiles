@@ -2,6 +2,7 @@ return {
   "stevearc/conform.nvim",
   optional = true,
   opts = {
+    lsp_fallback = true,
     formatters_by_ft = {
       ["javascript"] = { "prettier" },
       ["typescript"] = { "prettier" },
@@ -16,4 +17,3 @@ return {
     },
   },
 }
-
