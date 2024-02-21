@@ -23,7 +23,7 @@ return {
       },
       tsserver = {
         filetypes = { "typescript" },
-        root_dir = util.root_pattern("tsconfig.json", "jsconfig.json", ".git"),
+        root_dir = util.root_pattern("tsconfig.json"),
       },
       lua_ls = {
         settings = {
