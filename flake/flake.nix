@@ -27,13 +27,13 @@
             };
           };
         })
-        (final: prev: {
-          steam = prev.steam.override ({ extraPkgs ? pkgs': [ ], ... }: {
-            extraPkgs = pkgs': (extraPkgs pkgs') ++ (with pkgs'; [
-              libgdiplus
-            ]);
-          });
-        })
+        # (final: prev: {
+        #   steam = prev.steam.override ({ extraPkgs ? pkgs': [ ], ... }: {
+        #     extraPkgs = pkgs': (extraPkgs pkgs') ++ (with pkgs'; [
+        #       libgdiplus
+        #     ]);
+        #   });
+        # })
         (self: super: {
           mpv = super.mpv.override {
             scripts = [ self.mpvScripts.mpris ];

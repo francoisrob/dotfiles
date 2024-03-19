@@ -1,11 +1,11 @@
-{ pkgs, inputs, ... }:
+{ lib, pkgs, inputs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/desktop.nix
     ../../modules/nixos/virtualization.nix
     ../../modules/nixos/hardware-acceleration.nix
-    ../../modules/nixos/steam.nix
+    # ../../modules/nixos/steam.nix
     ../../modules/nixos/nvidia.nix
 
     ../../modules/nixos/thunar.nix
@@ -86,27 +86,34 @@
   };
 
   networking = {
+    # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+    # (the default) this is the recommended approach. When using systemd-networkd it's
+    # still possible to use this option, but it's recommended to use it in conjunction
+    # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+    useDHCP = lib.mkDefault true;
+    # networking.interfaces.enp2s0.useDHCP = lib.mkDefault true;
+    # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
     hostName = "nixos";
-    wireless.iwd.enable = true;
+    # wireless.iwd.enable = true;
     networkmanager = {
       enable = true;
-      wifi.backend = "iwd";
+      # wifi.backend = "iwd";
     };
-    nameservers = [ "8.8.8.8" ];
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 80 443 4200 3000 ];
-      allowedUDPPortRanges = [
-        {
-          from = 4000;
-          to = 4007;
-        }
-        {
-          from = 8000;
-          to = 8010;
-        }
-      ];
-    };
+    # nameservers = [ "8.8.8.8" ];
+    # firewall = {
+    #   enable = true;
+    #   allowedTCPPorts = [ 80 443 4200 3000 ];
+    #   allowedUDPPortRanges = [
+    #     {
+    #       from = 4000;
+    #       to = 4007;
+    #     }
+    #     {
+    #       from = 8000;
+    #       to = 8010;
+    #     }
+    #   ];
+    # };
   };
 
   nix = {
@@ -160,10 +167,10 @@
     };
     polkit.enable = true;
     rtkit.enable = true;
-    acme = {
-      acceptTerms = true;
-      defaults.email = "francoisdprob@gmail.com";
-    };
+    # acme = {
+    #   acceptTerms = true;
+    #   defaults.email = "francoisdprob@gmail.com";
+    # };
   };
   sound.enable = true;
 
@@ -192,7 +199,7 @@
 
     dbus = {
       enable = true;
-      packages = with pkgs; [ blueman ];
+      packages = with pkgs; [ blueman gcr ];
     };
 
     pipewire = {

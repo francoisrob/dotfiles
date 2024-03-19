@@ -14,31 +14,34 @@
 
       gnome.gnome-calculator
 
+      # Cli tools
       starship
-
-      # (stable.discord.override {
-      #   withOpenASAR = true;
-      #   withVencord = true;
-      # })
+      zoxide
 
       webcord-vencord
       font-manager
 
       firefox-wayland
+      chromium
+      # (chromium.override {
+      #   commandLineArgs = [
+      #     "--ozone-platform-hint=auto"
+      #   ];
+      # })
 
-      inkscape
-      gwenview
-      gimp-with-plugins
-      okular
-      ffmpeg
-      libreoffice-fresh
+      # inkscape
+      # gwenview
+      # gimp-with-plugins
+      # okular
+      # ffmpeg
+      # libreoffice-fresh
 
       nix-index
       prefetch-npm-deps
       nix-prefetch-git
       nix-prefetch
 
-      obs-studio
+      # obs-studio
 
       swww
       mako
@@ -61,11 +64,12 @@
 
       # wf-recorder
       (inputs.hyprland-contrib.packages.${pkgs.system}.grimblast)
-      (
-        waybar.overrideAttrs (oldAttrs: {
-          mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-        })
-      )
+      stable.waybar
+      # (
+      #   waybar.overrideAttrs (oldAttrs: {
+      #     mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+      #   })
+      # )
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -128,6 +132,7 @@
       enable = true;
       defaultCacheTtl = 31536000;
       maxCacheTtl = 31536000;
+      pinentryPackage = pkgs.pinentry-gnome3;
     };
   };
 
