@@ -1,5 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export NODE_ENV:development
 SETUVAR __fish_initialized:3100
 SETUVAR _fish_abbr_za:zoxide\x20add
 SETUVAR _fish_abbr_zq:zoxide\x20query

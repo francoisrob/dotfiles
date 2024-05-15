@@ -2,8 +2,8 @@ set fish_greeting ""
 set fish_home ~/.config/fish
 
 set -gx VOLTA_HOME "$HOME/.volta"
-set -gx PATH "$VOLTA_HOME/bin" "$HOME/.local/share/bin/" "$HOME/.local/bin/" $PATH
-set -gx PATH "$HOME/.cargo/bin" $PATH
+set -gx PATH "$VOLTA_HOME/bin" "$HOME/.local/share/bin/" "$HOME/.local/bin/" "/usr/local/go/bin" $PATH
+set -gx PATH "$HOME/.cargo/bin" "$HOME/.bun/bin" $PATH
 set -gx PROJECTS "$HOME/Projects"
 
 set -gx EDITOR "nvim"
