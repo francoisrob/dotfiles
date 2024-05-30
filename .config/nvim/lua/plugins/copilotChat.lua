@@ -1,49 +1,99 @@
 return {
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    opts = {
-      show_help = "yes", -- Show help text for CopilotChatInPlace, default: yes
-      debug = false, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
-      disable_extra_info = 'no', -- Disable extra information (e.g: system prompt) in the response.
-      language = "English" -- Copilot answer language settings when using default prompts. Default language is English.
-      -- proxy = "socks5://127.0.0.1:3000", -- Proxies requests via https or socks.
-      -- temperature = 0.1,
-    },
-    build = function()
-      vim.notify("Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.")
-    end,
-    event = "VeryLazy",
-    keys = {
-      { "<leader>ccb", ":CopilotChatBuffer ", desc = "CopilotChat - Chat with current buffer" },
-      { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-      { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
-      {
-        "<leader>ccT",
-        "<cmd>CopilotChatVsplitToggle<cr>",
-        desc = "CopilotChat - Toggle Vsplit", -- Toggle vertical split
-      },
-      {
-        "<leader>ccv",
-        ":CopilotChatVisual ",
-        mode = "x",
-        desc = "CopilotChat - Open in vertical split",
-      },
-      {
-        "<leader>ccx",
-        ":CopilotChatInPlace<cr>",
-        mode = "x",
-        desc = "CopilotChat - Run in-place code",
-      },
-      {
-        "<leader>ccf",
-        "<cmd>CopilotChatFixDiagnostic<cr>", -- Get a fix for the diagnostic message under the cursor.
-        desc = "CopilotChat - Fix diagnostic",
-      },
-      {
-        "<leader>ccr",
-        "<cmd>CopilotChatReset<cr>", -- Reset chat history and clear buffer.
-        desc = "CopilotChat - Reset chat history and clear buffer",
-      }
-    },
-  },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   branch = "canary",
+  --   dependencies = {
+  --     { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+  --     { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
+  --   },
+  --   opts = {
+  --     disable_extra_info = 'no', -- Disable extra information (e.g: system prompt) in the response.
+  --     language = "English",      -- Copilot answer language settings when using default prompts. Default language is English.
+  --     -- proxy = "socks5://127.0.0.1:3000", -- Proxies requests via https or socks.
+  --     -- temperature = 0.1,
+  --
+  --     debug = false,                                                   -- Enable debug logging
+  --     proxy = nil,                                                     -- [protocol://]host[:port] Use this proxy
+  --     allow_insecure = false,                                          -- Allow insecure server connections
+  --
+  --     model = 'gpt-4',                                                 -- GPT model to use, 'gpt-3.5-turbo' or 'gpt-4'
+  --     temperature = 0.1,                                               -- GPT temperature
+  --
+  --     question_header = '## User ',                                    -- Header to use for user questions
+  --     answer_header = '## Copilot ',                                   -- Header to use for AI answers
+  --     error_header = '## Error ',                                      -- Header to use for errors
+  --     separator = '---',                                               -- Separator to use in chat
+  --
+  --     show_folds = true,                                               -- Shows folds for sections in chat
+  --     show_help = true,                                                -- Shows help message as virtual lines when waiting for user input
+  --     auto_follow_cursor = true,                                       -- Auto-follow cursor in chat
+  --     auto_insert_mode = false,                                        -- Automatically enter insert mode when opening window and if auto follow cursor is enabled on new prompt
+  --     clear_chat_on_new_prompt = false,                                -- Clears chat on every new prompt
+  --
+  --     context = nil,                                                   -- Default context to use, 'buffers', 'buffer' or none (can be specified manually in prompt via @).
+  --     history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
+  --     callback = nil,                                                  -- Callback to use when ask response is received
+  --   },
+  --   build = function()
+  --     vim.notify("Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.")
+  --   end,
+  --   event = "VeryLazy",
+  --
+  --   -- :CopilotChatExplain - Write an explanation for the active selection as paragraphs of text
+  --   -- :CopilotChatReview - Review the selected code
+  --   -- :CopilotChatFix - There is a problem in this code. Rewrite the code to show it with the bug fixed
+  --   -- :CopilotChatOptimize - Optimize the selected code to improve performance and readablilty
+  --   -- :CopilotChatDocs - Please add documentation comment for the selection
+  --   -- :CopilotChatTests - Please generate tests for my code
+  --   -- :CopilotChatFixDiagnostic - Please assist with the following diagnostic issue in file
+  --   -- :CopilotChatCommit - Write commit message for the change with commitizen convention
+  --   -- :CopilotChatCommitStaged - Write commit message for the change with commitizen convention
+  --
+  --   -- :CopilotChat <input>? - Open chat window with optional input
+  --   -- :CopilotChatOpen - Open chat window
+  --   -- :CopilotChatClose - Close chat window
+  --   -- :CopilotChatToggle - Toggle chat window
+  --   -- :CopilotChatStop - Stop current copilot output
+  --   -- :CopilotChatReset - Reset chat window
+  --   -- :CopilotChatSave <name>? - Save chat history to file
+  --   -- :CopilotChatLoad <name>? - Load chat history from file
+  --   -- -- :CopilotChatDebugInfo - Show debug information
+  --   keys = {
+  --     {
+  --       "<leader>ccc",
+  --       ":CopilotChat ",
+  --       mode = "n",
+  --       desc = "Open chat window with optional input"
+  --     },
+  --     {
+  --       "<leader>cco",
+  --       ":CopilotChatOpen<cr>",
+  --       desc = "Open chat window"
+  --     },
+  --     {
+  --       "<leader>cce",
+  --       ":CopilotChatExplain<cr>",
+  --       mode = "x",
+  --       desc = "Explain for the active selection"
+  --     },
+  --     {
+  --       "<leader>ccr",
+  --       ":CopilotChatReview<cr>",
+  --       mode = "x",
+  --       desc = "Review the selected code"
+  --     },
+  --     {
+  --       "<leader>ccf",
+  --       ":CopilotChatFix<cr>",
+  --       mode = "x",
+  --       desc = "Fix the bug in the selected code"
+  --     },
+  --     {
+  --       "<leader>ccp",
+  --       ":CopilotChatOptimize<cr>",
+  --       mode = "x",
+  --       desc = "Optimize the selected code to improve performance and readablilty"
+  --     },
+  --   },
+  -- },
 }

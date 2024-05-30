@@ -1,7 +1,7 @@
 return { "williamboman/mason.nvim",
 opts = {
   ensure_installed = {
-    "eslint_d",
+    -- "eslint_d",
     "prettier",
   }
 }
