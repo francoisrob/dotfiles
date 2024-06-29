@@ -1,9 +1,9 @@
 return {
-  'nvimdev/dashboard-nvim',
+  "nvimdev/dashboard-nvim",
   dependencies = {
-    { 'nvim-tree/nvim-web-devicons' }
+    { "nvim-tree/nvim-web-devicons" },
   },
-  event = 'VimEnter',
+  event = "VimEnter",
   opts = {
     theme = "hyper",
     hide = {
@@ -13,27 +13,27 @@ return {
       project = {
         enable = true,
         limit = 8,
-        icon = '󰏓 ',
-        label = 'Recent Projects',
-        action = 'Telescope find_files cwd='
+        icon = "󰏓 ",
+        label = "Recent Projects",
+        action = "Telescope find_files cwd=",
       },
       mru = {
         limit = 10,
-        icon = ' ',
-        label = 'Most Recent Files',
-        cwd_only = false
+        icon = " ",
+        label = "Most Recent Files",
+        cwd_only = false,
       },
       week_header = {
-        enable = true
+        enable = true,
       },
       packages = { enable = false },
       shortcut = {
-        { action = "Telescope find_files", desc = "Find file", icon = " ", group = 'Number', key = "f" },
-        { action = "ene | startinsert", desc = "New file", icon = " ", group = 'String', key = "n" },
-        { action = 'Lazy update', desc = 'Update', icon = "󰊳 ", group = 'Statement', key = 'u' },
-        { action = "qa", desc = "Quit", icon = " ", group = 'Error', key = "q" },
+        { action = "Telescope find_files", desc = "Find file", icon = " ", group = "Number", key = "f" },
+        { action = "ene | startinsert", desc = "New file", icon = " ", group = "String", key = "n" },
+        { action = "Lazy update", desc = "Update", icon = "󰊳 ", group = "Statement", key = "u" },
+        { action = "qa", desc = "Quit", icon = " ", group = "Error", key = "q" },
       },
-      footer = { "" }
-    }
-  }
+      footer = { "" },
+    },
+  },
 }

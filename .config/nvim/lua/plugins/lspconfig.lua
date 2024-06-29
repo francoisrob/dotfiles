@@ -1,24 +1,31 @@
--- add tsserver and setup with typescript.nvim instead of lspconfig
 local util = require "lspconfig.util"
+
+---@type LazyPluginSpec[]
 return {
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-
-    },
+    dependencies = {},
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options
       servers = {
-        angularls = {
-          filetypes = { "typescript", "html" },
-          root_dir = util.root_pattern("angular.json"),
-        },
+        -- angularls = {
+        --   filetypes = { "typescript", "html" },
+        --   root_dir = util.root_pattern("angular.json"),
+        -- },
         tailwindcss = {
           filetypes_exclude = { "markdown" },
           filetypes = { "html", "css", "scss", "typescript" },
-          root_dir = util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs',
-            'tailwind.config.ts', 'postcss.config.js', 'postcss.config.cjs', 'postcss.config.mjs', 'postcss.config.ts')
+          root_dir = util.root_pattern(
+            "tailwind.config.js",
+            "tailwind.config.cjs",
+            "tailwind.config.mjs",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "postcss.config.cjs",
+            "postcss.config.mjs",
+            "postcss.config.ts"
+          ),
         },
         -- tsserver = {
         --   filetypes = { "typescript", "html" },
@@ -26,7 +33,7 @@ return {
         -- },
         eslint = {
           filetypes = { "typescript", "html" },
-          root_dir = util.root_pattern(".eslintrc.json"),
+          root_dir = util.root_pattern ".eslintrc.json",
         },
         lua_ls = {
           settings = {
@@ -35,7 +42,7 @@ return {
               telemetry = { enable = false },
               diagnostics = {
                 disable = { "missing-fields" },
-              }
+              },
             },
           },
         },
@@ -60,18 +67,45 @@ return {
       -- },
     },
   },
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    event = { "BufReadPost *.ts,*.tsx,*.js,*.jsx", "BufNewFile *.ts,*.tsx,*.js,*.jsx" },
-    opts = {
-      settings = {
-        tsserver_file_preferences = {
-          includeInlayParameterNameHints = "literals",
-          includeInlayVariableTypeHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-        },
-      },
-    },
-  },
+  -- {
+  --   "pmizio/typescript-tools.nvim",
+  --   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+  --   event = { "BufReadPost *.ts,*.tsx,*.js,*.jsx", "BufNewFile *.ts,*.tsx,*.js,*.jsx" },
+  --   opts = {
+  --     settings = {
+  --       tsserver_file_preferences = {
+  --         includeInlayParameterNameHints = "literals",
+  --         includeInlayVariableTypeHints = true,
+  --         includeInlayFunctionLikeReturnTypeHints = true,
+  --       },
+  --     },
+  --   },
+  --   keys = {
+  --     {
+  --       "<leader>cto",
+  --       ":TSToolsOrganizeImports<cr>",
+  --       mode = "n",
+  --       desc = "Sorts and removes unused imports"
+  --     },
+  --     {
+  --       "<leader>ctf",
+  --       ":TSToolsFileReferences<cr>",
+  --       mode = "n",
+  --       desc = "Find files that reference the current file"
+  --     },
+  --     {
+  --       "<leader>cta",
+  --       ":TSToolsFixAll<cr>",
+  --       mode = "n",
+  --       desc = "Fixes all fixable errors"
+  --     },
+  --     {
+  --       "<leader>cti",
+  --       ":TSToolsAddMissingImports<cr>",
+  --       mode = "n",
+  --       desc = "Adds imports for all statements that lack one and can be imported"
+  --     },
+  --   },
+  --
+  -- },
 }

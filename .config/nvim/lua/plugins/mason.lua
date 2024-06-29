@@ -1,8 +1,9 @@
-return { "williamboman/mason.nvim",
-opts = {
-  ensure_installed = {
-    -- "eslint_d",
-    "prettier",
-  }
-}
+return {
+  "williamboman/mason.nvim",
+  opts = {
+    ensure_installed = {
+      -- "eslint_d",
+      "prettier",
+    },
+  },
 }
