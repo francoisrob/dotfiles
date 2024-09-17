@@ -1,6 +1,6 @@
 ---@type LazyPluginSpec[]
 return {
-  { "dstein64/vim-startuptime", enabled = false },
+  -- { "dstein64/vim-startuptime", enabled = false },
 
   -- {
   --   "OlegGulevskyy/better-ts-errors.nvim",
