@@ -122,7 +122,7 @@
     enable = true;
     theme = {
       name = "Adwaita-dark";
-      package = pkgs.gnome.gnome-themes-extra;
+      package = pkgs.gnome-themes-extra;
     };
     iconTheme = {
       name = "rose-pine";
@@ -132,13 +132,15 @@
       name = "Sans";
       size = 11;
     };
-    iconCache.enable = true;
   };
 
   qt = {
     enable = true;
-    platformTheme = "gnome";
-    style = "adwaita-dark";
+    platformTheme.name = "adwaita";
+    style = {
+      package = pkgs.gnome-themes-extra;
+      name = "Adwaita-dark";
+    };
   };
 
   programs = {
