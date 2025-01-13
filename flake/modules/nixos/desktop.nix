@@ -1,9 +1,12 @@
 { pkgs, ... }:
 {
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    # withUWSM = true;
+  programs = {
+    uwsm.enable = true;
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+      withUWSM = true;
+    };
   };
 
   services = {

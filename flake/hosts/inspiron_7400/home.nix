@@ -6,19 +6,9 @@
     stateVersion = "24.11";
 
     packages = with pkgs; [
-      # (pkgs.writeShellScriptBin "my-hello" ''
-      #   echo "Hello, ${config.home.username}!"
-      # '')
-
       gnome-calculator
 
-      # (stable.discord.override {
-      #   withOpenASAR = true;
-      #   withVencord = true;
-      # })
-
       discord
-      # slack
 
       font-manager
 
@@ -33,7 +23,7 @@
       okular
       ffmpeg
       libreoffice-fresh
-
+      postman
       obs-studio
 
       swww
@@ -47,7 +37,6 @@
 
       waypaper
 
-      # Develop
       starship
       ncdu
       gh
@@ -108,6 +97,7 @@
       VISUAL = "nvim";
       MANPAGER = "nvim +Man!";
       TERMINAL = "kitty";
+
       AQ_DRM_DEVICES = "/dev/dri/card2:/dev/dri/card1";
     };
 
@@ -130,18 +120,25 @@
 
   gtk = {
     enable = true;
-    # theme = {
-    #   name = "rose-pine";
-    #   package = pkgs.rose-pine-gtk-theme;
-    # };
-    # iconTheme = {
-    #   name = "rose-pine";
-    #   package = pkgs.rose-pine-icon-theme;
-    # };
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome.gnome-themes-extra;
+    };
+    iconTheme = {
+      name = "rose-pine";
+      package = pkgs.rose-pine-icon-theme;
+    };
     font = {
       name = "Sans";
       size = 11;
     };
+    iconCache.enable = true;
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "adwaita-dark";
   };
 
   programs = {
