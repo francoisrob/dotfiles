@@ -31,6 +31,7 @@
     fontconfig.enable = true;
     fontDir.enable = true;
     packages = with pkgs; [
+      nerd-fonts._0xproto
       font-awesome
       corefonts
       noto-fonts

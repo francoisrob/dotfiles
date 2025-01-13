@@ -1,10 +1,7 @@
 { pkgs, ... }: {
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-
-    # Vulkan
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       # Vulkan
       intel-compute-runtime

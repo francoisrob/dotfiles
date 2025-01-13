@@ -13,7 +13,7 @@
     ];
   };
 
-  environment.systemPackages = with pkgs.gnome; [
+  environment.systemPackages = with pkgs; [
     file-roller # Needed for zip
   ];
 }

@@ -23,7 +23,7 @@
       };
     };
 
-    opengl.extraPackages = with pkgs; [
+    graphics.extraPackages = with pkgs; [
       nvidia-vaapi-driver
     ];
   };
