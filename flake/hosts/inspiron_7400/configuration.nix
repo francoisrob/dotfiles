@@ -2,6 +2,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/nixos/audio.nix
     ../../modules/nixos/desktop.nix
     ../../modules/nixos/virtualization.nix
     ../../modules/nixos/hardware-acceleration.nix
@@ -16,21 +17,32 @@
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       timeout = 5;
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+      };
       efi.canTouchEfiVariables = true;
     };
-    # supportedFilesystems = [ "ntfs" ];
-    # PLYMOUTH
     consoleLogLevel = 0;
-    initrd.verbose = false;
+    initrd = {
+      verbose = false;
+    };
     plymouth.enable = true;
     kernelParams = [
       "quiet"
+      "loglevel=3"
       "splash"
       "rd.systemd.show_status=false"
       "rd.udev.log_level=3"
       "udev.log_priority=3"
       "boot.shell_on_fail"
+
+      # high res
+      "video=2560x1200"
+      "fbcon=font:TER16x32"
+
+      "i915.enable_psr=1"
+      "i915.fastboot=1"
+      "i915.enable_guc=3"
     ];
   };
 
@@ -43,8 +55,6 @@
       libva-utils
       pciutils
 
-      wayland # Needed for Hyprland
-      libnotify # Needed for dunst
       unzip # Needed for unzip
 
       btop
@@ -54,7 +64,6 @@
       killall
 
       kitty
-      rofi-wayland
 
       glxinfo
       openssl
@@ -68,6 +77,8 @@
       fzf
       gnumake
       ripgrep
+      mongosh
+      mongodb-tools
 
       lua
       luajitPackages.luarocks
@@ -83,11 +94,11 @@
   };
 
   hardware = {
+    enableAllFirmware = true;
     bluetooth = {
       enable = true;
       powerOnBoot = true;
     };
-    # https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800/11
     i2c.enable = true;
   };
 
@@ -98,21 +109,6 @@
       enable = true;
       wifi.backend = "iwd";
     };
-    # nameservers = [ "8.8.8.8" ];
-    # firewall = {
-    #   enable = true;
-    #   allowedTCPPorts = [ 80 443 4200 3000 ];
-    #   allowedUDPPortRanges = [
-    #     {
-    #       from = 4000;
-    #       to = 4007;
-    #     }
-    #     {
-    #       from = 8000;
-    #       to = 8010;
-    #     }
-    #   ];
-    # };
   };
 
   nix = {
@@ -155,10 +151,6 @@
   programs = {
     nix-ld.enable = true;
     mtr.enable = true;
-    # neovim = {
-    #   enable = true;
-    #   defaultEditor = true;
-    # };
     fish.enable = true;
     gnupg.agent = {
       enable = true;
@@ -167,20 +159,16 @@
   };
 
   security = {
-    sudo = {
-      enable = true;
-    };
+    sudo.enable = true;
     polkit.enable = true;
-    rtkit.enable = true;
     acme = {
       acceptTerms = true;
       defaults.email = "francoisdprob@gmail.com";
     };
   };
-  # sound.enable = true;
 
   services = {
-    # snap.enable = true;
+    envfs.enable = true;
     mongodb = {
       enable = true;
       package = pkgs.mongodb-ce;
@@ -201,18 +189,6 @@
     dbus = {
       enable = true;
       packages = with pkgs; [ blueman ];
-    };
-
-    pipewire = {
-      enable = true;
-      audio.enable = true;
-      alsa = {
-        enable = true;
-        support32Bit = true;
-      };
-      pulse.enable = true;
-      wireplumber.enable = true;
-      jack.enable = true;
     };
   };
 
@@ -241,15 +217,6 @@
       "storage"
     ];
     shell = pkgs.fish;
-  };
-  xdg = {
-    portal = {
-      enable = true;
-    };
-    mime = {
-      enable = true;
-      defaultApplications = { };
-    };
   };
 
 }

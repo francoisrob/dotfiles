@@ -29,7 +29,6 @@
     let
       system = "x86_64-linux";
       overlays = [
-        # (final: prev: { nwg-displays = prev.nwg-displays.override { hyprlandSupport = true; }; })
         (final: _prev: {
           stable = import inputs.stable {
             inherit system;

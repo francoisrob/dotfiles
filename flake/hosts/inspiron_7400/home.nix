@@ -7,6 +7,7 @@
 
     packages = with pkgs; [
       gnome-calculator
+      hyprcursor
 
       discord
 
@@ -33,6 +34,7 @@
       wl-clipboard
 
       nwg-displays
+      nwg-look
       networkmanagerapplet
 
       waypaper
@@ -43,6 +45,7 @@
       lazygit
       sqlitebrowser
       stylua
+      aws-sam-cli
 
       mongodb-compass
 
@@ -99,14 +102,21 @@
       TERMINAL = "kitty";
 
       AQ_DRM_DEVICES = "/dev/dri/card2:/dev/dri/card1";
+
+      XDG_SESSION_TYPE = "wayland";
+
+      HYPRCURSOR_SIZE = 24;
+      XCURSOR_SIZE = 24;
+      HYPRCURSOR_THEME = "Bibata-Modern-Classic";
+      XCURSOR_THEME = "Bibata-Modern-Classic";
     };
 
     pointerCursor = {
       gtk.enable = true;
       x11.enable = true;
       package = pkgs.bibata-cursors;
-      name = "Bibata-Original-Ice";
-      size = 20;
+      name = "Bibata-Modern-Classic";
+      size = 24;
     };
   };
 

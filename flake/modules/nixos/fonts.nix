@@ -1,25 +1,30 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+
+let
+  catppuccinColors = [
+    "1e1e2e" # Black (Base)
+    "f38ba8" # Red
+    "a6e3a1" # Green
+    "f9e2af" # Yellow
+    "89b4fa" # Blue
+    "f5c2e7" # Magenta
+    "94e2d5" # Cyan
+    "cdd6f4" # White
+    "45475a" # Bright Black
+    "f38ba8" # Bright Red
+    "a6e3a1" # Bright Green
+    "f9e2af" # Bright Yellow
+    "89b4fa" # Bright Blue
+    "f5c2e7" # Bright Magenta
+    "94e2d5" # Bright Cyan
+    "b1b6c9" # Bright White
+  ];
+in
+{
   console = {
-    colors = [
-      "191724"
-      "31748f"
-      "9ccfd8"
-      "f6c177"
-      "31748f"
-      "c4a7e7"
-      "9ccfd8"
-      "524f67"
-      "403d52"
-      "eb6f92"
-      "31748f"
-      "f6c177"
-      "9ccfd8"
-      "c4a7e7"
-      "9ccfd8"
-      "e0def4"
-    ];
-    keyMap = "us";
     enable = true;
+    keyMap = "us";
+    colors = catppuccinColors;
     earlySetup = true;
     packages = with pkgs; [ terminus_font ];
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
