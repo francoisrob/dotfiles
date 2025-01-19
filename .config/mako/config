@@ -1,48 +1,31 @@
-font=DejaVu Sans 10
-background-color=#1b1b1b
-text-color=#d4be98
+font=JetBrainsMono Nerd Font 10
+background-color=#1e1e2e
+text-color=#cdd6f4
 width=400
 height=200
-outer-margin=0
+outer-margin=10
 margin=10
 padding=10
-border-size=1
-border-color=#a9b665
-progress-color=over #89b482
+border-size=2
+border-color=#89b4fa
+progress-color=#89b482
 icons=1
-format=<b>%a ⏵</b> %s\n%b
+format=<b>%a ⏵</b> %s\n<b>%b</b>
 text-alignment=left
 default-timeout=10
 ignore-timeout=0
 group-by=none
 anchor=top-right
+border-radius=5
 
 [urgency=low]
-border-color=#a9b665
-background-color=#282828
+border-color=#a6e3a1
+background-color=#1e1e2e
 
 [urgency=normal]
-border-color=#d8a657
-background-color=#45403d
+border-color=#89b4fa
+background-color=#313244
 
 [urgency=critical]
-border-color=#ea6962
-background-color=#32302f
-
-# sort=-time
-# output=DP-2
-# layer=overlay
-# padding=0,5,10
-# border-size=1
-# border-radius=0
-# icons=1
-# default-timeout=10000
-# ignore-timeout=1
-
-# Colors
-
-# border-color=#89b4fa
-# progress-color=over #313244
-
-# [urgency=high]
-# border-color=#fab387
+border-color=#f38ba8
+background-color=#1a182c
