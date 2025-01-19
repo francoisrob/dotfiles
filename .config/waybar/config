@@ -5,7 +5,6 @@
   "modules-left": ["clock", "hyprland/workspaces"],
   "modules-center": [],
   "height": 28,
-  // "modules-right": ["tray", "pulseaudio", "backlight", "battery"],
   "modules-right": ["tray","pulseaudio", "battery"],
   "hyprland/workspaces": {
     "disable-scroll": false,
