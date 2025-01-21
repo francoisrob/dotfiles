@@ -41,7 +41,7 @@
       "fbcon=font:TER16x32"
 
       "i915.enable_psr=1"
-      "i915.fastboot=1"
+      # "i915.fastboot=1"
       "i915.enable_guc=3"
     ];
   };
@@ -149,6 +149,10 @@
 
   powerManagement.powertop.enable = true;
   programs = {
+    java = {
+      enable = true;
+      package = pkgs.jdk17;
+    };
     nix-ld.enable = true;
     mtr.enable = true;
     fish.enable = true;
@@ -172,6 +176,20 @@
     mongodb = {
       enable = true;
       package = pkgs.mongodb-ce;
+    };
+    postgresql = {
+      enable = false;
+      ensureDatabases = [ "mydatabase" ];
+      authentication = pkgs.lib.mkOverride 10 ''
+        #type database  DBuser  auth-method
+        local all       all     trust
+
+        # ipv4
+        host  all      all     127.0.0.1/32   trust
+
+        # ipv6
+        host all       all     ::1/128        trust
+      '';
     };
     # File mounting
     udisks2.enable = true;

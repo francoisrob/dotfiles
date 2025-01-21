@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
+in
 {
   programs = {
     uwsm.enable = true;
@@ -25,12 +28,11 @@
 
     greetd = {
       enable = true;
-      settings = rec {
-        initial_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+      settings = {
+        default_session = {
+          command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -S hyprland-uwsm.desktop'";
           user = "francois";
         };
-        default_session = initial_session;
       };
     };
 
