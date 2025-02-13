@@ -10,16 +10,16 @@
     "disable-scroll": false,
     "all-outputs": true,
     "format": "<sub>{icon}</sub> {windows}",
-    "window-rewrite-default": "",
+    "window-rewrite-default": "   ",
     "format-window-separator": "  ",
     "window-rewrite": {
-      "firefox": "",
-      "kitty": "",
-      "code": "󰨞",
-      "font-manager": "",
-      "steam": "",
-      "discord": "",
-      "Webcord": ""
+      "firefox": "   ",
+      "kitty": "  ",
+      "code": " 󰨞  ",
+      "font-manager": "  ",
+      "steam": "   ",
+      "discord": "   ",
+      "Webcord": "   "
     },
     "persistent-workspaces": {
       "*": 3
@@ -34,7 +34,7 @@
 
   "backlight": {
     "format": "{icon} {percent}",
-    "format-icons": ["󰃞", "󰃟", "󰃝", "󰃠"],
+    "format-icons": [" 󰃞  ", " 󰃟  ", " 󰃝  ", " 󰃠 "],
     "tooltip": false,
   },
 
@@ -52,15 +52,15 @@
   "pulseaudio": {
     "format": " {volume} {icon}",
     "format-bluetooth": " {icon} {volume}",
-    "format-muted": "󰝟",
+    "format-muted": " 󰝟 ",
     "format-icons": {
-      "headphones": "",
-      "handsfree": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": ["", "", ""]
+      "headphones": "   ",
+      "handsfree": "   ",
+      "headset": "   ",
+      "phone": "   ",
+      "portable": "   ",
+      "car": "   ",
+      "default": ["  ", "  ", "   "]
     },
     "on-click": "pavucontrol"
   },
@@ -72,7 +72,7 @@
       "critical": 15
     },
     "format": "{capacity} {icon}",
-    "format-icons": ["", "", "", "", ""],
+    "format-icons": ["   ", "   ", "   ", "   ", "   "],
     "max-length": 25
   }
 }
