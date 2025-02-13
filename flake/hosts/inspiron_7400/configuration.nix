@@ -172,6 +172,10 @@
   };
 
   services = {
+    solaar = {
+      enable = true;
+      package = pkgs.solaar;
+    };
     envfs.enable = true;
     mongodb = {
       enable = true;

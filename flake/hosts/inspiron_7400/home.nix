@@ -13,11 +13,9 @@
 
       font-manager
 
-      # browsers
       firefox-wayland
       chromium
 
-      # media
       inkscape
       gimp
       gwenview
@@ -26,6 +24,7 @@
       libreoffice-fresh
       postman
       obs-studio
+      spotify
 
       swww
       mako

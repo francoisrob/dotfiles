@@ -11,11 +11,10 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # nix-snapd = {
-    #   url = "github:nix-community/nix-snapd";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    solaar = {
+      url = "github:Svenum/Solaar-Flake/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -23,7 +22,7 @@
       self,
       nixpkgs,
       home-manager,
-      # nix-snapd,
+      solaar,
       ...
     }:
     let
@@ -62,22 +61,13 @@
     in
     {
       nixosConfigurations = {
-        default = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit inputs; };
-          modules = [
-            { nixpkgs.overlays = overlays; }
-            ./hosts/default/configuration.nix
-            home-manager.nixosModules.home-manager
-          ];
-        };
         inspiron-7400 = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [
             { nixpkgs.overlays = overlays; }
-            # nix-snapd.nixosModules.default
             home-manager.nixosModules.home-manager
+            solaar.nixosModules.default
             ./hosts/inspiron_7400/configuration.nix
           ];
         };
