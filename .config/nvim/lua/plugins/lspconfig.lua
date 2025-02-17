@@ -36,10 +36,6 @@ return {
             "postcss.config.ts"
           ),
         },
-        -- tsserver = {
-        --   filetypes = { "typescript", "html" },
-        --   root_dir = util.root_pattern("tsconfig.json"),
-        -- },
         eslint = {
           filetypes = { "typescript", "html" },
           root_dir = util.root_pattern ".eslintrc.json",
@@ -64,8 +60,29 @@ return {
         jsonls = {
           filetypes = { "json" },
         },
+        nixd = {
+          filetypes = { "nix" },
+          cmd = { "nixd" },
+          settings = {
+            nixd = {
+              nixpkgs = {
+                expr = "import <nixpkgs> {}",
+              },
+              formatting = {
+                command = { "alejandra" },
+              },
+              options = {
+                -- nixos = {
+                --   expr = '(builtins.getFlake "github:francoisrob/dotfiles?dir=flake").nixosConfigurations."inspiron-7400".options',
+                -- },
+                -- home_manager = {
+                --   expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options',
+                -- },
+              },
+            },
+          },
+        },
       },
-
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       -- setup = {
       --   tsserver = function(_, opts)

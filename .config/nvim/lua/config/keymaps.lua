@@ -28,3 +28,10 @@ map("n", "<C-q>", "<cmd> bd <CR>")
 map("n", "<leader>fm", function()
   require("conform").format()
 end)
+
+map(
+  "n",
+  "<c-S-Enter>",
+  "<cmd> exe 'silent !kitty --detach --directory ' . expand('%:p:h') | redraw! <CR>",
+  { desc = "new Kitty Terminal" }
+)
