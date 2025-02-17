@@ -7,7 +7,7 @@ set -gx PATH "$VOLTA_HOME/bin" $PATH
 
 set -gx PATH "$HOME/.local/share/bin/" $PATH
 set -gx PATH "$HOME/.local/bin/" $PATH
-set -gx PATH "/usr/local/go/bin" $PATH
+set -gx PATH /usr/local/go/bin $PATH
 
 # Go
 # set -gx PATH /usr/local/go/bin $PATH
@@ -15,6 +15,7 @@ set -gx PATH "/usr/local/go/bin" $PATH
 # Rust
 set -gx PATH "$HOME/.cargo/bin" $PATH
 set -gx PATH "$HOME/programs/platform-tools" $PATH
+set -gx PATH "$HOME/programs/mindustry-linux-64-bit" $PATH
 
 # Bun
 set -gx PATH "$HOME/.bun/bin" $PATH
@@ -34,3 +35,11 @@ source ~/.asdf/asdf.fish
 function dev-api -d "npm run dev-api in current directory"
     npm run dev-api
 end
+
+function fish_user_key_bindings
+    fish_default_key_bindings -M insert
+    fish_vi_key_bindings --no-erase insert
+end
+
+
+source ~/.secrets.fish
