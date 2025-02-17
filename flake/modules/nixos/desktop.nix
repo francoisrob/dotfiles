@@ -1,8 +1,6 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
-in
-{
+in {
   programs = {
     uwsm.enable = true;
     seahorse.enable = true;
@@ -35,7 +33,6 @@ in
         };
       };
     };
-
   };
 
   xdg = {
@@ -70,6 +67,5 @@ in
     # etc."greetd/hyprland.conf".text = ''
     #   exec-once = qtgreet; hyprctl dispatch exit
     # '';
-
   };
 }

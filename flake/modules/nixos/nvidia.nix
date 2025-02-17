@@ -1,6 +1,9 @@
-{ config, pkgs, ... }:
 {
-  boot.kernelParams = [ "nvidia.NVreg_PreserveVideoMemoryAllocations=1" ];
+  config,
+  pkgs,
+  ...
+}: {
+  boot.kernelParams = ["nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
 
   hardware = {
     nvidia = {
@@ -28,5 +31,5 @@
     ];
   };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = ["nvidia"];
 }

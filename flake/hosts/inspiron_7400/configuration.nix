@@ -1,5 +1,8 @@
-{ pkgs, inputs, ... }:
 {
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/audio.nix
@@ -49,27 +52,41 @@
   environment = {
     systemPackages = with pkgs; [
       xdg-user-dirs
+      xdg-utils
+      uutils-coreutils-noprefix
+      findutils
 
       acpi
       fastfetch
       libva-utils
       pciutils
 
-      unzip # Needed for unzip
+      unzip
 
       btop
+      icu
 
       wget
       stow
       killall
 
       kitty
+      zoxide
 
       glxinfo
       openssl
       brightnessctl
       pavucontrol
       mpv
+
+      (lutris.override {
+        extraLibraries = pkgs: [
+          findutils # List library dependencies here
+        ];
+        extraPkgs = pkgs: [
+          # List package dependencies here
+        ];
+      })
 
       # Developer
       tmux
@@ -79,6 +96,7 @@
       ripgrep
       mongosh
       mongodb-tools
+      mono
 
       lua
       luajitPackages.luarocks
@@ -86,10 +104,11 @@
       python3
       gcc
       cargo
-      nil
-      nixfmt-rfc-style
+
+      nixd
+      alejandra
     ];
-    pathsToLink = [ "/libexec" ];
+    pathsToLink = ["/libexec"];
     localBinInPath = true;
   };
 
@@ -119,6 +138,7 @@
         "flakes"
       ];
     };
+    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
     gc = {
       automatic = true;
       dates = "weekly";
@@ -183,7 +203,7 @@
     };
     postgresql = {
       enable = false;
-      ensureDatabases = [ "mydatabase" ];
+      ensureDatabases = ["mydatabase"];
       authentication = pkgs.lib.mkOverride 10 ''
         #type database  DBuser  auth-method
         local all       all     trust
@@ -210,7 +230,7 @@
 
     dbus = {
       enable = true;
-      packages = with pkgs; [ blueman ];
+      packages = with pkgs; [blueman];
     };
   };
 
@@ -240,5 +260,4 @@
     ];
     shell = pkgs.fish;
   };
-
 }

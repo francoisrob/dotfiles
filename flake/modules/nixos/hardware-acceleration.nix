@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   boot = {
     initrd.kernelModules = [
       "nvidia"
@@ -8,7 +7,7 @@
       "nvidia_uvm"
       "nvidia_drm"
     ];
-    kernelParams = [ "nvidia-drm.fbdev=1" ];
+    kernelParams = ["nvidia-drm.fbdev=1"];
   };
   hardware = {
     graphics = {

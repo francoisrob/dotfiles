@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   catppuccinColors = [
     "1e1e2e" # Black (Base)
     "f38ba8" # Red
@@ -19,14 +17,13 @@ let
     "94e2d5" # Bright Cyan
     "b1b6c9" # Bright White
   ];
-in
-{
+in {
   console = {
     enable = true;
     keyMap = "us";
     colors = catppuccinColors;
     earlySetup = true;
-    packages = with pkgs; [ terminus_font ];
+    packages = with pkgs; [terminus_font];
     font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
   };
 

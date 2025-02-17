@@ -1,12 +1,14 @@
 # NEEDS hardware accelaration
-{ pkgs, lib, ... }:
 {
+  pkgs,
+  lib,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     steam
     steam-run
   ];
-  nixpkgs.config.allowUnfreePredicate =
-    pkg:
+  nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       "steam"
       "steam-original"

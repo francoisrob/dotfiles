@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   services = {
     tumbler.enable = true;
     gvfs.enable = true;

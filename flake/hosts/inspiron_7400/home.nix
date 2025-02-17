@@ -1,5 +1,8 @@
-{ inputs, pkgs, ... }:
 {
+  inputs,
+  pkgs,
+  ...
+}: {
   home = {
     username = "francois";
     homeDirectory = "/home/francois";
@@ -51,7 +54,7 @@
       # wf-recorder
       (inputs.hyprland-contrib.packages.${pkgs.system}.grimblast)
       (waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+        mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
       }))
     ];
 
