@@ -11,7 +11,7 @@
     packages = with pkgs; [
       gnome-calculator
       hyprcursor
-
+      asdf-vm
       discord
 
       font-manager

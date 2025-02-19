@@ -55,13 +55,13 @@
       xdg-utils
       uutils-coreutils-noprefix
       findutils
-
-      acpi
-      fastfetch
       libva-utils
       pciutils
+      acpi
 
+      fastfetch
       unzip
+      neovim
 
       btop
       icu
