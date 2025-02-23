@@ -3,7 +3,18 @@
   pkgs,
   ...
 }: {
-  boot.kernelParams = ["nvidia.NVreg_PreserveVideoMemoryAllocations=1"];
+  boot = {
+    kernelModules = [
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+    ];
+    kernelParams = [
+      "nvidia-drm.fbdev=1"
+      "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+    ];
+  };
 
   hardware = {
     nvidia = {
@@ -14,7 +25,7 @@
 
       powerManagement = {
         enable = true;
-        finegrained = false;
+        finegrained = true;
       };
       prime = {
         intelBusId = "PCI:0:2:0";

@@ -30,7 +30,7 @@
       spotify
 
       swww
-      mako
+      swaynotificationcenter
       pass-wayland
       cliphist
       wl-clipboard
@@ -45,7 +45,7 @@
       ncdu
       gh
       lazygit
-      sqlitebrowser
+      # sqlitebrowser
       stylua
       aws-sam-cli
 
@@ -89,28 +89,14 @@
     #  /etc/profiles/per-user/francois/etc/profile.d/hm-session-vars.sh
     #
     sessionVariables = {
-      # EDITOR = "emacs";
-      LANG = "en_US.UTF-8";
-      LANGUAGE = "en_US";
-      LC_CTYPE = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
-      NIXOS_OZONE_WL = "1";
-      MOZ_ENABLE_WAYLAND = 1;
-      GDK_BACKEND = "wayland";
-
       EDITOR = "nvim";
       VISUAL = "nvim";
       MANPAGER = "nvim +Man!";
       TERMINAL = "kitty";
+    };
 
-      AQ_DRM_DEVICES = "/dev/dri/card2:/dev/dri/card1";
-
-      XDG_SESSION_TYPE = "wayland";
-
-      HYPRCURSOR_SIZE = 24;
-      XCURSOR_SIZE = 24;
-      HYPRCURSOR_THEME = "Bibata-Modern-Classic";
-      XCURSOR_THEME = "Bibata-Modern-Classic";
+    shell = {
+      enableFishIntegration = true;
     };
 
     pointerCursor = {
@@ -159,6 +145,48 @@
     git = {
       enable = true;
       lfs.enable = true;
+    };
+    fish = {
+      enable = true;
+      shellInit = ''
+         set fish_greeting ""
+         set fish_home ~/.config/fish
+
+         set -gx PATH "$HOME/.local/share/bin/" $PATH
+         set -gx PATH "$HOME/.local/bin/" $PATH
+
+         # Volta
+         set -gx VOLTA_HOME "$HOME/.volta"
+         set -gx PATH "$VOLTA_HOME/bin" $PATH
+
+         # Rust
+         set -gx PATH "$HOME/.cargo/bin" $PATH
+
+         # Bun
+         set -gx PATH "$HOME/.bun/bin" $PATH
+
+         # set -gx EDITOR nvim
+         # set -gx VISUAL nvim
+
+         set -gx FZF_DEFAULT_COMMAND 'fd --type file'
+         set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
+
+         starship init fish | source
+         zoxide init fish | source
+
+         source "$HOME/.local/state/nix/profiles/home-manager/home-path/share/asdf-vm/asdf.fish"
+
+         function dev-api -d "npm run dev-api in current directory"
+             npm run dev-api
+        end
+
+         function fish_user_key_bindings
+             fish_default_key_bindings -M insert
+             fish_vi_key_bindings --no-erase insert
+         end
+
+         source ~/.secrets.fish
+      '';
     };
     # Let Home Manager install and manage itself.
     home-manager.enable = true;

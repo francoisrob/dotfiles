@@ -21,10 +21,10 @@ in {
   console = {
     enable = true;
     keyMap = "us";
+    font = "ter-132n";
+    packages = with pkgs; [terminus_font];
     colors = catppuccinColors;
     earlySetup = true;
-    packages = with pkgs; [terminus_font];
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
   };
 
   fonts = {
@@ -40,6 +40,17 @@ in {
       joypixels
       ubuntu_font_family
     ];
+  };
+
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LANGUAGE = "en_US";
+      LC_MESSAGES = "en_US.UTF-8";
+      LC_TIME = "en_US.UTF-8";
+      LC_CTYPE = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+    };
   };
 
   nixpkgs.config.joypixels.acceptLicense = true;

@@ -2,8 +2,12 @@
   tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
 in {
   programs = {
-    uwsm.enable = true;
-    seahorse.enable = true;
+    uwsm = {
+      enable = true;
+    };
+    # seahorse = {
+    #   enable = true;
+    # };
     hyprland = {
       enable = true;
       xwayland.enable = true;
@@ -19,7 +23,7 @@ in {
       ];
     };
 
-    gnome.gnome-keyring.enable = true;
+    # gnome.gnome-keyring.enable = true;
     libinput = {
       enable = true;
     };
@@ -47,25 +51,14 @@ in {
     };
   };
 
-  security = {
-    pam = {
-      services.greetd.enableGnomeKeyring = true;
-    };
-  };
-
   environment = {
     systemPackages = with pkgs; [
       libsecret
       hyprpolkitagent
 
       wayland # Needed for Hyprland
-      libnotify # Needed for dunst
+      libnotify # Needed for notifications
       rofi-wayland
     ];
-    # libsecret api needed
-
-    # etc."greetd/hyprland.conf".text = ''
-    #   exec-once = qtgreet; hyprctl dispatch exit
-    # '';
   };
 }
