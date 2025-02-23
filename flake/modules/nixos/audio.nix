@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   environment.systemPackages = [pkgs.alsa-utils];
+
   security.rtkit.enable = true;
 
   services = {

@@ -249,7 +249,20 @@
     upower.enable = true;
     thermald.enable = true;
     system76-scheduler.settings.cfsProfiles.enable = true;
-    tlp.enable = true;
+
+    auto-cpufreq = {
+      enable = true;
+      settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "never";
+        };
+        charger = {
+          governor = "performance";
+          turbo = "auto";
+        };
+      };
+    };
 
     dbus = {
       enable = true;

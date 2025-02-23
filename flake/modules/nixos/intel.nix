@@ -19,9 +19,8 @@
     graphics = {
       extraPackages = with pkgs; [
         intel-media-driver
+        vpl-gpu-rt
         intel-ocl
-
-        # Vulkan
         intel-compute-runtime
       ];
     };
