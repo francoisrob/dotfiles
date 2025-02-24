@@ -26,6 +26,7 @@ return {
       week_header = {
         enable = true,
       },
+      disable_move = true,
       packages = { enable = false },
       shortcut = {
         { action = "Telescope find_files", desc = "Find file", icon = " ", group = "Number", key = "f" },

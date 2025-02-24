@@ -36,10 +36,6 @@ return {
             "postcss.config.ts"
           ),
         },
-        eslint = {
-          filetypes = { "typescript", "html" },
-          root_dir = util.root_pattern ".eslintrc.json",
-        },
         lua_ls = {
           settings = {
             Lua = {
@@ -57,9 +53,9 @@ return {
         html = {
           filetypes = { "html", "typescript", "htmlangular" },
         },
-        jsonls = {
-          filetypes = { "json" },
-        },
+        -- jsonls = {
+        --   filetypes = { "json" },
+        -- },
         nixd = {
           filetypes = { "nix" },
           cmd = { "nixd" },
@@ -72,11 +68,11 @@ return {
                 command = { "alejandra" },
               },
               options = {
-                -- nixos = {
-                --   expr = '(builtins.getFlake "github:francoisrob/dotfiles?dir=flake").nixosConfigurations."inspiron-7400".options',
-                -- },
+                nixos = {
+                  expr = '(builtins.getFlake "github:francoisrob/dotfiles?dir=flake").nixosConfigurations.inspiron-7400.options',
+                },
                 -- home_manager = {
-                --   expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options',
+                --   expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options  fran.outputs.nixosConfigurations.inspiron-7400.config.home-manager',
                 -- },
               },
             },
