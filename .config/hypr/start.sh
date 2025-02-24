@@ -11,18 +11,18 @@ start_clipboard_monitoring() {
 
 # Function to restore wallpaper
 restore_wallpaper() {
-  waypaper --restore &
+  uwsm app -- waypaper --restore &
 }
 
 # Function to start system tray utilities
 start_system_tray_apps() {
   # Start Waybar in the background
-  nohup waybar >/dev/null 2>&1 &
+  uwsm app -- nohup waybar >/dev/null 2>&1 &
 
-  nm-applet --indicator &
+  uwsm app -- nm-applet --indicator &
 
   # Start Bluetooth manager applet
-  blueman-applet &
+  uwsm app -- blueman-applet &
 }
 
 # Main function to coordinate startup
@@ -37,6 +37,8 @@ main() {
   start_system_tray_apps
 
   echo "Startup script completed successfully!"
+
+  systemctl --user enable --now hyprpolkitagent.service
 }
 
 main
