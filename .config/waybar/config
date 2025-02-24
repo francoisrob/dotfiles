@@ -5,7 +5,7 @@
   "modules-left": ["clock", "hyprland/workspaces"],
   "modules-center": [],
   "height": 28,
-  "modules-right": ["tray","pulseaudio", "battery"],
+  "modules-right": ["tray","pulseaudio", "custom/notification", "battery" ],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
@@ -19,7 +19,8 @@
       "font-manager": "  ",
       "steam": "   ",
       "discord": "   ",
-      "Webcord": "   "
+      "Webcord": "   ",
+      "Chromium": "   "
     },
     "persistent-workspaces": {
       "*": 3
@@ -69,10 +70,31 @@
     "interval": 60,
     "states": {
       "warning": 30,
-      "critical": 15
+      "critical": 20
     },
-    "format": "{capacity} {icon}",
+    "format": "{capacity}% {icon}",
     "format-icons": ["   ", "   ", "   ", "   ", "   "],
     "max-length": 25
+  },
+
+  "custom/notification": {
+    "tooltip": false,
+    "format": "{icon} {}",
+    "format-icons": {
+      "notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "none": "   ",
+      "dnd-notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "dnd-none": "   ",
+      "inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "inhibited-none": "   ",
+      "dnd-inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "dnd-inhibited-none": "   "
+    },
+    "return-type": "json",
+    "exec-if": "which swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
   }
 }

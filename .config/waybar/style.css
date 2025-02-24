@@ -81,11 +81,25 @@ label#window {
   color: @text;
 }
 
+#battery.warning {
+  color: @peach;
+}
+
+#battery.critical {
+  color: @red;
+}
+
 #backlight {
   padding: 4px 8px 4px 8px;
   color: @text;
 }
+
 #pulseaudio {
   padding: 4px 0px 4px 0px;
   color: @text;
+}
+
+#custom.notification {
+  padding: 40px 160px 40px 80px;
+  color: @red;
 }
