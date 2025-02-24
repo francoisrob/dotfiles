@@ -75,6 +75,7 @@
       libva-utils
       pciutils
       acpi
+      glibc
 
       fastfetch
       unzip
@@ -159,8 +160,7 @@
     nixPath = ["nixpkgs=${inputs.nixpkgs}"];
     gc = {
       automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
+      dates = "daily";
     };
   };
 
@@ -195,6 +195,7 @@
     #   enable = true;
     #   package = pkgs.jdk17;
     # };
+
     nix-ld.enable = true;
     mtr.enable = true;
     fish.enable = true;
@@ -223,6 +224,7 @@
       enable = true;
       package = pkgs.mongodb-ce;
     };
+
     # postgresql = {
     #   enable = false;
     #   ensureDatabases = ["mydatabase"];
@@ -237,6 +239,7 @@
     #     host all       all     ::1/128        trust
     #   '';
     # };
+
     # File mounting
     udisks2.enable = true;
     devmon.enable = true;
@@ -271,17 +274,10 @@
   };
 
   system = {
-    autoUpgrade = {
-      enable = true;
-      allowReboot = true;
-      channel = "https://nixos.org/channel/nixos-unstable";
-    };
     stateVersion = "24.05";
   };
 
   time.timeZone = "Africa/Johannesburg";
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # i18n.consolePackages
 
   users.users.francois = {
     isNormalUser = true;

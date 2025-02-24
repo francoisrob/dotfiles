@@ -21,8 +21,9 @@
 
       inkscape
       gimp
-      gwenview
-      okular
+      kdePackages.gwenview
+
+      evince
       ffmpeg
       libreoffice-fresh
       postman
@@ -45,13 +46,12 @@
       ncdu
       gh
       lazygit
-      # sqlitebrowser
+
       stylua
       aws-sam-cli
 
       mongodb-compass
 
-      # wf-recorder
       (inputs.hyprland-contrib.packages.${pkgs.system}.grimblast)
       (waybar.overrideAttrs (oldAttrs: {
         mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
@@ -123,8 +123,11 @@
       package = pkgs.gnome-themes-extra;
     };
     iconTheme = {
-      name = "rose-pine";
-      package = pkgs.rose-pine-icon-theme;
+      name = "Papirus";
+      package = pkgs.catppuccin-papirus-folders.override {
+        accent = "blue";
+        flavor = "mocha";
+      };
     };
     font = {
       name = "Sans";
@@ -136,8 +139,17 @@
     enable = true;
     platformTheme.name = "adwaita";
     style = {
-      package = pkgs.gnome-themes-extra;
-      name = "Adwaita-dark";
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
+  };
+
+  dconf = {
+    settings = {
+      "org/gnome/desktop/interface" = {
+        gtk-theme = "Adwaita-dark";
+        color-scheme = "prefer-dark";
+      };
     };
   };
 
