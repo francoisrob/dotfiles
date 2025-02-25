@@ -203,10 +203,40 @@
       enable = true;
       enableSSHSupport = true;
     };
+
+    auto-cpufreq = {
+      enable = true;
+      settings = {
+        battery = {
+          governor = "powersave";
+          turbo = "never";
+        };
+        charger = {
+          governor = "performance";
+          turbo = "auto";
+        };
+      };
+    };
   };
 
   security = {
-    sudo.enable = true;
+    sudo = {
+      enable = true;
+      extraRules = [
+        {
+          groups = ["wheel"];
+          commands = [
+            {
+              command = "/run/current-system/sw/bin/true";
+              options = [
+                "NOLOG_INPUT"
+                "NOLOG_OUTPUT"
+              ];
+            }
+          ];
+        }
+      ];
+    };
     polkit.enable = true;
     acme = {
       acceptTerms = true;
@@ -215,6 +245,14 @@
   };
 
   services = {
+    logind = {
+      killUserProcesses = true;
+      powerKey = "lock";
+      powerKeyLongPress = "reboot";
+      lidSwitch = "lock";
+      lidSwitchExternalPower = "ignore";
+      lidSwitchDocked = "ignore";
+    };
     solaar = {
       enable = true;
       package = pkgs.solaar;
@@ -252,20 +290,6 @@
     upower.enable = true;
     thermald.enable = true;
     system76-scheduler.settings.cfsProfiles.enable = true;
-
-    auto-cpufreq = {
-      enable = true;
-      settings = {
-        battery = {
-          governor = "powersave";
-          turbo = "never";
-        };
-        charger = {
-          governor = "performance";
-          turbo = "auto";
-        };
-      };
-    };
 
     dbus = {
       enable = true;

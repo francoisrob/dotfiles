@@ -7,6 +7,7 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
     hyprland-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -15,12 +16,17 @@
       url = "github:Svenum/Solaar-Flake/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
     nixpkgs,
     home-manager,
     solaar,
+    auto-cpufreq,
     ...
   }: let
     system = "x86_64-linux";
@@ -59,6 +65,7 @@
           {nixpkgs.overlays = overlays;}
           home-manager.nixosModules.home-manager
           solaar.nixosModules.default
+          auto-cpufreq.nixosModules.default
           ./hosts/inspiron_7400/configuration.nix
         ];
       };

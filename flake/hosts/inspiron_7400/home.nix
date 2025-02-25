@@ -52,7 +52,6 @@
 
       mongodb-compass
 
-      (inputs.hyprland-contrib.packages.${pkgs.system}.grimblast)
       (waybar.overrideAttrs (oldAttrs: {
         mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
       }))
