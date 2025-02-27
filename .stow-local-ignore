@@ -1,9 +1,12 @@
 \.git
 \.gitignore
 /resources
-/flake
 /makefile
 
 ^/README.*
 ^/LICENSE.*
 ^/COPYING
+
+/hosts
+/modules
+flake.*
