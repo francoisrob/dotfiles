@@ -120,12 +120,33 @@
       luajitPackages.luarocks
       go
       python3
-      gcc
       cargo
 
       nixd
       alejandra
+
+      # C development tools
+      gcc
+      gdb
+      cmake
+      check
+      valgrind
+
+      # Build essentials
+      binutils
+      pkg-config
+
+      # Optional but useful
+      bear # For generating compile_commands.json
+      clang-tools # For clangd, static analysis, etc.
     ];
+    variables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+      MANPAGER = "nvim +Man!";
+      C_INCLUDE_PATH = "${pkgs.glibc.dev}/include:${pkgs.glibc}/include";
+      CPLUS_INCLUDE_PATH = "${pkgs.glibc.dev}/include:${pkgs.glibc}/include:${pkgs.stdenv.cc.cc}/include/c++/${pkgs.stdenv.cc.cc.version}";
+    };
     pathsToLink = ["/libexec"];
     localBinInPath = true;
   };

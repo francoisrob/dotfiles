@@ -88,9 +88,6 @@
     #  /etc/profiles/per-user/francois/etc/profile.d/hm-session-vars.sh
     #
     sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-      MANPAGER = "nvim +Man!";
       TERMINAL = "kitty";
     };
 

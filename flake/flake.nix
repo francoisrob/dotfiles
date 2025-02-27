@@ -57,6 +57,21 @@
       })
     ];
   in {
+    devShells.${system} = let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      default = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          jdk
+        ];
+      };
+      jdk17 = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          jdk17
+        ];
+      };
+    };
+
     nixosConfigurations = {
       inspiron-7400 = nixpkgs.lib.nixosSystem {
         inherit system;
