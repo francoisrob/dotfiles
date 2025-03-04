@@ -4,17 +4,18 @@
 
 # Inserts a blank line between shell prompts
 add_newline = false
+command_timeout = 750
 
 [character]
-success_symbol = '[➜](bold green) '
-error_symbol = '[✗](bold red) '
-vimcmd_symbol = '[V](bold green) '
+success_symbol = '[ ](bold green)'
+error_symbol = '[ ](bold red) '
+vimcmd_symbol = '[V ](bold green) '
 
 [directory]
 truncation_length = 8
 truncation_symbol = '…/'
 format = '[$read_only]($read_only_style) [$path]($style) '
-read_only = '[]'
+read_only = '[ ]'
 
 [package]
 disabled = true

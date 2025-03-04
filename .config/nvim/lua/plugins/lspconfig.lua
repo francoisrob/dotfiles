@@ -69,7 +69,10 @@ return {
               },
               options = {
                 nixos = {
-                  expr = '(builtins.getFlake "github:francoisrob/dotfiles?dir=flake").nixosConfigurations.inspiron-7400.options',
+                  expr = string.format(
+                    '(builtins.getFlake "path:%s/dotfiles").nixosConfigurations.inspiron-7400.options',
+                    os.getenv "HOME"
+                  ),
                 },
                 -- home_manager = {
                 --   expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."ruixi@k-on".options  fran.outputs.nixosConfigurations.inspiron-7400.config.home-manager',
