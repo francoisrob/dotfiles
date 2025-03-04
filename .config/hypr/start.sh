@@ -38,7 +38,9 @@ main() {
 
   echo "Startup script completed successfully!"
 
+  uwsm app -- kanshi
   systemctl --user enable --now hyprpolkitagent.service
+  systemctl --user enable --now hypridle.service
 }
 
 main
