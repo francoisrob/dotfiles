@@ -32,7 +32,6 @@
       cliphist
       wl-clipboard
 
-      nwg-displays
       nwg-look
       networkmanagerapplet
 

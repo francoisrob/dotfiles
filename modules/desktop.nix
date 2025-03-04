@@ -7,13 +7,15 @@
   hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
   tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
 in {
-  nix.settings = {
-    substituters = [
-      "https://hyprland.cachix.org"
-    ];
-    trusted-public-keys = [
-      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-    ];
+  nix = {
+    settings = {
+      substituters = [
+        "https://hyprland.cachix.org"
+      ];
+      trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      ];
+    };
   };
 
   programs = {
@@ -22,7 +24,9 @@ in {
     };
     hyprland = {
       enable = true;
-      xwayland.enable = true;
+      xwayland = {
+        enable = true;
+      };
       withUWSM = true;
       package = hyprland.hyprland;
       portalPackage = hyprland.xdg-desktop-portal-hyprland;
@@ -60,7 +64,9 @@ in {
     mime.enable = true;
     portal = {
       enable = true;
-      wlr.enable = true;
+      wlr = {
+        enable = true;
+      };
     };
   };
 

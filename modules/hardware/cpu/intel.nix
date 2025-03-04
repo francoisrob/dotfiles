@@ -11,6 +11,7 @@
       "intel_pstate=active"
     ];
   };
+
   hardware = {
     graphics = {
       extraPackages = with pkgs; [

@@ -21,12 +21,15 @@
       open = false;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
-      modesetting.enable = true;
+      modesetting = {
+        enable = true;
+      };
 
       powerManagement = {
         enable = true;
         finegrained = true;
       };
+
       prime = {
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
@@ -37,10 +40,16 @@
       };
     };
 
-    graphics.extraPackages = with pkgs; [
-      nvidia-vaapi-driver
-    ];
+    graphics = {
+      extraPackages = with pkgs; [
+        nvidia-vaapi-driver
+      ];
+    };
   };
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services = {
+    xserver = {
+      videoDrivers = ["nvidia"];
+    };
+  };
 }

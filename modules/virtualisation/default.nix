@@ -1,9 +1,9 @@
 {pkgs, ...}: {
+  imports = [
+    ./docker.nix
+  ];
+
   virtualisation = {
-    docker.rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
     libvirtd = {
       enable = true;
       qemu = {
@@ -21,7 +21,6 @@
   users.users.francois.extraGroups = [
     "libvirtd"
     "kvm"
-    "docker"
   ];
 
   services.spice-vdagentd.enable = true;
