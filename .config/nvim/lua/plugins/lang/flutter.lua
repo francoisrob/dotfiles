@@ -1,7 +1,14 @@
 return {
   {
     "nvim-flutter/flutter-tools.nvim",
-    lazy = false,
+    ft = { "dart" },
+    -- cond = function()
+    --   -- Check for pubspec.yaml or other Flutter project indicators
+    --   local flutter_files = vim.fn.findfile("pubspec.yaml")
+    --   print("check", flutter_files)
+    --   return flutter_files ~= ""
+    -- end,
+    -- lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
