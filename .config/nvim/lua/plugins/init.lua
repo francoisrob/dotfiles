@@ -1,43 +1,29 @@
----@type LazyPluginSpec[]
 return {
-  -- { "dstein64/vim-startuptime", enabled = false },
-
-  -- {
-  --   "OlegGulevskyy/better-ts-errors.nvim",
-  --   dependencies = { "MunifTanjim/nui.nvim" },
-  --   keys = {
-  --     {
-  --       'go_to_definition',
-  --       default = '<leader>dx',
-  --       description = 'Go to definition',
-  --     },
-  --     {
-  --       'toggle',
-  --       default = '<leader>dd',
-  --       description = 'Toggle error list',
-  --     },
-  --     -- toggle = '<leader>dd',          -- default '<leader>dd'
-  --     -- go_to_definition = '<leader>dx' -- default '<leader>dx'
-  --   }
-  -- }
-  -- {
-  --   "LunarVim/bigfile.nvim",
-  --   event = "BufReadPre",
-  --   config = function()
-  --     require("bigfile").setup {
-  --       filesize = 1, -- size of the file in MiB, the plugin round file sizes to the closest MiB
-  --       pattern = { "*" }, -- autocmd pattern or function see <### Overriding the detection of big files>
-  --       features = { -- features to disable
-  --         "indent_blankline",
-  --         "illuminate",
-  --         "lsp",
-  --         "treesitter",
-  --         "syntax",
-  --         "matchparen",
-  --         "vimopts",
-  --         "filetype",
-  --       },
-  --     }
-  --   end,
-  -- },
+  { import = "plugins/lang" },
+  {
+    "folke/snacks.nvim",
+    opts = {
+      image = {},
+      dashboard = {
+        preset = {
+          header = [[
+      ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+      ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+      ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+      ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+      ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+      ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+        },
+      },
+      picker = {
+        sources = {
+          explorer = {
+            auto_close = false,
+            ignored = true,
+            hidden = true,
+          },
+        },
+      },
+    },
+  },
 }

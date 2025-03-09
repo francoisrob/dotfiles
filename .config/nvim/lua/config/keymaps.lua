@@ -6,10 +6,12 @@ map("i", "jk", "<ESC>")
 map("n", "<C-c>", "<cmd> %y+ <CR>") -- copy whole filecontent
 
 -- nvimtree
-map("n", "<C-n>", "<cmd> Neotree toggle <CR>")
--- map("n", "<C-n>", function()
---   Snacks.explorer()
--- end)
+-- map("n", "<C-n>", "<cmd> Neotree toggle <CR>")
+map("n", "<C-n>", function()
+  if Snacks.explorer ~= nil then
+    Snacks.explorer()
+  end
+end)
 
 -- bufferline, cycle buffers
 map("n", "<Tab>", "<cmd> BufferLineCycleNext <CR>")
