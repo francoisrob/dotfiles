@@ -29,6 +29,9 @@
     # Desktop
     ../../modules/desktop.nix
 
+    # Development
+    ../../modules/development
+
     # TODO: REFACTOR
     ../../modules/home.nix
     ../../modules/packages.nix

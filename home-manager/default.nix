@@ -42,14 +42,9 @@
       gh
       lazygit
 
-      stylua
       aws-sam-cli
 
       mongodb-compass
-
-      (waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-      }))
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -145,6 +140,11 @@
   };
 
   programs = {
+    waybar = {
+      enable = true;
+      package = pkgs.waybar_git;
+    };
+
     git = {
       enable = true;
       lfs.enable = true;

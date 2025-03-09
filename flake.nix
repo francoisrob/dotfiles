@@ -20,6 +20,9 @@
       url = "github:AdnanHodzic/auto-cpufreq";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    waybar = {
+      url = "github:Alexays/Waybar/master";
+    };
   };
 
   outputs = inputs @ {
@@ -31,7 +34,7 @@
   }: let
     system = "x86_64-linux";
     overlays = [
-      (final: _prev: {
+      (final: prev: {
         stable = import inputs.stable {
           inherit system;
           config = {
@@ -54,6 +57,11 @@
         mpv = super.mpv.override {
           scripts = [self.mpvScripts.mpris];
         };
+      })
+      (final: prev: {
+        waybar_git = prev.waybar.overrideAttrs (oldAttrs: {
+          src = inputs.waybar;
+        });
       })
     ];
   in {
