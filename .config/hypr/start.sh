@@ -1,46 +1,59 @@
 #!/usr/bin/env bash
 
-# Enable strict error handling
-set -euo pipefail
+set -uo pipefail
 
-# Function to start clipboard monitoring
+log() {
+  echo "[$(date '+%H:%M:%S')] $1"
+}
+
 start_clipboard_monitoring() {
-  wl-paste --type text --watch cliphist store &
-  wl-paste --type image --watch cliphist store &
+  log "Starting cliphist"
+  if ! pgrep -f "wl-paste --type text" >/dev/null; then
+    wl-paste --type text --watch cliphist store &
+  fi
+
+  if ! pgrep -f "wl-paste --type image" >/dev/null; then
+    wl-paste --type image --watch cliphist store &
+  fi
 }
 
 # Function to restore wallpaper
 restore_wallpaper() {
+  log "Restoring wallpaper"
   uwsm app -- waypaper --restore &
 }
 
-# Function to start system tray utilities
 start_system_tray_apps() {
-  # Start Waybar in the background
-  uwsm app -- nohup waybar >/dev/null 2>&1 &
+  log "Starting tray apps"
+  if ! pgrep -x waybar >/dev/null; then
+    uwsm app -- nohup waybar >/dev/null 2>&1 &
+  fi
 
-  uwsm app -- nm-applet --indicator &
+  if ! pgrep -x nm-applet >/dev/null; then
+    uwsm app -- nm-applet --indicator &
+  fi
 
-  # Start Bluetooth manager applet
-  uwsm app -- blueman-applet &
+  if ! pgrep -x blueman-applet >/dev/null; then
+    uwsm app -- blueman-applet &
+  fi
 }
 
-# Main function to coordinate startup
-main() {
-  echo "Starting clipboard monitoring..."
-  start_clipboard_monitoring
-
-  echo "Restoring wallpaper..."
-  restore_wallpaper
-
-  echo "Launching system tray utilities..."
-  start_system_tray_apps
-
-  echo "Startup script completed successfully!"
-
-  uwsm app -- kanshi
+setup_system_services() {
+  log "Starting systemd services"
   systemctl --user enable --now hyprpolkitagent.service
   systemctl --user enable --now hypridle.service
+  dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+}
+
+main() {
+
+  start_clipboard_monitoring
+  restore_wallpaper
+  start_system_tray_apps
+
+  uwsm app -- kanshi &
+
+  setup_system_services
 }
 
 main
