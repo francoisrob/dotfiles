@@ -10,6 +10,7 @@
       package = pkgs.mongodb-ce;
     };
 
-    flatpak.enable = true;
+    # Screenshare fixed for slack desktop
+    # flatpak.enable = true;
   };
 }

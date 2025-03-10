@@ -6,7 +6,7 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
-      timeout = 5;
+      timeout = 2;
       systemd-boot = {
         enable = true;
         editor = false;
@@ -21,14 +21,27 @@
       verbose = false;
       systemd = {
         enable = true;
+        services = {
+          "*" = {
+            serviceConfig = {
+              DefaultDependencies = false;
+            };
+          };
+        };
       };
     };
 
     kernel = {
       sysctl = {
-        # "kernel.sysrq" = 502;
-        # "net.ipv4.tcp_syncookies" = false;
-        "vm.swappiness" = 60;
+        "vm.swappiness" = 10;
+        "vm.dirty_ratio" = 10;
+        "vm.nr_hugepages" = 128;
+
+        # network optimizations
+        "net.core.rmem_max" = 16777216;
+        "net.core.wmem_max" = 16777216;
+        "net.ipv4.tcp_rmem" = "4096 87380 16777216";
+        "net.ipv4.tcp_wmem" = "4096 87380 16777216";
       };
     };
 
@@ -74,6 +87,27 @@
     };
     pathsToLink = ["/libexec"];
     localBinInPath = true;
+  };
+
+  fileSystems = {
+    "/" = {
+      options = [
+        "noatime"
+        "discard"
+      ];
+    };
+    "/home" = {
+      options = [
+        "noatime"
+        "discard"
+      ];
+    };
+    "/tmp" = {
+      options = [
+        "noatime"
+        "discard"
+      ];
+    };
   };
 
   systemd = {
@@ -126,6 +160,7 @@
 
     # Power
     upower.enable = true;
+    tlp.enable = true;
     thermald.enable = true;
     system76-scheduler.settings.cfsProfiles.enable = true;
 
@@ -143,7 +178,9 @@
     };
 
     journald = {
-      extraConfig = "SystemMaxUse=1G";
+      storage = "volatile";
+      rateLimitBurst = 1000;
+      extraConfig = "RuntimeMaxUse=512M";
     };
   };
 
@@ -207,5 +244,10 @@
 
   system = {
     stateVersion = "24.05";
+  };
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 25;
   };
 }

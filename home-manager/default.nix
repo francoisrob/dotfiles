@@ -8,6 +8,8 @@
       gnome-calculator
       hyprcursor
       asdf-vm
+
+      slack
       discord
 
       font-manager
@@ -79,6 +81,14 @@
     #
     sessionVariables = {
       TERMINAL = "kitty";
+      WLR_NO_HARDWARE_CURSORS = "1";
+
+      # Hardware acceleration
+      LIBVA_DRIVER_NAME = "nvidia";
+
+      # GBM backend
+      GBM_BACKEND = "nvidia-drm";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     };
 
     shell = {
