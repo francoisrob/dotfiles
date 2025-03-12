@@ -16,6 +16,9 @@ return {
       debugger = {
         enabled = true,
       },
+      dev_log = {
+        enabled = false,
+      },
       decorations = {
         statusline = {
           app_version = true,
