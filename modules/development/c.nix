@@ -13,7 +13,7 @@
       pkg-config
 
       # For generating compile_commands.json
-      bear 
+      bear
 
       # For clangd, static analysis, etc.
       clang-tools

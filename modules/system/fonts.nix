@@ -23,7 +23,7 @@ in {
     keyMap = "us";
     font = "ter-132n";
     packages = with pkgs; [terminus_font];
-    colors = catppuccinColors;
+    # colors = catppuccinColors;
     earlySetup = true;
   };
 

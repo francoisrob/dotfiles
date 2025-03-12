@@ -13,4 +13,26 @@
     # Screenshare fixed for slack desktop
     # flatpak.enable = true;
   };
+
+  # mongodb soft limits
+  security = {
+    pam = {
+      loginLimits = [
+        {
+          domain = "mongodb";
+          item = "nofile";
+          type = "-";
+          value = "64000";
+        }
+      ];
+    };
+  };
+
+  systemd = {
+    services = {
+      mongodb.environment = {
+        "GLIBC_TUNABLES" = "glibc.pthread.rseq=0";
+      };
+    };
+  };
 }

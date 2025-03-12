@@ -37,23 +37,18 @@ in {
   };
 
   services = {
-    xserver = {
-      enable = true;
-      excludePackages = with pkgs; [
-        xterm
-      ];
-    };
-
     libinput = {
       enable = true;
     };
 
     greetd = {
       enable = true;
-      package = pkgs.stable.greetd;
+      package = pkgs.greetd;
+      vt = 7;
       settings = {
         default_session = {
-          command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -S hyprland-uwsm.desktop'";
+          command = "uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null";
+          # command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null'";
           user = "francois";
         };
       };

@@ -4,7 +4,7 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs?ref=nixos-unstable";
     };
-    stable = {
+    nixpkgs-stable = {
       url = "github:nixos/nixpkgs/nixos-24.11";
     };
     home-manager = {
@@ -29,19 +29,25 @@
     waybar = {
       url = "github:Alexays/Waybar/master";
     };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
     nixpkgs,
+    nixpkgs-stable,
     home-manager,
     solaar,
     auto-cpufreq,
+    nur,
     ...
   }: let
     system = "x86_64-linux";
     overlays = [
       (final: prev: {
-        stable = import inputs.stable {
+        stable = import nixpkgs-stable {
           inherit system;
           config = {
             allowUnfree = true;
@@ -68,6 +74,9 @@
         waybar_git = prev.waybar.overrideAttrs (oldAttrs: {
           src = inputs.waybar;
         });
+      })
+      (final: prev: {
+        nur = import nur;
       })
     ];
   in {

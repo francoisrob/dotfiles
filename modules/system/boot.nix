@@ -6,9 +6,10 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
-      timeout = 2;
+      timeout = 0;
       systemd-boot = {
         enable = true;
+        configurationLimit = 5;
         editor = false;
       };
       efi.canTouchEfiVariables = true;
@@ -33,9 +34,10 @@
 
     kernel = {
       sysctl = {
-        "vm.swappiness" = 10;
+        "vm.swappiness" = 1;
         "vm.dirty_ratio" = 10;
         "vm.nr_hugepages" = 128;
+        "vm.transparent_hugepages" = "always";
 
         # network optimizations
         "net.core.rmem_max" = 16777216;
@@ -46,6 +48,10 @@
     };
 
     kernelParams = [
+      "quiet"
+      # disable serial port probing
+      "8250.nr_uarts=0"
+
       "rd.systemd.show_status=false"
       "rd.udev.log_level=3"
       "udev.log_priority=3"
@@ -60,6 +66,11 @@
   };
 
   environment = {
+    etc = {
+      "issue" = {
+        text = "";
+      };
+    };
     systemPackages = with pkgs; [
       xdg-user-dirs
       xdg-utils
@@ -112,6 +123,9 @@
 
   systemd = {
     watchdog.rebootTime = "0";
+    services = {
+      NetworkManager-wait-online.enable = false;
+    };
   };
 
   powerManagement = {
@@ -143,7 +157,7 @@
   };
 
   services = {
-    envfs.enable = true;
+    # envfs.enable = true;
 
     # File mounting
     udisks2.enable = true;
@@ -208,6 +222,12 @@
       powerOnBoot = true;
     };
     i2c.enable = true;
+    logitech = {
+      wireless = {
+        enable = true;
+        enableGraphical = true;
+      };
+    };
   };
 
   networking = {
@@ -250,4 +270,6 @@
     enable = true;
     memoryPercent = 25;
   };
+
+  networking.firewall.allowedTCPPorts = [3000];
 }

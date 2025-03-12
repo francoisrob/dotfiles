@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   imports = [
     ./c.nix
     ./flutter.nix
@@ -8,4 +8,10 @@
     ./python.nix
     ./rust.nix
   ];
+
+  environment = {
+    systemPackages = with pkgs; [
+      nix-index
+    ];
+  };
 }

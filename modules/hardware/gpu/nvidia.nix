@@ -2,13 +2,12 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.stable;
+in {
   boot = {
     kernelModules = [
-      "nvidia"
-      "nvidia_modeset"
       "nvidia_uvm"
-      "nvidia_drm"
     ];
     kernelParams = [
       "nvidia-drm.fbdev=1"
@@ -20,7 +19,7 @@
     nvidia = {
       open = false;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = nvidiaPackage;
       modesetting = {
         enable = true;
       };
