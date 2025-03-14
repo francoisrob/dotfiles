@@ -1,17 +1,12 @@
-{pkgs, ...}: {
+{...}: {
   imports = [
     ./c.nix
-    ./flutter.nix
+    # ./flutter.nix
+    ./android.nix
     ./golang.nix
     ./lua.nix
     ./nix.nix
     ./python.nix
     ./rust.nix
   ];
-
-  environment = {
-    systemPackages = with pkgs; [
-      nix-index
-    ];
-  };
 }

@@ -12,7 +12,9 @@
         configurationLimit = 5;
         editor = false;
       };
-      efi.canTouchEfiVariables = true;
+      efi = {
+        canTouchEfiVariables = true;
+      };
     };
     supportedFilesystems = ["ntfs"];
 
@@ -87,14 +89,11 @@
       openssl
       brightnessctl
       pavucontrol
-      mpv
     ];
     variables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
       MANPAGER = "nvim +Man!";
-      C_INCLUDE_PATH = "${pkgs.glibc.dev}/include:${pkgs.glibc}/include";
-      CPLUS_INCLUDE_PATH = "${pkgs.glibc.dev}/include:${pkgs.glibc}/include:${pkgs.stdenv.cc.cc}/include/c++/${pkgs.stdenv.cc.cc.version}";
     };
     pathsToLink = ["/libexec"];
     localBinInPath = true;
@@ -122,24 +121,38 @@
   };
 
   systemd = {
-    watchdog.rebootTime = "0";
+    watchdog = {
+      rebootTime = "0";
+    };
     services = {
-      NetworkManager-wait-online.enable = false;
+      NetworkManager-wait-online = {
+        enable = false;
+      };
     };
   };
 
   powerManagement = {
     enable = true;
-    powertop.enable = true;
+    powertop = {
+      enable = true;
+    };
   };
 
   programs = {
-    nix-ld.enable = true;
-    mtr.enable = true;
-    fish.enable = true;
-    gnupg.agent = {
+    nix-ld = {
       enable = true;
-      enableSSHSupport = true;
+    };
+    mtr = {
+      enable = true;
+    };
+    fish = {
+      enable = true;
+    };
+    gnupg = {
+      agent = {
+        enable = true;
+        enableSSHSupport = true;
+      };
     };
     auto-cpufreq = {
       enable = true;
@@ -160,8 +173,12 @@
     # envfs.enable = true;
 
     # File mounting
-    udisks2.enable = true;
-    devmon.enable = true;
+    udisks2 = {
+      enable = true;
+    };
+    devmon = {
+      enable = true;
+    };
 
     logind = {
       killUserProcesses = true;
@@ -173,10 +190,22 @@
     };
 
     # Power
-    upower.enable = true;
-    tlp.enable = true;
-    thermald.enable = true;
-    system76-scheduler.settings.cfsProfiles.enable = true;
+    upower = {
+      enable = true;
+    };
+    tlp = {
+      enable = true;
+    };
+    thermald = {
+      enable = true;
+    };
+    system76-scheduler = {
+      settings = {
+        cfsProfiles = {
+          enable = true;
+        };
+      };
+    };
 
     dbus = {
       enable = true;
@@ -201,6 +230,9 @@
   security = {
     sudo = {
       enable = true;
+      extraConfig = ''
+        Defaults!/run/current-system/sw/bin/true !syslog
+      '';
     };
     polkit = {
       enable = true;
@@ -213,7 +245,9 @@
     };
   };
 
-  time.timeZone = "Africa/Johannesburg";
+  time = {
+    timeZone = "Africa/Johannesburg";
+  };
 
   hardware = {
     enableAllFirmware = true;
@@ -221,7 +255,9 @@
       enable = true;
       powerOnBoot = true;
     };
-    i2c.enable = true;
+    i2c = {
+      enable = true;
+    };
     logitech = {
       wireless = {
         enable = true;
@@ -232,10 +268,19 @@
 
   networking = {
     hostName = "nixos";
-    wireless.iwd.enable = true;
+    wireless = {
+      iwd = {
+        enable = true;
+      };
+    };
     networkmanager = {
       enable = true;
-      wifi.backend = "iwd";
+      wifi = {
+        backend = "iwd";
+      };
+    };
+    firewall = {
+      allowedTCPPorts = [3000];
     };
   };
 
@@ -270,6 +315,4 @@
     enable = true;
     memoryPercent = 25;
   };
-
-  networking.firewall.allowedTCPPorts = [3000];
 }

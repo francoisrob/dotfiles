@@ -1,9 +1,9 @@
 {pkgs, ...}: let
-  buildToolsVersion = "34.0.0";
+  buildToolsVersion = "35.0.0";
   androidComposition = pkgs.androidenv.composeAndroidPackages {
-    buildToolsVersions = [buildToolsVersion "33.0.1"];
-    platformVersions = ["35"];
-    abiVersions = ["arm64-v8a"];
+    buildToolsVersions = [buildToolsVersion "34.0.0" "31.0.0"];
+    platformVersions = ["35" "34" "31"];
+    abiVersions = ["armeabi-v7a" "arm64-v8a"];
     extraLicenses = [
       "android-googletv-license"
       "android-sdk-arm-dbt-license"
@@ -17,6 +17,7 @@
     ];
   };
   androidSdk = androidComposition.androidsdk;
+  ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
 in {
   nixpkgs = {
     config = {
@@ -41,8 +42,9 @@ in {
       jdk17
     ];
     variables = {
-      ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
-      ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+      ANDROID_HOME = ANDROID_HOME;
+      ANDROID_SDK_ROOT = ANDROID_HOME;
+      GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/${buildToolsVersion}/aapt2";
     };
   };
 }

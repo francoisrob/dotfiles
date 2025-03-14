@@ -30,8 +30,10 @@
 
   systemd = {
     services = {
-      mongodb.environment = {
-        "GLIBC_TUNABLES" = "glibc.pthread.rseq=0";
+      mongodb = {
+        environment = {
+          "GLIBC_TUNABLES" = "glibc.pthread.rseq=0";
+        };
       };
     };
   };

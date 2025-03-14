@@ -4,80 +4,78 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs?ref=nixos-unstable";
     };
-    nixpkgs-stable = {
-      url = "github:nixos/nixpkgs/nixos-24.11";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
     };
     hyprland = {
       url = "github:hyprwm/Hyprland";
     };
     hyprland-contrib = {
       url = "github:hyprwm/contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
     };
     solaar = {
       url = "github:Svenum/Solaar-Flake/main";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
     };
     auto-cpufreq = {
       url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
     };
     waybar = {
       url = "github:Alexays/Waybar/master";
     };
-    nur = {
+    nurpkgs = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
+    android-nixpkgs = {
+      url = "github:tadfisher/android-nixpkgs";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
     };
   };
 
   outputs = inputs @ {
     nixpkgs,
-    nixpkgs-stable,
     home-manager,
     solaar,
     auto-cpufreq,
-    nur,
+    nurpkgs,
     ...
   }: let
     system = "x86_64-linux";
     overlays = [
       (final: prev: {
-        stable = import nixpkgs-stable {
-          inherit system;
-          config = {
-            allowUnfree = true;
-          };
-        };
-      })
-      (final: prev: {
-        steam = prev.steam.override (
-          {extraPkgs ? pkgs': [], ...}: {
-            extraPkgs = pkgs':
-              (extraPkgs pkgs')
-              ++ (with pkgs'; [
-                libgdiplus
-              ]);
-          }
-        );
-      })
-      (self: super: {
-        mpv = super.mpv.override {
-          scripts = [self.mpvScripts.mpris];
-        };
-      })
-      (final: prev: {
         waybar_git = prev.waybar.overrideAttrs (oldAttrs: {
           src = inputs.waybar;
         });
       })
-      (final: prev: {
-        nur = import nur;
-      })
+      nurpkgs.overlays.default
     ];
   in {
     devShells.${system} = let

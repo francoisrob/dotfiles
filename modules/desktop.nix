@@ -56,7 +56,9 @@ in {
   };
 
   xdg = {
-    mime.enable = true;
+    mime = {
+      enable = true;
+    };
     portal = {
       enable = true;
       wlr = {

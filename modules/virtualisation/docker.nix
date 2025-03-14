@@ -8,7 +8,13 @@
     };
   };
 
-  users.users.francois.extraGroups = [
-    "docker"
-  ];
+  users = {
+    users = {
+      francois = {
+        extraGroups = [
+          "docker"
+        ];
+      };
+    };
+  };
 }

@@ -11,10 +11,12 @@
       inherit pkgs;
       inherit inputs;
     };
-    users.francois = {
-      imports = [
-        ../home-manager
-      ];
+    users = {
+      francois = {
+        imports = [
+          ../home-manager
+        ];
+      };
     };
   };
 }

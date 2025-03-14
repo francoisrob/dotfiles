@@ -88,8 +88,12 @@
     };
 
     pointerCursor = {
-      gtk.enable = true;
-      x11.enable = true;
+      gtk = {
+        enable = true;
+      };
+      x11 = {
+        enable = true;
+      };
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
       size = 24;
@@ -125,7 +129,9 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "adwaita";
+    platformTheme = {
+      name = "adwaita";
+    };
     style = {
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;
@@ -149,10 +155,14 @@
 
     git = {
       enable = true;
-      lfs.enable = true;
+      lfs = {
+        enable = true;
+      };
     };
 
     # Let Home Manager install and manage itself.
-    home-manager.enable = true;
+    home-manager = {
+      enable = true;
+    };
   };
 }

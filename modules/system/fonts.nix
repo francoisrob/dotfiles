@@ -30,8 +30,12 @@ in {
   fonts = {
     enableGhostscriptFonts = true;
     enableDefaultPackages = true;
-    fontconfig.enable = true;
-    fontDir.enable = true;
+    fontconfig = {
+      enable = true;
+    };
+    fontDir = {
+      enable = true;
+    };
     packages = with pkgs; [
       nerd-fonts._0xproto
       font-awesome
@@ -53,5 +57,11 @@ in {
     };
   };
 
-  nixpkgs.config.joypixels.acceptLicense = true;
+  nixpkgs = {
+    config = {
+      joypixels = {
+        acceptLicense = true;
+      };
+    };
+  };
 }
