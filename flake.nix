@@ -1,5 +1,6 @@
 {
-  description = "francoisrob flake v2";
+  description = "francoisrob nixos flake";
+
   inputs = {
     nixpkgs = {
       url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -57,6 +58,9 @@
           follows = "nixpkgs";
         };
       };
+    };
+    neovim-nightly = {
+      url = "github:nix-community/neovim-nightly-overlay";
     };
   };
 

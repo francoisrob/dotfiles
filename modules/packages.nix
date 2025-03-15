@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   nixpkgs = {
     overlays = [
       (self: super: {
@@ -13,7 +17,20 @@
           extraPkgs = pkgs: [];
         };
       })
+
+      inputs.neovim-nightly.overlays.default
     ];
+  };
+
+  nix = {
+    settings = {
+      substituters = [
+        "https://neovim-nightly.cachix.org"
+      ];
+      trusted-public-keys = [
+        "neovim-nightly.cachix.org-1:feIoInHRevVEplgdZvQDjhp11kYASYCE2NGY9hNrwxY="
+      ];
+    };
   };
 
   environment = {
@@ -22,7 +39,6 @@
 
       fastfetch
       unzip
-      # neovim
       popsicle
       gparted
 
@@ -61,6 +77,14 @@
 
     tmux = {
       enable = true;
+    };
+
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+      vimAlias = true;
+      viAlias = true;
+      package = with pkgs; neovim;
     };
   };
 }
