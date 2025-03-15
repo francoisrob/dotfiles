@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  hostName,
   ...
 }: {
   boot = {
@@ -267,7 +268,7 @@
   };
 
   networking = {
-    hostName = "nixos";
+    inherit hostName;
     wireless = {
       iwd = {
         enable = true;
@@ -292,19 +293,25 @@
 
   nix = {
     settings = {
+      max-jobs = "auto";
       # hard link duplicates
       auto-optimise-store = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
+      cores = 0;
+      substituters = [
+        "https://nix-community.cachix.org"
       ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+
+      experimental-features = ["nix-command" "flakes"];
     };
-    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
     gc = {
       automatic = true;
-      dates = "daily";
-      randomizedDelaySec = "10min";
+      dates = "weekly";
+      randomizedDelaySec = "45min";
     };
+    nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   };
 
   system = {

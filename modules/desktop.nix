@@ -1,11 +1,12 @@
 {
   pkgs,
   inputs,
+  user,
   ...
 }: let
   hyprland-contrib = inputs.hyprland-contrib.packages.${pkgs.system};
   hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
-  tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
+  # tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
 in {
   nix = {
     settings = {
@@ -17,6 +18,14 @@ in {
       ];
     };
   };
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      waybar_git = prev.waybar.overrideAttrs (oldAttrs: {
+        src = inputs.waybar;
+      });
+    })
+  ];
 
   programs = {
     uwsm = {
@@ -49,7 +58,7 @@ in {
         default_session = {
           command = "uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null";
           # command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null'";
-          user = "francois";
+          user = user;
         };
       };
     };

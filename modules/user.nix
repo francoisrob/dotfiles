@@ -1,9 +1,13 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   users = {
     users = {
-      francois = {
+      ${user} = {
         isNormalUser = true;
-        description = "Francois";
+        description = user;
         extraGroups = [
           "networkmanager"
           "wheel"

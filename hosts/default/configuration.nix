@@ -2,8 +2,6 @@
   imports = [
     ./hardware-configuration.nix
 
-    # NEW
-    #
     # Hardware
     ../../modules/hardware/cpu/intel.nix
     ../../modules/hardware/gpu/nvidia.nix
@@ -17,10 +15,6 @@
     ../../modules/system/boot.nix
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
-
-    # hardening - needs checking
-    # ../../modules/system/systemd-hardening.nix
-    # ../../modules/system/kernel-hardening.nix
 
     # Virtualization
     ../../modules/virtualisation/default.nix

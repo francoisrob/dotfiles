@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, user, ...}: {
   imports = [
     ./docker.nix
   ];
@@ -33,7 +33,7 @@
   };
   users = {
     users = {
-      francois = {
+      ${user} = {
         extraGroups = [
           "libvirtd"
           "kvm"

@@ -1,4 +1,4 @@
-{
+{user, ...}: {
   virtualisation = {
     docker = {
       rootless = {
@@ -10,7 +10,7 @@
 
   users = {
     users = {
-      francois = {
+      ${user} = {
         extraGroups = [
           "docker"
         ];

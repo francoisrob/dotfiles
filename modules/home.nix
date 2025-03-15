@@ -1,6 +1,6 @@
 {
-  pkgs,
   inputs,
+  user,
   ...
 }: {
   home-manager = {
@@ -8,11 +8,11 @@
     useUserPackages = true;
     backupFileExtension = "backup";
     extraSpecialArgs = {
-      inherit pkgs;
       inherit inputs;
+      inherit user;
     };
     users = {
-      francois = {
+      ${user} = {
         imports = [
           ../home-manager
         ];

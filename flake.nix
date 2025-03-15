@@ -60,49 +60,51 @@
     };
   };
 
-  outputs = inputs @ {
+  outputs = {
     nixpkgs,
     home-manager,
     solaar,
     auto-cpufreq,
     nurpkgs,
     ...
-  }: let
+  } @ inputs: let
     system = "x86_64-linux";
+    hostName = "nixos";
+    user = "francois";
+
     overlays = [
-      (final: prev: {
-        waybar_git = prev.waybar.overrideAttrs (oldAttrs: {
-          src = inputs.waybar;
-        });
-      })
       nurpkgs.overlays.default
     ];
   in {
-    devShells.${system} = let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          jdk
-        ];
-      };
-      jdk17 = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          jdk17
-        ];
-      };
-    };
+    # devShells.${system} = let
+    #   pkgs = nixpkgs.legacyPackages.${system};
+    # in {
+    #   default = pkgs.mkShell {
+    #     buildInputs = with pkgs; [
+    #       jdk
+    #     ];
+    #   };
+    #   jdk17 = pkgs.mkShell {
+    #     buildInputs = with pkgs; [
+    #       jdk17
+    #     ];
+    #   };
+    # };
 
     nixosConfigurations = {
-      inspiron-7400 = nixpkgs.lib.nixosSystem {
+      ${hostName} = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+          inherit user;
+          inherit hostName;
+        };
         modules = [
           {nixpkgs.overlays = overlays;}
           home-manager.nixosModules.home-manager
           solaar.nixosModules.default
           auto-cpufreq.nixosModules.default
-          ./hosts/inspiron_7400/configuration.nix
+          ./hosts/default/configuration.nix
         ];
       };
     };

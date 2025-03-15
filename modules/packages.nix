@@ -1,4 +1,21 @@
 {pkgs, ...}: {
+  nixpkgs = {
+    overlays = [
+      (self: super: {
+        mpv = super.mpv.override {
+          scripts = [self.mpvScripts.webtorrent-mpv-hook];
+        };
+
+        lutris = super.lutris.override {
+          extraLibraries = pkgs: [
+            self.findutils
+          ];
+          extraPkgs = pkgs: [];
+        };
+      })
+    ];
+  };
+
   environment = {
     systemPackages = with pkgs; [
       kanshi
@@ -15,24 +32,9 @@
       kitty
       zoxide
 
-      # mpvScripts
-      # (self: super: {
-      #   mpv = super.mpv.override {
-      #     scripts = [self.mpvScripts.mpris];
-      #   };
-      # })
-      (mpv.override {
-        scripts = [ mpvScripts.webtorrent-mpv-hook ];
-      })
+      mpv
 
-      (lutris.override {
-        extraLibraries = pkgs: [
-          findutils # List library dependencies here
-        ];
-        extraPkgs = pkgs: [
-          # List package dependencies here
-        ];
-      })
+      lutris
 
       # Developer
       fd

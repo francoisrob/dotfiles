@@ -14,24 +14,29 @@
           "steam-run"
         ];
     };
+    overlays = [
+      (final: prev: {
+        steam = prev.steam.override (
+          {extraPkgs ? pkgs': [], ...}: {
+            extraPkgs = pkgs':
+              (extraPkgs pkgs')
+              ++ (with pkgs'; [
+                libgdiplus
+                glxinfo
+              ]);
+          }
+        );
+      })
+    ];
   };
 
   programs = {
     steam = {
       enable = true;
-      package = pkgs.steam.override {
-        extraPkgs = p:
-          with p; [
-            libgdiplus
-            glxinfo
-          ];
-      };
+      package = pkgs.steam;
       extraCompatPackages = with pkgs; [
         proton-ge-bin
       ];
-      # remotePlay = {
-      #   openFirewall = true;
-      # };
       dedicatedServer = {
         openFirewall = true;
       };
