@@ -1,5 +1,3 @@
-FLAKE ?= $(PWD)/flake
-
 .PHONY: help
 help:
 	@echo "Available make commands:"
@@ -10,12 +8,12 @@ help:
 
 .PHONY: switch
 switch:
-	@sudo nixos-rebuild switch --flake .#$(CONFIG)
+	@sudo nixos-rebuild switch --flake .
 
 .PHONY: update
 update:
 	@sudo nix flake update
-	@$(MAKE) switch CONFIG=$(CONFIG)
+	@$(MAKE) switch
 
 .PHONY: clean
 clean:
