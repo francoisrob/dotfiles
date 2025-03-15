@@ -8,7 +8,7 @@
   androidSdk = android-nixpkgs (
     sdk:
       with sdk; [
-        # tools
+        platform-tools
         cmdline-tools-latest
         platforms-android-35
         platforms-android-34
@@ -27,20 +27,22 @@ in {
       androidSdk
       jdk17
     ];
-    # variables = {
-    #   ANDROID_HOME = ANDROID_HOME;
-    #   ANDROID_SDK_ROOT = ANDROID_HOME;
-    #   # JAVA_HOME = "${pkgs.jdk17}/lib/openjdk";
-    #   GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/35.0.0/aapt2";
-    # };
+    variables = {
+      ANDROID_HOME = ANDROID_HOME;
+      ANDROID_SDK_ROOT = ANDROID_HOME;
+      GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/35.0.0/aapt2";
+    };
   };
 
-  programs = {
-    # adb = {
-    #   enable = true;
-    # };
-    # nix-ld = {
-    #   enable = true;
-    # };
+  services = {
+    udev = {
+      packages = [pkgs.android-udev-rules];
+    };
+  };
+
+  users = {
+    groups = {
+      adbusers = {};
+    };
   };
 }
