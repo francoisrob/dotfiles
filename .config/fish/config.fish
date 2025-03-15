@@ -1,17 +1,15 @@
 set fish_greeting ""
 set fish_home ~/.config/fish
 
-
-# Paths (prepend to ensure priority)
 fish_add_path "$HOME/.local/share/bin"
 fish_add_path "$HOME/.local/bin"
 
-# Rust
-fish_add_path "$HOME/.cargo/bin"
 # Bun
 fish_add_path "$HOME/.bun/bin"
 
 fish_add_path "$HOME/.volta/bin"
+
+fish_add_path "$HOME/.pub-cache/bin"
 
 # Volta
 set -gx VOLTA_HOME "$HOME/.volta"
@@ -28,8 +26,8 @@ function dev-api -d "npm run dev-api in current directory"
     npm run dev-api
 end
 
-function nd -d "run 'nix develop'"
-    nix develop --command fish
+function nd -d "run 'nix develop -c $SHELL'"
+    nix develop -c $SHELL
 end
 
 # function fish_user_key_bindings
