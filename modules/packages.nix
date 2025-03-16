@@ -64,6 +64,8 @@
       mongosh
       mongodb-tools
       mono
+
+      sqlite
     ];
   };
 

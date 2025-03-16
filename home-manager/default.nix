@@ -57,10 +57,6 @@
       TERMINAL = "kitty";
     };
 
-    shell = {
-      enableFishIntegration = true;
-    };
-
     pointerCursor = {
       gtk = {
         enable = true;

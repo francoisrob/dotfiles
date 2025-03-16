@@ -52,7 +52,6 @@
 
     kernelParams = [
       "quiet"
-      # disable serial port probing
       "8250.nr_uarts=0"
 
       "rd.systemd.show_status=false"
@@ -65,6 +64,7 @@
       "rcu_nocbs=0-7"
       "pcie_aspm=force"
       "nvme.noacpi=1"
+      "usbcore.autosuspend=-1"
     ];
   };
 
