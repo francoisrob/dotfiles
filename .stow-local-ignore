@@ -9,4 +9,6 @@
 
 /hosts
 /modules
+/home-manager
+/lib
 flake.*
