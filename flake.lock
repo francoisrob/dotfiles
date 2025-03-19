@@ -739,6 +739,26 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1742096597,
+        "narHash": "sha256-CUy00dj513aIvtN2NGiDKLCVEQSz4xHWSDf229EiJdU=",
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "rev": "5c77c6d6f2e8cc6007c2b1a4df1a507834404a67",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1741851582,
@@ -856,6 +876,7 @@
         "hyprland": "hyprland",
         "hyprland-contrib": "hyprland-contrib",
         "neovim-nightly": "neovim-nightly",
+        "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_3",
         "nurpkgs": "nurpkgs",
         "solaar": "solaar",

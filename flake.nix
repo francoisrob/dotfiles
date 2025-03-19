@@ -62,6 +62,14 @@
     neovim-nightly = {
       url = "github:nix-community/neovim-nightly-overlay";
     };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
   };
 
   outputs = {
@@ -70,6 +78,7 @@
     solaar,
     auto-cpufreq,
     nurpkgs,
+    nix-index-database,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -108,6 +117,7 @@
           home-manager.nixosModules.home-manager
           solaar.nixosModules.default
           auto-cpufreq.nixosModules.default
+          nix-index-database.nixosModules.nix-index
           ./hosts/default/configuration.nix
         ];
       };

@@ -148,6 +148,18 @@
     };
     fish = {
       enable = true;
+      useBabelfish = true;
+      vendor = {
+        config = {
+          enable = false;
+        };
+        completions = {
+          enable = false;
+        };
+        functions = {
+          enable = false;
+        };
+      };
     };
     gnupg = {
       agent = {

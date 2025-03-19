@@ -4,6 +4,7 @@
   ...
 }: {
   users = {
+    defaultUserShell = pkgs.bash;
     users = {
       ${user} = {
         isNormalUser = true;
