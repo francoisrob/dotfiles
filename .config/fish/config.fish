@@ -1,26 +1,39 @@
-set fish_greeting ""
+set -g fish_greeting ""
+
 set fish_home ~/.config/fish
 
-fish_add_path "$HOME/.local/share/bin"
-fish_add_path "$HOME/.local/bin"
-
-# Bun
-fish_add_path "$HOME/.bun/bin"
-
-fish_add_path "$HOME/.volta/bin"
-
-fish_add_path "$HOME/.pub-cache/bin"
+# Path additions - consolidated for better performance
+fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.volta/bin" "$HOME/.pub-cache/bin"
 
 # Volta
 set -gx VOLTA_HOME "$HOME/.volta"
-
-set -gx FZF_DEFAULT_COMMAND 'fd --type file'
+set -gx FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
+set -gx FZF_ALT_C_COMMAND 'fd --type directory --follow --hidden --exclude .git'
 
-# ASDF
-source "$HOME/.local/state/nix/profiles/home-manager/home-path/share/asdf-vm/asdf.fish"
+# Load ASDF only if it exists
+if test -f "$HOME/.local/state/nix/profiles/home-manager/home-path/share/asdf-vm/asdf.fish"
+    source "$HOME/.local/state/nix/profiles/home-manager/home-path/share/asdf-vm/asdf.fish"
+end
 
-source ~/.secrets.fish
+# Load secrets if they exist
+if test -f ~/.secrets.fish
+    source ~/.secrets.fish
+end
+
+if status is-interactive
+    if type -q starship
+        starship init fish | source
+    end
+
+    if type -q zoxide
+        zoxide init fish | source
+    end
+
+    if type -q fzf
+        fzf --fish | source
+    end
+end
 
 function dev-api -d "npm run dev-api in current directory"
     npm run dev-api
@@ -29,8 +42,3 @@ end
 function nd -d "run 'nix develop -c $SHELL'"
     nix develop -c $SHELL
 end
-
-# function fish_user_key_bindings
-#     fish_default_key_bindings -M insert
-#     fish_vi_key_bindings --no-erase insert
-# end
