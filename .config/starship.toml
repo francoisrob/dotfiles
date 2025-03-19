@@ -9,7 +9,7 @@ command_timeout = 750
 [character]
 success_symbol = '[ ](bold green)'
 error_symbol = '[ ](bold red) '
-vimcmd_symbol = '[V ](bold green) '
+vimcmd_symbol = '[ ](bold green) '
 
 [status]
 style = 'bg:blue'
