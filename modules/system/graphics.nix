@@ -9,7 +9,6 @@
         libvdpau-va-gl
 
         mesa
-        mesa.drivers
         vulkan-tools
       ];
     };

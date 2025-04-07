@@ -1,17 +1,24 @@
 {
   pkgs,
   user,
+  inputs,
   ...
-}: {
+}: let
+  tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
+in {
   home = {
     username = user;
     homeDirectory = "/home/${user}";
     stateVersion = "24.11";
 
     packages = with pkgs; [
+      tagstudio
+
       gnome-calculator
       hyprcursor
       asdf-vm
+      stremio
+      bitwarden
 
       slack
       discord
@@ -51,6 +58,10 @@
       aws-sam-cli
 
       mongodb-compass
+
+      # *** AI ***
+      adwaita-qt # Qt style matching Adwaita
+      libsForQt5.qtstyleplugins
     ];
 
     sessionVariables = {
@@ -100,7 +111,7 @@
   qt = {
     enable = true;
     platformTheme = {
-      name = "adwaita";
+      name = "gtk";
     };
     style = {
       name = "adwaita-dark";
@@ -126,6 +137,13 @@
     git = {
       enable = true;
       lfs = {
+        enable = true;
+      };
+    };
+
+    direnv = {
+      enable = true;
+      nix-direnv = {
         enable = true;
       };
     };

@@ -47,6 +47,8 @@
 
       kitty
       zoxide
+      sd
+      bat
 
       mpv
 

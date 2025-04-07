@@ -38,15 +38,20 @@
     kernel = {
       sysctl = {
         "vm.swappiness" = 1;
+        # "kernel.sched_migration_cost_ns" = 500000;
+        # "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
         "vm.nr_hugepages" = 128;
         "vm.transparent_hugepages" = "always";
+        # "vm.transparent_hugepages" = "madvise";
 
         # network optimizations
         "net.core.rmem_max" = 16777216;
         "net.core.wmem_max" = 16777216;
+        # "net.core.netdev_max_backlog" = 5000;
         "net.ipv4.tcp_rmem" = "4096 87380 16777216";
         "net.ipv4.tcp_wmem" = "4096 87380 16777216";
+        # "net.ipv4.tcp_mtu_probing" = 1;
       };
     };
 
@@ -66,6 +71,11 @@
       "nvme.noacpi=1"
       "usbcore.autosuspend=-1"
     ];
+
+    tmp = {
+      useTmpfs = true;
+      tmpfsSize = "20%";
+    };
   };
 
   environment = {
@@ -104,18 +114,21 @@
     "/" = {
       options = [
         "noatime"
+        "nodiratime"
         "discard"
       ];
     };
     "/home" = {
       options = [
         "noatime"
+        "nodiratime"
         "discard"
       ];
     };
     "/tmp" = {
       options = [
         "noatime"
+        "nodiratime"
         "discard"
       ];
     };
@@ -322,6 +335,7 @@
       automatic = true;
       dates = "weekly";
       randomizedDelaySec = "45min";
+      options = "--delete-older-than 2d";
     };
     nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   };
@@ -332,6 +346,6 @@
 
   zramSwap = {
     enable = true;
-    memoryPercent = 25;
+    memoryPercent = 40;
   };
 }

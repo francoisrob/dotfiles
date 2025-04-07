@@ -30,12 +30,6 @@ in {
   fonts = {
     enableGhostscriptFonts = true;
     enableDefaultPackages = true;
-    fontconfig = {
-      enable = true;
-    };
-    fontDir = {
-      enable = true;
-    };
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
       font-awesome
@@ -44,6 +38,16 @@ in {
       joypixels
       ubuntu_font_family
     ];
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        sansSerif = ["Noto Sans"];
+        monospace = ["JetBrainsMono Nerd Font"];
+      };
+    };
+    fontDir = {
+      enable = true;
+    };
   };
 
   i18n = {

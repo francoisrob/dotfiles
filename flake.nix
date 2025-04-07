@@ -70,6 +70,15 @@
         };
       };
     };
+
+    tagstudio = {
+      url = "github:TagStudioDev/TagStudio";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
   };
 
   outputs = {
@@ -88,7 +97,18 @@
     overlays = [
       nurpkgs.overlays.default
     ];
+
+    pkgs = import nixpkgs {
+      inherit system;
+      inherit overlays;
+    };
+
+    devshells = import ./devshells {
+      inherit inputs;
+      inherit pkgs;
+    };
   in {
+    devShells.${system} = devshells;
     # devShells.${system} = let
     #   pkgs = nixpkgs.legacyPackages.${system};
     # in {
