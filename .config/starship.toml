@@ -4,7 +4,7 @@
 
 # Inserts a blank line between shell prompts
 add_newline = false
-command_timeout = 750
+command_timeout = 1000
 
 [character]
 success_symbol = '[ ](bold green)'
@@ -31,6 +31,16 @@ style_root = 'black bold'
 format = '[$user]($style) '
 disabled = true
 show_always = true
+
+[direnv]
+disabled = false
+symbol = '󰌪'
+format = '[$symbol$loaded$allowed]($style)'
+allowed_msg = ''
+not_allowed_msg = '󰂭'
+denied_msg = '󰂭'
+loaded_msg = ''
+unloaded_msg = ''
 
 [aws]
 symbol = "  "
