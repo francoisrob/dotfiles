@@ -33,6 +33,10 @@ if status is-interactive
     if type -q fzf
         fzf --fish | source
     end
+
+    if type -q direnv
+        direnv hook fish | source
+    end
 end
 
 function dev-api -d "npm run dev-api in current directory"
