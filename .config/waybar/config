@@ -2,25 +2,25 @@
   "layer": "top",
   "position": "top",
   "exclusive": true,
-  "modules-left": ["clock", "hyprland/workspaces"],
-  "modules-center": [],
-  "height": 28,
-  "modules-right": ["tray","pulseaudio", "custom/notification", "battery" ],
+  "modules-left": ["clock", "hyprland/workspaces", "hyprland/submap"],
+  "modules-center": ["hyprland/window"],
+  "modules-right": ["tray","pulseaudio", "custom/notification", "battery"],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
     "format": "<sub>{icon}</sub> {windows}",
-    "window-rewrite-default": "   ",
+    "window-rewrite-default": "",
     "format-window-separator": "  ",
     "window-rewrite": {
-      "firefox": "   ",
-      "kitty": "  ",
-      "code": " 󰨞  ",
-      "font-manager": "  ",
-      "steam": "   ",
-      "discord": "   ",
-      "Webcord": "   ",
-      "Chromium": "   "
+      "firefox": "",
+      "kitty": "󰆍",
+      "steam": "",
+      "discord": "",
+      "Chromium": "",
+      "thunar": "",
+      "spotify": "󰓇",
+      "slack": "󰒱",
+      "stremio": ""
     },
     "persistent-workspaces": {
       "*": 3
@@ -30,13 +30,13 @@
   "tray": {
     "icon-size": 14,
     "spacing": 12,
-    "reverse-direction": true,
+    "reverse-direction": true
   },
 
   "backlight": {
     "format": "{icon} {percent}",
     "format-icons": [" 󰃞  ", " 󰃟  ", " 󰃝  ", " 󰃠 "],
-    "tooltip": false,
+    "tooltip": false
   },
 
   "clock": {
@@ -96,5 +96,11 @@
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
+  },
+
+  "hyprland/submap": {
+    "format": "{}",
+    "max-length": 8,
+    "tooltip": false
   }
 }

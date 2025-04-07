@@ -23,26 +23,35 @@ window#waybar {
 #workspaces {
   padding: 0 4px 0 4px;
 }
+
 #workspaces button {
   background-color: inherit;
   margin: 2px 0 2px 0;
+  border-radius: 4px;
 }
+
 #workspaces button box {
   padding: 2px 12px 2px 12px;
+  border-radius: 4px;
 }
+
 #workspaces button box label {
   color: @text;
   font-weight: 500;
 }
+
 #workspaces button.active {
   background-image: linear-gradient(to top right, @teal 50%, @peach 100%);
-  border-radius: 4px;
 }
-
-/* #workspaces button.active box {} */
 
 #workspaces button.active box label {
   color: @crust;
+  font-weight: bold;
+}
+
+#workspaces button:hover {
+  color: @crust;
+  background-color: #ffffff;
   font-weight: bold;
 }
 
