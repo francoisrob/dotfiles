@@ -47,27 +47,28 @@
 
       kitty
       zoxide
+
+      ripgrep
+      fzf
       sd
+      fd
       bat
+      broot
 
       mpv
 
       lutris
 
-      # Developer
-      fd
-      fzf
-      ripgrep
-
-      chafa
       scrcpy
-
+      # Developer
+      chafa
       gnumake
       mongosh
       mongodb-tools
-      mono
 
+      mono
       sqlite
+      sqlitebrowser
     ];
   };
 
