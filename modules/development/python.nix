@@ -1,7 +1,12 @@
 {pkgs, ...}: {
   environment = {
     systemPackages = with pkgs; [
-      python313
+      python3
+      (python3.withPackages (ps:
+        with ps; [
+          setuptools
+          pip
+        ]))
     ];
   };
 }

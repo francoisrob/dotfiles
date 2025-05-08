@@ -72,7 +72,7 @@
     };
 
     tagstudio = {
-      url = "github:TagStudioDev/TagStudio";
+      url = "github:TagStudioDev/TagStudio/Alpha-v9.5.3";
       inputs = {
         nixpkgs = {
           follows = "nixpkgs";

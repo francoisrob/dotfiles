@@ -131,7 +131,7 @@ in {
   programs = {
     waybar = {
       enable = true;
-      package = pkgs.waybar_git;
+      # package = pkgs.waybar_git;
     };
 
     git = {
