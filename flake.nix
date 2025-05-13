@@ -5,6 +5,9 @@
     nixpkgs = {
       url = "github:nixos/nixpkgs?ref=nixos-unstable";
     };
+    flutter-nixpkgs = {
+      url = "github:NixOS/nixpkgs/10069ef4cf863633f57238f179a0297de84bd8d3";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs = {
@@ -98,31 +101,14 @@
       nurpkgs.overlays.default
     ];
 
-    pkgs = import nixpkgs {
-      inherit system;
-      inherit overlays;
-    };
-
     devshells = import ./devshells {
       inherit inputs;
-      inherit pkgs;
+      pkgs = import inputs.flutter-nixpkgs {
+        inherit system;
+      };
     };
   in {
     devShells.${system} = devshells;
-    # devShells.${system} = let
-    #   pkgs = nixpkgs.legacyPackages.${system};
-    # in {
-    #   default = pkgs.mkShell {
-    #     buildInputs = with pkgs; [
-    #       jdk
-    #     ];
-    #   };
-    #   jdk17 = pkgs.mkShell {
-    #     buildInputs = with pkgs; [
-    #       jdk17
-    #     ];
-    #   };
-    # };
 
     nixosConfigurations = {
       ${hostName} = nixpkgs.lib.nixosSystem {
