@@ -10,8 +10,9 @@
       package = pkgs.mongodb-ce;
     };
 
-    # Screenshare fixed for slack desktop
-    # flatpak.enable = true;
+    qdrant = {
+      enable = true;
+    };
   };
 
   # mongodb soft limits

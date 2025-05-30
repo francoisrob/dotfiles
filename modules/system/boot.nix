@@ -85,6 +85,7 @@
       };
     };
     systemPackages = with pkgs; [
+      ntfs3g
       xdg-user-dirs
       xdg-utils
       uutils-coreutils-noprefix
@@ -100,6 +101,7 @@
       openssl
       brightnessctl
       pavucontrol
+      inotify-tools
     ];
     variables = {
       EDITOR = "nvim";
