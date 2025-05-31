@@ -3,7 +3,7 @@ set -g fish_greeting ""
 set fish_home ~/.config/fish
 
 # Path additions - consolidated for better performance
-fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.volta/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin"
+fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.volta/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin" "$HOME/.cargo/bin"
 
 # Volta
 set -gx VOLTA_HOME "$HOME/.volta"
