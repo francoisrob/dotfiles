@@ -5,7 +5,7 @@
   ...
 }: {
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages;
     loader = {
       timeout = 0;
       systemd-boot = {
