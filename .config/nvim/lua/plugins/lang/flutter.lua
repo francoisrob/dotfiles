@@ -1,38 +1,4 @@
 return {
-
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   config = function()
-  --     local lspconfig = require("lspconfig")
-  --
-  --     local function should_attach(client, bufnr)
-  --       local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-  --       local bufname = vim.api.nvim_buf_get_name(bufnr)
-  --       if filetype == "qf" or filetype == "lspinfo" or bufname:match("definitions") or bufname:match("errors") then
-  --         return false
-  --       end
-  --       return true
-  --     end
-  --
-  --     lspconfig.dartls.setup({
-  --       on_attach = function(client, bufnr)
-  --         if not should_attach(client, bufnr) then
-  --           client.stop()
-  --           return
-  --         end
-  --       end,
-  --       filetypes = { "dart" },
-  --       init_options = {
-  --         onlyAnalyzeProjectsWithOpenFiles = false,
-  --         suggestFromUnimportedLibraries = true,
-  --         closingLabels = true,
-  --         outline = false,
-  --         flutterOutline = false,
-  --       },
-  --     })
-  --   end,
-  -- },
-
   {
     "nvim-flutter/flutter-tools.nvim",
     ft = { "dart" },
@@ -50,23 +16,6 @@ return {
         end
         return true
       end
-
-      -- lspconfig.dartls.setup({
-      --   on_attach = function(client, bufnr)
-      --     if not should_attach(client, bufnr) then
-      --       client.stop()
-      --       return
-      --     end
-      --   end,
-      --   filetypes = { "dart" },
-      --   init_options = {
-      --     onlyAnalyzeProjectsWithOpenFiles = false,
-      --     suggestFromUnimportedLibraries = true,
-      --     closingLabels = true,
-      --     outline = false,
-      --     flutterOutline = false,
-      --   },
-      -- })
 
       require("flutter-tools").setup({
         debugger = {
