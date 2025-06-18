@@ -212,7 +212,7 @@
       killUserProcesses = true;
       powerKey = "lock";
       powerKeyLongPress = "reboot";
-      lidSwitch = "lock";
+      lidSwitch = "suspend";
       lidSwitchExternalPower = "ignore";
       lidSwitchDocked = "ignore";
     };
