@@ -46,3 +46,7 @@ end
 function nd -d "run 'nix develop -c $SHELL'"
     nix develop -c $SHELL
 end
+
+function please -d "Run the last command with sudo"
+    eval sudo (history --max=1)
+end
