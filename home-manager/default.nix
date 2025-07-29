@@ -4,7 +4,7 @@
   inputs,
   ...
 }: let
-  tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
+  # tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio-jxl;
 in {
   home = {
     username = user;
@@ -12,7 +12,7 @@ in {
     stateVersion = "24.11";
 
     packages = with pkgs; [
-      tagstudio
+      # tagstudio
 
       gnome-calculator
       hyprcursor

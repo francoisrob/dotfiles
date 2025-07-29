@@ -6,7 +6,6 @@
 }: let
   hyprland-contrib = inputs.hyprland-contrib.packages.${pkgs.system};
   hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
-  # tuigreet = "${pkgs.greetd.tuigreet}/bin/tuigreet";
 in {
   nix = {
     settings = {
@@ -52,7 +51,6 @@ in {
 
     greetd = {
       enable = true;
-      package = pkgs.greetd;
       vt = 7;
       settings = {
         default_session = {
