@@ -28,8 +28,8 @@ in {
       firefox-wayland
       chromium
 
-      inkscape
-      gimp
+      inkscape-with-extensions
+      gimp3-with-plugins
       kdePackages.gwenview
 
       evince

@@ -137,8 +137,10 @@
   };
 
   systemd = {
-    watchdog = {
-      rebootTime = "0";
+    settings = {
+      Manager = {
+        RebootWatchdogSec = "0";
+      };
     };
     services = {
       NetworkManager-wait-online = {

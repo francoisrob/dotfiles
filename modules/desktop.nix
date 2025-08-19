@@ -51,7 +51,6 @@ in {
 
     greetd = {
       enable = true;
-      vt = 7;
       settings = {
         default_session = {
           command = "uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null";
