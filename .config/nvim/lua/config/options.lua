@@ -24,25 +24,37 @@ opt.numberwidth = 2
 opt.ruler = false
 
 -- disable nvim intro
-opt.shortmess:append "sI"
+opt.shortmess:append("sI")
 
 opt.signcolumn = "yes"
 opt.splitbelow = true
 opt.splitright = true
+
 opt.termguicolors = true
+opt.pumblend = 0
+opt.winblend = 0
+
 opt.timeoutlen = 400
 opt.undofile = true
 
 opt.updatetime = 250
 
-opt.whichwrap:append "<>[]hl"
+opt.whichwrap:append("<>[]hl")
 
 g.mapleader = " "
 g.autoformat = false
 
-for _, provider in ipairs { "node", "perl", "ruby" } do
+vim.filetype.add({
+  extension = {
+    vert = "c",
+    frag = "c",
+    glsl = "c",
+  },
+})
+
+for _, provider in ipairs({ "node", "perl", "ruby" }) do
   vim.g["loaded_" .. provider .. "_provider"] = 0
 end
 
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.fn.stdpath "data" .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
