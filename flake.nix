@@ -73,7 +73,6 @@
         };
       };
     };
-
     tagstudio = {
       url = "github:TagStudioDev/TagStudio";
       inputs = {

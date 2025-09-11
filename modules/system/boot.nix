@@ -102,6 +102,7 @@
       brightnessctl
       pavucontrol
       inotify-tools
+      playerctl
     ];
     variables = {
       EDITOR = "nvim";

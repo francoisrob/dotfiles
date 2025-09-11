@@ -12,6 +12,7 @@ in {
     stateVersion = "24.11";
 
     packages = with pkgs; [
+      ansible
       # tagstudio
 
       gnome-calculator
@@ -22,6 +23,7 @@ in {
 
       slack
       discord
+      galaxy-buds-client
 
       font-manager
 

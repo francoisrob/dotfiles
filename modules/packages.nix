@@ -36,6 +36,9 @@
   environment = {
     systemPackages = with pkgs; [
       kanshi
+      sshpass
+      php
+      ngrok
 
       fastfetch
       unzip
