@@ -13,6 +13,7 @@ in {
 
     packages = with pkgs; [
       ansible
+      mqttx
       # tagstudio
 
       gnome-calculator
