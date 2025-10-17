@@ -2,6 +2,9 @@
 
 set -uo pipefail
 
+eval $(/usr/bin/gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+
 start_clipboard_monitoring() {
   uwsm app -- wl-paste --type text --watch cliphist store &
   uwsm app -- wl-paste --type image --watch cliphist store &
@@ -19,18 +22,15 @@ start_system_tray_apps() {
 }
 
 setup_system_services() {
-  systemctl --user enable --now hyprpolkitagent.service
   systemctl --user enable --now hypridle.service
-  # UWSM handles env sync
-  # dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 }
 
 main() {
+  setup_system_services
   start_clipboard_monitoring
   restore_wallpaper
   start_system_tray_apps
   uwsm-app -- kanshi &
-  setup_system_services
 }
 
 main
