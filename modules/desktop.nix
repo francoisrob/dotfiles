@@ -42,6 +42,9 @@ in {
     hyprlock = {
       enable = true;
     };
+    seahorse = {
+      enable = true;
+    };
   };
 
   services = {
@@ -54,6 +57,7 @@ in {
       settings = {
         default_session = {
           command = "uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null";
+          # command = "${pkgs.uwsm}/bin/uwsm start -N Hyprland";
           # command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null'";
           user = user;
         };
@@ -75,12 +79,12 @@ in {
 
   environment = {
     systemPackages = with pkgs; [
-      libsecret
-      hyprpolkitagent
+      # libsecret
+      # hyprpolkitagent
 
       wayland # Needed for Hyprland
       libnotify # Needed for notifications
-      rofi-wayland
+      rofi
 
       hyprland-contrib.grimblast
       hyprland-contrib.shellevents

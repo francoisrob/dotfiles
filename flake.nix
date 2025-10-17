@@ -118,7 +118,11 @@
           inherit hostName;
         };
         modules = [
-          {nixpkgs.overlays = overlays;}
+          {
+            nixpkgs = {
+              overlays = overlays;
+            };
+          }
           home-manager.nixosModules.home-manager
           solaar.nixosModules.default
           auto-cpufreq.nixosModules.default

@@ -4,7 +4,7 @@
   inputs,
   ...
 }: let
-  # tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio-jxl;
+  tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
 in {
   home = {
     username = user;
@@ -19,7 +19,7 @@ in {
       gnome-calculator
       hyprcursor
       asdf-vm
-      stremio
+      # stremio
       bitwarden
 
       slack
@@ -65,6 +65,7 @@ in {
       # *** AI ***
       adwaita-qt # Qt style matching Adwaita
       libsForQt5.qtstyleplugins
+      libsecret
     ];
 
     sessionVariables = {
@@ -84,11 +85,30 @@ in {
     };
   };
 
+  xdg.desktopEntries.mongodb-compass = {
+    name = "MongoDB Compass (Wayland)";
+    comment = "The MongoDB GUI";
+    genericName = "MongoDB Compass";
+    exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland";
+    type = "Application";
+    icon = "mongodb-compass";
+    startupNotify = true;
+    terminal = false;
+    categories = ["Development" "Utility" "GTK"];
+    mimeType = ["x-scheme-handler/mongodb" "x-scheme-handler/mongodb+srv"];
+  };
+
   services = {
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 31536000;
       maxCacheTtl = 31536000;
+    };
+    gnome-keyring = {
+      enable = true;
+    };
+    hyprpolkitagent = {
+      enable = true;
     };
   };
 

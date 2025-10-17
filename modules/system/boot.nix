@@ -212,12 +212,16 @@
     };
 
     logind = {
-      killUserProcesses = true;
-      powerKey = "lock";
-      powerKeyLongPress = "reboot";
-      lidSwitch = "suspend";
-      lidSwitchExternalPower = "ignore";
-      lidSwitchDocked = "ignore";
+      settings = {
+        Login = {
+          KillUserProcesses = true;
+          HandlePowerKey = "lock";
+          HandlePowerKeyLongPress = "reboot";
+          HandleLidSwitch = "suspend";
+          HandleLidSwitchExternalPower = "ignore";
+          HandleLidSwitchDocked = "ignore";
+        };
+      };
     };
 
     # Power
