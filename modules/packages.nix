@@ -75,6 +75,13 @@
     ];
   };
 
+  security.wrappers.btop = {
+    source = "${pkgs.btop}/bin/btop";
+    owner = "root";
+    group = "root";
+    capabilities = "cap_perfmon,cap_dac_read_search+ep";
+  };
+
   programs = {
     nix-index = {
       enable = true;
