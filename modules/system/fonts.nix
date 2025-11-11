@@ -36,7 +36,7 @@ in {
       corefonts
       noto-fonts
       joypixels
-      ubuntu_font_family
+      ubuntu-sans
     ];
     fontconfig = {
       enable = true;

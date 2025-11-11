@@ -22,7 +22,6 @@
               (extraPkgs pkgs')
               ++ (with pkgs'; [
                 libgdiplus
-                glxinfo
               ]);
           }
         );

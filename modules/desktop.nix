@@ -4,7 +4,7 @@
   user,
   ...
 }: let
-  hyprland-contrib = inputs.hyprland-contrib.packages.${pkgs.system};
+  hyprland-contrib = inputs.hyprland-contrib.packages.${pkgs.stdenv.hostPlatform.system};
   hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
 in {
   nix = {
@@ -61,6 +61,14 @@ in {
           # command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null'";
           user = user;
         };
+      };
+    };
+  };
+
+  security = {
+    pam = {
+      services.greetd = {
+        enableGnomeKeyring = true;
       };
     };
   };

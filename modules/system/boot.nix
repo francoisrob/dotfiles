@@ -97,7 +97,7 @@
       wget
       stow
       killall
-      glxinfo
+      mesa-demos
       openssl
       brightnessctl
       pavucontrol

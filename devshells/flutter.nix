@@ -3,7 +3,7 @@
   inputs,
   ...
 }: let
-  android-nixpkgs = inputs.android-nixpkgs.sdk.${pkgs.system};
+  android-nixpkgs = inputs.android-nixpkgs.sdk.${pkgs.stdenv.hostPlatform.system};
 
   androidSdk = android-nixpkgs (
     sdk:

@@ -14,13 +14,13 @@ in {
     packages = with pkgs; [
       ansible
       mqttx
-      # tagstudio
+      tagstudio
 
       gnome-calculator
       hyprcursor
       asdf-vm
       # stremio
-      bitwarden
+      bitwarden-desktop
 
       slack
       discord
@@ -28,7 +28,7 @@ in {
 
       font-manager
 
-      firefox-wayland
+      firefox
       chromium
 
       inkscape-with-extensions
@@ -58,7 +58,7 @@ in {
       gh
       lazygit
 
-      aws-sam-cli
+      # aws-sam-cli # broken
 
       mongodb-compass
 
