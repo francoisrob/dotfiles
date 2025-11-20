@@ -1,4 +1,8 @@
-{pkgs, user, ...}: {
+{
+  pkgs,
+  user,
+  ...
+}: {
   imports = [
     ./docker.nix
   ];
@@ -6,7 +10,9 @@
   virtualisation = {
     libvirtd = {
       enable = true;
+      onShutdown = "shutdown";
       qemu = {
+        package = pkgs.qemu_kvm;
         swtpm = {
           enable = true;
         };
@@ -16,6 +22,15 @@
       enable = true;
     };
   };
+  nixpkgs.overlays = [
+    (final: prev: {
+      libvirt = prev.libvirt.override {
+        enableXen = false;
+        enableGlusterfs = false;
+        enableIscsi = false;
+      };
+    })
+  ];
   systemd = {
     services = {
       "user@" = {

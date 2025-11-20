@@ -62,10 +62,12 @@ in {
 
       mongodb-compass
 
-      # *** AI ***
-      adwaita-qt # Qt style matching Adwaita
-      libsForQt5.qtstyleplugins
       libsecret
+
+      gtk4
+      adwaita-icon-theme
+      gnome-themes-extra
+      adwaita-qt
     ];
 
     sessionVariables = {

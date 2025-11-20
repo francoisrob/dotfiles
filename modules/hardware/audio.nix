@@ -73,6 +73,9 @@
               "default.clock.max-quantum" = 512;
             };
           };
+          "92-disable-unstable-codecs" = {
+            "bluez5.codecs" = ["sbc" "aac"];
+          };
         };
       };
     };

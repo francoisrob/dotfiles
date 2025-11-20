@@ -5,7 +5,7 @@
   ...
 }: {
   boot = {
-    kernelPackages = pkgs.linuxPackages;
+    kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       timeout = 0;
       systemd-boot = {
@@ -201,6 +201,11 @@
   };
 
   services = {
+    # Disable autosuspend for Bluetooth USB controller
+    udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", TEST=="power/control", ATTR{power/control}="on"
+    '';
+
     # envfs.enable = true;
 
     # File mounting
@@ -289,6 +294,13 @@
     bluetooth = {
       enable = true;
       powerOnBoot = true;
+      settings = {
+        General = {
+          Experimental = true;
+          JustWorksRepairing = "always";
+          ControllerMode = "dual";
+        };
+      };
     };
     i2c = {
       enable = true;
