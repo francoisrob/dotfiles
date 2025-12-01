@@ -98,6 +98,18 @@
 
     overlays = [
       nurpkgs.overlays.default
+
+      (final: prev: {
+        mindustry = prev.mindustry.overrideAttrs (old: {
+          version = "v153";
+          src = prev.fetchFromGitHub {
+            owner = "Anuken";
+            repo = "Mindustry";
+            rev = "v153";
+            sha256 = "sha256-yVrOHZOCZrI5SsmMdo7Eh+zS0PXv2X67zLCdLOWcPVc=";
+          };
+        });
+      })
     ];
 
     devshells = import ./devshells {

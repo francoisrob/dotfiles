@@ -35,12 +35,16 @@ in {
       gimp3-with-plugins
       kdePackages.gwenview
 
+      protonvpn-gui
+
       evince
       ffmpeg
       libreoffice-fresh
       postman
       obs-studio
       spotify
+
+      mindustry
 
       swww
       swaynotificationcenter
@@ -59,6 +63,8 @@ in {
       lazygit
 
       # aws-sam-cli # broken
+      awscli2
+      ssm-session-manager-plugin
 
       mongodb-compass
 
@@ -87,17 +93,19 @@ in {
     };
   };
 
-  xdg.desktopEntries.mongodb-compass = {
-    name = "MongoDB Compass (Wayland)";
-    comment = "The MongoDB GUI";
-    genericName = "MongoDB Compass";
-    exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland";
-    type = "Application";
-    icon = "mongodb-compass";
-    startupNotify = true;
-    terminal = false;
-    categories = ["Development" "Utility" "GTK"];
-    mimeType = ["x-scheme-handler/mongodb" "x-scheme-handler/mongodb+srv"];
+  xdg.desktopEntries = {
+    mongodb-compass = {
+      name = "MongoDB Compass (Wayland)";
+      comment = "The MongoDB GUI";
+      genericName = "MongoDB Compass";
+      exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland";
+      type = "Application";
+      icon = "mongodb-compass";
+      startupNotify = true;
+      terminal = false;
+      categories = ["Development" "Utility" "GTK"];
+      mimeType = ["x-scheme-handler/mongodb" "x-scheme-handler/mongodb+srv"];
+    };
   };
 
   services = {
