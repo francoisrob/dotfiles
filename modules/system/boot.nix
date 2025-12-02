@@ -121,20 +121,6 @@
         "discard"
       ];
     };
-    "/home" = {
-      options = [
-        "noatime"
-        "nodiratime"
-        "discard"
-      ];
-    };
-    "/tmp" = {
-      options = [
-        "noatime"
-        "nodiratime"
-        "discard"
-      ];
-    };
   };
 
   systemd = {
