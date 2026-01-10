@@ -2,7 +2,13 @@
 
 set -uo pipefail
 
-eval $(/usr/bin/gnome-keyring-daemon --start)
+LOG_FILE="${LOG_FILE:-/tmp/hyprland.log}"
+
+log() {
+  echo "$*" | tee -a "$LOG_FILE"
+}
+
+eval "$(/usr/bin/gnome-keyring-daemon --start)"
 export SSH_AUTH_SOCK
 
 start_clipboard_monitoring() {
@@ -22,7 +28,9 @@ start_system_tray_apps() {
 }
 
 setup_system_services() {
-  systemctl --user enable --now hypridle.service
+  #2>&1 | tee -a "$LOG_FILE" || true
+  systemctl --user enable --now hypridle.service &
+  hypridle &
 }
 
 main() {
@@ -30,7 +38,7 @@ main() {
   start_clipboard_monitoring
   restore_wallpaper
   start_system_tray_apps
-  uwsm-app -- kanshi &
+  uwsm app -- ghostty --gtk-single-instance=true --quit-after-last-window-closed=false --initial-window=true #2>&1 | tee -a "$LOG_FILE" || true
 }
 
 main
