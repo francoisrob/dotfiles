@@ -48,6 +48,8 @@ in {
   };
 
   services = {
+    # teamviewer.enable = true;
+
     libinput = {
       enable = true;
     };
@@ -81,6 +83,12 @@ in {
       enable = true;
       wlr = {
         enable = true;
+      };
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config = {
+        common = {
+          default = [ "hyprland" "gtk" ];
+        };
       };
     };
   };

@@ -19,7 +19,7 @@ in {
       gnome-calculator
       hyprcursor
       asdf-vm
-      # stremio
+      grayjay
       bitwarden-desktop
 
       slack
@@ -78,6 +78,8 @@ in {
 
     sessionVariables = {
       TERMINAL = "kitty";
+      XDG_DATA_DIRS =
+        "${pkgs.lib.makeSearchPath "share" [ "/var/lib/flatpak/exports" "/home/${user}/.local/share/flatpak/exports" ]}:$XDG_DATA_DIRS";
     };
 
     pointerCursor = {

@@ -51,12 +51,6 @@
     };
   };
 
-  services = {
-    spice-vdagentd = {
-      enable = true;
-    };
-  };
-
   environment = {
     systemPackages = with pkgs; [
       virt-viewer

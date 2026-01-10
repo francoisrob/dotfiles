@@ -35,7 +35,6 @@
 
   environment = {
     systemPackages = with pkgs; [
-      kanshi
       sshpass
       php
       ngrok
@@ -49,6 +48,7 @@
       icu
 
       kitty
+      ghostty
       zoxide
 
       ripgrep
@@ -56,6 +56,7 @@
       sd
       fd
       bat
+      jq
       broot
 
       mpv

@@ -70,6 +70,13 @@
       "pcie_aspm=force"
       "nvme.noacpi=1"
       "usbcore.autosuspend=-1"
+
+      # "acpi_osi=" # breaks touchpad multitouch gestures
+      # "acpi_backlight=vendor"
+
+      "ucsi_acpi.trace=0"
+      "ucsi_ccg.skip_ucsi=1"
+      # "i2c_hid.ignore_special_reports=1"
     ];
 
     tmp = {
@@ -118,6 +125,8 @@
       options = [
         "noatime"
         "nodiratime"
+        "commit=120"
+        "data=ordered"
         "discard"
       ];
     };
@@ -353,6 +362,6 @@
 
   zramSwap = {
     enable = true;
-    memoryPercent = 40;
+    memoryPercent = 20;
   };
 }

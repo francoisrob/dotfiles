@@ -1,5 +1,9 @@
 {pkgs, ...}: {
   services = {
+    flatpak = {
+      enable = true;
+    };
+
     solaar = {
       enable = true;
       package = pkgs.solaar;
@@ -10,9 +14,9 @@
       package = pkgs.mongodb-ce;
     };
 
-    qdrant = {
-      enable = true;
-    };
+    # qdrant = {
+    #   enable = true;
+    # };
   };
 
   # mongodb soft limits

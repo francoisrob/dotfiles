@@ -133,6 +133,9 @@
           {
             nixpkgs = {
               overlays = overlays;
+              config.permittedInsecurePackages = [
+                "qtwebengine-5.15.19"
+              ];
             };
           }
           home-manager.nixosModules.home-manager
