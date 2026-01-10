@@ -7,15 +7,15 @@
   margin: 0;
   padding: 0;
   font-family: "Ubuntu", "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
-  font-size: 12px;
+  font-size: 14px;
 }
 
 window#waybar {
-  background-color: @crust;
+  background: rgba(17, 17, 27, 0.7);
 }
 
 .modules-left {
-  background-image: linear-gradient(to top right, @crust 0%, @mantle 90%);
+  background-color: inherit;
   border-radius: 0 4px 4px 0;
 }
 
@@ -72,7 +72,7 @@ label#window {
 }
 
 .modules-right {
-  background-color: @base;
+  background: inherit;
   border-radius: 4px;
 }
 

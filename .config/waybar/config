@@ -4,7 +4,7 @@
   "exclusive": true,
   "modules-left": ["clock", "hyprland/workspaces", "hyprland/submap"],
   "modules-center": ["hyprland/window"],
-  "modules-right": ["tray","pulseaudio", "custom/notification", "battery"],
+  "modules-right": ["tray","pulseaudio", "backlight", "custom/notification", "battery"],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
@@ -14,6 +14,7 @@
     "window-rewrite": {
       "firefox": "",
       "kitty": "󰆍",
+      "ghostty": "󰆍",
       "steam": "",
       "discord": "",
       "Chromium": "",
@@ -51,7 +52,7 @@
   },
 
   "pulseaudio": {
-    "format": " {volume} {icon}",
+    "format": "{icon} {volume}",
     "format-bluetooth": " {icon} {volume}",
     "format-muted": " 󰝟 ",
     "format-icons": {
