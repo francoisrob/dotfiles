@@ -108,7 +108,7 @@ label#window {
   color: @text;
 }
 
-#custom.notification {
-  padding: 40px 160px 40px 80px;
-  color: @red;
+#custom-notification {
+  padding: 4px 8px 4px 8px;
+  color: @text;
 }
