@@ -157,6 +157,10 @@ in {
   };
 
   programs = {
+    waybar = {
+      enable = true;
+      systemd.enable = true;
+    };
     ghostty = {
       enable = true;
       enableFishIntegration = true;

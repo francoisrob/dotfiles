@@ -87,7 +87,7 @@ in {
       libnotify # Needed for notifications
       rofi
 
-      ashell
+      # ashell
       waytrogen
 
       hyprland-contrib.grimblast
