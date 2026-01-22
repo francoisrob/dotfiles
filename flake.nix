@@ -8,6 +8,9 @@
     flutter-nixpkgs = {
       url = "github:NixOS/nixpkgs/10069ef4cf863633f57238f179a0297de84bd8d3";
     };
+    ashell = {
+      url = "github:MalpenZibo/ashell";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs = {
@@ -42,9 +45,6 @@
           follows = "nixpkgs";
         };
       };
-    };
-    waybar = {
-      url = "github:Alexays/Waybar/master";
     };
     nurpkgs = {
       url = "github:nix-community/NUR";
@@ -109,6 +109,9 @@
             sha256 = "sha256-yVrOHZOCZrI5SsmMdo7Eh+zS0PXv2X67zLCdLOWcPVc=";
           };
         });
+      })
+      (final: prev: {
+        ashell = inputs.ashell.packages.${prev.stdenv.hostPlatform.system}.default;
       })
     ];
 

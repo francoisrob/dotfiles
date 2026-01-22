@@ -48,7 +48,6 @@
       icu
 
       kitty
-      ghostty
       zoxide
 
       ripgrep

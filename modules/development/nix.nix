@@ -3,6 +3,7 @@
     systemPackages = with pkgs; [
       nixd
       alejandra
+      statix
     ];
   };
 }

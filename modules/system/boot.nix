@@ -37,7 +37,7 @@
 
     kernel = {
       sysctl = {
-        "vm.swappiness" = 1;
+        "vm.swappiness" = 100;
         # "kernel.sched_migration_cost_ns" = 500000;
         # "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
@@ -247,9 +247,9 @@
       implementation = "broker";
     };
 
-    blueman = {
-      enable = true;
-    };
+    # blueman = {
+    #   enable = true;
+    # };
 
     openssh = {
       enable = true;
@@ -322,7 +322,11 @@
       };
     };
     firewall = {
-      allowedTCPPorts = [3000];
+      enable = true;
+    };
+
+    nftables = {
+      enable = true;
     };
   };
 
@@ -360,8 +364,18 @@
     stateVersion = "24.05";
   };
 
+  systemd.oomd = {
+    enableRootSlice = true;
+    enableSystemSlice = true;
+    enableUserSlices = true;
+    settings.OOM = {
+      DefaultMemoryPressureLimit = "60%";
+      DefaultMemoryPressureDurationSec = "20s";
+    };
+  };
+
   zramSwap = {
     enable = true;
-    memoryPercent = 20;
+    memoryPercent = 35;
   };
 }

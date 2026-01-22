@@ -17,14 +17,14 @@ in {
       tagstudio
 
       gnome-calculator
-      hyprcursor
-      asdf-vm
+      # hyprcursor
+      # asdf-vm
       grayjay
       bitwarden-desktop
 
       slack
       discord
-      galaxy-buds-client
+      # galaxy-buds-client
 
       font-manager
 
@@ -44,23 +44,16 @@ in {
       obs-studio
       spotify
 
-      mindustry
+      # mindustry
 
-      swww
-      swaynotificationcenter
-      pass-wayland
-      cliphist
+      # swaynotificationcenter
       wl-clipboard
-
-      nwg-look
-      networkmanagerapplet
-
-      waypaper
 
       starship
       ncdu
       gh
       lazygit
+      uv
 
       # aws-sam-cli # broken
       awscli2
@@ -78,8 +71,7 @@ in {
 
     sessionVariables = {
       TERMINAL = "kitty";
-      XDG_DATA_DIRS =
-        "${pkgs.lib.makeSearchPath "share" [ "/var/lib/flatpak/exports" "/home/${user}/.local/share/flatpak/exports" ]}:$XDG_DATA_DIRS";
+      XDG_DATA_DIRS = "${pkgs.lib.makeSearchPath "share" ["/var/lib/flatpak/exports" "/home/${user}/.local/share/flatpak/exports"]}:$XDG_DATA_DIRS";
     };
 
     pointerCursor = {
@@ -95,12 +87,13 @@ in {
     };
   };
 
+  xdg.autostart.enable = true;
   xdg.desktopEntries = {
     mongodb-compass = {
       name = "MongoDB Compass (Wayland)";
       comment = "The MongoDB GUI";
       genericName = "MongoDB Compass";
-      exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland";
+      exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland --password-store=gnome-libsecret";
       type = "Application";
       icon = "mongodb-compass";
       startupNotify = true;
@@ -116,19 +109,19 @@ in {
       defaultCacheTtl = 31536000;
       maxCacheTtl = 31536000;
     };
-    gnome-keyring = {
-      enable = true;
-    };
-    hyprpolkitagent = {
-      enable = true;
-    };
+    hyprpolkitagent.enable = true;
+    hypridle.enable = true;
+    cliphist.enable = true;
+    hyprpaper.enable = true;
   };
 
   gtk = {
     enable = true;
     theme = {
-      name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra;
+      name = "Adwaita";
+    };
+    gtk3.extraConfig = {
+      "gtk-application-prefer-dark-theme" = 1;
     };
     iconTheme = {
       name = "Papirus";
@@ -157,18 +150,18 @@ in {
   dconf = {
     settings = {
       "org/gnome/desktop/interface" = {
-        gtk-theme = "Adwaita-dark";
+        gtk-theme = "Adwaita";
         color-scheme = "prefer-dark";
       };
     };
   };
 
   programs = {
-    waybar = {
+    ghostty = {
       enable = true;
-      # package = pkgs.waybar_git;
+      enableFishIntegration = true;
+      systemd.enable = true;
     };
-
     git = {
       enable = true;
       lfs = {

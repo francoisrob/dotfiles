@@ -18,14 +18,6 @@ in {
     };
   };
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      waybar_git = prev.waybar.overrideAttrs (oldAttrs: {
-        src = inputs.waybar;
-      });
-    })
-  ];
-
   programs = {
     uwsm = {
       enable = true;
@@ -48,8 +40,8 @@ in {
   };
 
   services = {
+    gnome.gnome-keyring.enable = true;
     # teamviewer.enable = true;
-
     libinput = {
       enable = true;
     };
@@ -61,18 +53,14 @@ in {
           command = "uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null";
           # command = "${pkgs.uwsm}/bin/uwsm start -N Hyprland";
           # command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null'";
-          user = user;
+          inherit user;
         };
       };
     };
   };
 
   security = {
-    pam = {
-      services.greetd = {
-        enableGnomeKeyring = true;
-      };
-    };
+    pam.services.greetd.enableGnomeKeyring = true;
   };
 
   xdg = {
@@ -84,10 +72,10 @@ in {
       wlr = {
         enable = true;
       };
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      extraPortals = [pkgs.xdg-desktop-portal-gtk];
       config = {
         common = {
-          default = [ "hyprland" "gtk" ];
+          default = ["hyprland" "gtk"];
         };
       };
     };
@@ -95,18 +83,22 @@ in {
 
   environment = {
     systemPackages = with pkgs; [
-      # libsecret
-      # hyprpolkitagent
-
       wayland # Needed for Hyprland
       libnotify # Needed for notifications
       rofi
+
+      ashell
+      waytrogen
 
       hyprland-contrib.grimblast
       hyprland-contrib.shellevents
 
       hyprwayland-scanner
+      hyprlauncher
       hyprlock
+
+      iwgtk
+      blueberry
     ];
   };
 }
