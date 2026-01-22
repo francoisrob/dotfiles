@@ -1,0 +1,8 @@
+log
+sessions
+shell_snapshots
+tmp
+auth.json
+history.jsonl
+models_cache.json
+version.json
