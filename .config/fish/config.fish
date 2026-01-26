@@ -3,10 +3,8 @@ set -g fish_greeting ""
 set fish_home ~/.config/fish
 
 # Path additions - consolidated for better performance
-fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.volta/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin" "$HOME/.cargo/bin"
+fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin" "$HOME/.cargo/bin"
 
-# Volta
-set -gx VOLTA_HOME "$HOME/.volta"
 set -gx FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
 set -gx FZF_ALT_C_COMMAND 'fd --type directory --follow --hidden --exclude .git'
