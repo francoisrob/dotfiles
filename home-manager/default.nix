@@ -15,6 +15,7 @@ in {
       ansible
       mqttx
       tagstudio
+      mise
 
       gnome-calculator
       # hyprcursor

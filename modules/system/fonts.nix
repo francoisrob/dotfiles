@@ -21,7 +21,7 @@ in {
   console = {
     enable = true;
     keyMap = "us";
-    font = "ter-132n";
+    # font = "ter-132n";
     packages = with pkgs; [terminus_font];
     # colors = catppuccinColors;
     earlySetup = true;

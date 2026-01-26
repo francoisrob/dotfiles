@@ -6,6 +6,7 @@
 }: let
   hyprland-contrib = inputs.hyprland-contrib.packages.${pkgs.stdenv.hostPlatform.system};
   hyprland = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
+  tuigreet = "${pkgs.tuigreet}/bin/tuigreet";
 in {
   nix = {
     settings = {
@@ -50,10 +51,8 @@ in {
       enable = true;
       settings = {
         default_session = {
-          command = "uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null";
-          # command = "${pkgs.uwsm}/bin/uwsm start -N Hyprland";
-          # command = "${tuigreet} -r -t --asterisks --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >> /dev/null'";
-          inherit user;
+          command = "${tuigreet} --time --remember --user-menu --asterisks --theme 'border=blue;text=white;prompt=magenta;time=cyan;action=yellow;button=green;container=black' --cmd '${pkgs.bash}/bin/bash -lc \"uwsm start -N Hyprland hyprland-uwsm.desktop >/dev/null 2>&1\"'";
+          user = "greeter";
         };
       };
     };
@@ -61,6 +60,29 @@ in {
 
   security = {
     pam.services.greetd.enableGnomeKeyring = true;
+  };
+
+  console = {
+    font = "Goha-16";
+    packages = [pkgs.kbd];
+    colors = [
+      "11111b"
+      "f38ba8"
+      "a6e3a1"
+      "f9e2af"
+      "89b4fa"
+      "f5c2e7"
+      "94e2d5"
+      "bac2de"
+      "181825"
+      "f38ba8"
+      "a6e3a1"
+      "f9e2af"
+      "89b4fa"
+      "f5c2e7"
+      "94e2d5"
+      "cdd6f4"
+    ];
   };
 
   xdg = {
@@ -82,6 +104,9 @@ in {
   };
 
   environment = {
+    sessionVariables = {
+      SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
+    };
     systemPackages = with pkgs; [
       wayland # Needed for Hyprland
       libnotify # Needed for notifications
