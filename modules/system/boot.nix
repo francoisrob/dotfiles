@@ -138,9 +138,21 @@
         RebootWatchdogSec = "0";
       };
     };
-    services = {
-      NetworkManager-wait-online = {
-        enable = false;
+    network = {
+      enable = true;
+      networks = {
+        primary = {
+          matchConfig = {
+            Name = [
+              "en*"
+              "wl*"
+            ];
+          };
+          networkConfig = {
+            DHCP = "ipv4";
+            IPv6AcceptRA = true;
+          };
+        };
       };
     };
   };
@@ -180,22 +192,10 @@
         enableSSHSupport = true;
       };
     };
-    auto-cpufreq = {
-      enable = true;
-      settings = {
-        battery = {
-          governor = "powersave";
-          turbo = "never";
-        };
-        charger = {
-          governor = "performance";
-          turbo = "auto";
-        };
-      };
-    };
   };
 
   services = {
+    resolved.enable = true;
     # Disable autosuspend for Bluetooth USB controller
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", TEST=="power/control", ATTR{power/control}="on"
@@ -247,9 +247,9 @@
       implementation = "broker";
     };
 
-    # blueman = {
-    #   enable = true;
-    # };
+    blueman = {
+      enable = true;
+    };
 
     openssh = {
       enable = true;
@@ -289,6 +289,11 @@
     bluetooth = {
       enable = true;
       powerOnBoot = true;
+      # To auto-connect to devices, you need to trust them. You can do this
+      # using `bluetoothctl` or a TUI/GUI bluetooth manager. For example:
+      #   $ bluetoothctl
+      #   [bluetooth]# devices
+      #   [bluetooth]# trust <device_mac_address>
       settings = {
         General = {
           Experimental = true;
@@ -310,15 +315,16 @@
 
   networking = {
     inherit hostName;
+    useDHCP = false;
+    resolvconf.enable = false;
     wireless = {
       iwd = {
         enable = true;
-      };
-    };
-    networkmanager = {
-      enable = true;
-      wifi = {
-        backend = "iwd";
+        settings = {
+          General = {
+            EnableNetworkConfiguration = false; # systemd-networkd will handle this
+          };
+        };
       };
     };
     firewall = {

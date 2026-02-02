@@ -123,7 +123,7 @@ in {
       hyprlock
 
       iwgtk
-      blueberry
+      blueman
     ];
   };
 }

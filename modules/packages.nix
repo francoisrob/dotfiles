@@ -72,6 +72,7 @@
       mono
       sqlite
       sqlitebrowser
+      bluetuith
     ];
   };
 

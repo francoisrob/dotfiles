@@ -75,26 +75,6 @@
         "type": "github"
       }
     },
-    "auto-cpufreq": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1767889970,
-        "narHash": "sha256-evSHa1OjJT4eL1yIRGOOycHK8FUrU2ywmvjwr9R4B8I=",
-        "owner": "AdnanHodzic",
-        "repo": "auto-cpufreq",
-        "rev": "6dc987cd53c48621100b4926de6eace1b18e0fe9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AdnanHodzic",
-        "repo": "auto-cpufreq",
-        "type": "github"
-      }
-    },
     "crane": {
       "locked": {
         "lastModified": 1763938834,
@@ -812,7 +792,6 @@
       "inputs": {
         "android-nixpkgs": "android-nixpkgs",
         "ashell": "ashell",
-        "auto-cpufreq": "auto-cpufreq",
         "flutter-nixpkgs": "flutter-nixpkgs",
         "home-manager": "home-manager",
         "hyprland": "hyprland",

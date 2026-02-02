@@ -38,14 +38,6 @@
         };
       };
     };
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-    };
     nurpkgs = {
       url = "github:nix-community/NUR";
       inputs = {
@@ -87,7 +79,6 @@
     nixpkgs,
     home-manager,
     solaar,
-    auto-cpufreq,
     nurpkgs,
     nix-index-database,
     ...
@@ -136,14 +127,10 @@
           {
             nixpkgs = {
               overlays = overlays;
-              config.permittedInsecurePackages = [
-                "qtwebengine-5.15.19"
-              ];
             };
           }
           home-manager.nixosModules.home-manager
           solaar.nixosModules.default
-          auto-cpufreq.nixosModules.default
           nix-index-database.nixosModules.nix-index
           ./hosts/default/configuration.nix
         ];
