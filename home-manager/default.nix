@@ -15,7 +15,6 @@ in {
       ansible
       mqttx
       tagstudio
-      mise
 
       gnome-calculator
       # hyprcursor
@@ -105,6 +104,7 @@ in {
   };
 
   services = {
+    kanshi.enable = true;
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 31536000;
@@ -173,13 +173,16 @@ in {
         enable = true;
       };
     };
-
-    direnv = {
+    mise = {
       enable = true;
-      nix-direnv = {
-        enable = true;
-      };
+      enableFishIntegration = true;
     };
+    # direnv = {
+    #   enable = true;
+    #   nix-direnv = {
+    #     enable = true;
+    #   };
+    # };
 
     # Let Home Manager install and manage itself.
     home-manager = {
