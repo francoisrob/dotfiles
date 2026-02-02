@@ -18,6 +18,9 @@
       };
     };
     supportedFilesystems = ["ntfs"];
+    kernelModules = [
+      "bt_iso"
+    ];
 
     consoleLogLevel = 0;
 
@@ -155,6 +158,7 @@
         };
       };
     };
+    # services.systemd-networkd-wait-online.enable = false;
   };
 
   powerManagement = {
@@ -297,6 +301,7 @@
       settings = {
         General = {
           Experimental = true;
+          KernelExperimental = "6fbaf188-05e0-496a-9885-d6ddfdb4e03e";
           JustWorksRepairing = "always";
           ControllerMode = "dual";
         };

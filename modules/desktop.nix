@@ -51,7 +51,7 @@ in {
       enable = true;
       settings = {
         default_session = {
-          command = "${tuigreet} --time --remember --user-menu --asterisks --theme 'border=blue;text=white;prompt=magenta;time=cyan;action=yellow;button=green;container=black' --cmd '${pkgs.bash}/bin/bash -lc \"uwsm start -N Hyprland hyprland-uwsm.desktop >/dev/null 2>&1\"'";
+          command = "${tuigreet} --time --remember --user-menu --asterisks --theme 'border=blue;text=white;prompt=magenta;time=cyan;action=yellow;button=green;container=black' --cmd 'uwsm start -N Hyprland hyprland-uwsm.desktop >/dev/null 2>&1'";
           user = "greeter";
         };
       };
@@ -105,7 +105,7 @@ in {
 
   environment = {
     sessionVariables = {
-      SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
+      SSH_AUTH_SOCK = "\${XDG_RUNTIME_DIR}/keyring/ssh";
     };
     systemPackages = with pkgs; [
       wayland # Needed for Hyprland
