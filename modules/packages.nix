@@ -1,27 +1,4 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
-  nixpkgs = {
-    overlays = [
-      (self: super: {
-        mpv = super.mpv.override {
-          scripts = [self.mpvScripts.webtorrent-mpv-hook];
-        };
-
-        lutris = super.lutris.override {
-          extraLibraries = pkgs: [
-            self.findutils
-          ];
-          extraPkgs = pkgs: [];
-        };
-      })
-
-      inputs.neovim-nightly.overlays.default
-    ];
-  };
-
+{pkgs, ...}: {
   nix = {
     settings = {
       substituters = [

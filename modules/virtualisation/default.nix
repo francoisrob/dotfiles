@@ -22,15 +22,6 @@
       enable = true;
     };
   };
-  nixpkgs.overlays = [
-    (final: prev: {
-      libvirt = prev.libvirt.override {
-        enableXen = false;
-        enableGlusterfs = false;
-        enableIscsi = false;
-      };
-    })
-  ];
   systemd = {
     services = {
       "user@" = {

@@ -8,9 +8,6 @@
     flutter-nixpkgs = {
       url = "github:NixOS/nixpkgs/10069ef4cf863633f57238f179a0297de84bd8d3";
     };
-    ashell = {
-      url = "github:MalpenZibo/ashell";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs = {
@@ -32,14 +29,6 @@
     };
     solaar = {
       url = "github:Svenum/Solaar-Flake/main";
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-    };
-    nurpkgs = {
-      url = "github:nix-community/NUR";
       inputs = {
         nixpkgs = {
           follows = "nixpkgs";
@@ -79,7 +68,6 @@
     nixpkgs,
     home-manager,
     solaar,
-    nurpkgs,
     nix-index-database,
     ...
   } @ inputs: let
@@ -87,24 +75,7 @@
     hostName = "nixos";
     user = "francois";
 
-    overlays = [
-      nurpkgs.overlays.default
-
-      (final: prev: {
-        mindustry = prev.mindustry.overrideAttrs (old: {
-          version = "v153";
-          src = prev.fetchFromGitHub {
-            owner = "Anuken";
-            repo = "Mindustry";
-            rev = "v153";
-            sha256 = "sha256-yVrOHZOCZrI5SsmMdo7Eh+zS0PXv2X67zLCdLOWcPVc=";
-          };
-        });
-      })
-      (final: prev: {
-        ashell = inputs.ashell.packages.${prev.stdenv.hostPlatform.system}.default;
-      })
-    ];
+    overlays = import ./modules/overlays.nix {inherit inputs;};
 
     devshells = import ./devshells {
       inherit inputs;
