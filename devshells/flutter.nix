@@ -12,11 +12,8 @@
         cmdline-tools-latest
         platforms-android-35
         platforms-android-34
-        platforms-android-31
         build-tools-35-0-0
         build-tools-34-0-0
-        build-tools-33-0-1
-        build-tools-31-0-0
       ]
   );
   ANDROID_HOME = "${androidSdk}/share/android-sdk";
