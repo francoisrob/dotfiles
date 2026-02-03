@@ -143,6 +143,9 @@
     };
     network = {
       enable = true;
+      wait-online = {
+        anyInterface = true;
+      };
       networks = {
         primary = {
           matchConfig = {
