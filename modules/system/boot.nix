@@ -40,7 +40,7 @@
 
     kernel = {
       sysctl = {
-        "vm.swappiness" = 100;
+        "vm.swappiness" = 20;
         # "kernel.sched_migration_cost_ns" = 500000;
         # "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
@@ -134,6 +134,14 @@
       ];
     };
   };
+
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024;
+      priority = 1;
+    }
+  ];
 
   systemd = {
     settings = {
@@ -394,6 +402,6 @@
 
   zramSwap = {
     enable = true;
-    memoryPercent = 35;
+    memoryPercent = 20;
   };
 }
