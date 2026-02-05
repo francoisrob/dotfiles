@@ -4,7 +4,7 @@
   "exclusive": true,
   "modules-left": ["clock", "hyprland/workspaces", "hyprland/submap"],
   "modules-center": ["hyprland/window"],
-  "modules-right": ["tray","pulseaudio", "backlight", "custom/notification", "battery"],
+  "modules-right": ["tray", "pulseaudio", "backlight", "custom/notification", "battery"],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
