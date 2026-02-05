@@ -1,0 +1,11 @@
+# Docked: both Dells connected -> laptop panel off
+profile docked {
+    output "Dell Inc. DELL U2724DE BR2DDP3" mode 2560x1440@120Hz position 0,0 scale 1
+    output "Dell Inc. DELL U2724D JCJK9P3"  mode 2560x1440@120Hz position 2560,0 scale 1
+    output eDP-1 disable
+}
+
+# Undocked: no Dells -> laptop panel on
+profile undocked {
+    output eDP-1 mode 2560x1600@60Hz position 0,0 scale 1
+}
