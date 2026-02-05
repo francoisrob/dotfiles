@@ -32,8 +32,8 @@ if status is-interactive
         fzf --fish | source
     end
 
-    if type -q direnv
-        direnv hook fish | source
+    if type -q mise
+        mise activate fish | source
     end
 end
 
@@ -58,3 +58,5 @@ end
 function reload-fish -d "Reload the fish configuration"
     source $fish_home/config.fish
 end
+
+alias cat="bat"
