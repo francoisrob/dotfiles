@@ -41,6 +41,7 @@
     kernel = {
       sysctl = {
         "vm.swappiness" = 20;
+        "vm.lru_gen.min_ttl_ms" = 1000;
         # "kernel.sched_migration_cost_ns" = 500000;
         # "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
@@ -395,8 +396,8 @@
     enableSystemSlice = true;
     enableUserSlices = true;
     settings.OOM = {
-      DefaultMemoryPressureLimit = "60%";
-      DefaultMemoryPressureDurationSec = "20s";
+      DefaultMemoryPressureLimit = "55%";
+      DefaultMemoryPressureDurationSec = "10s";
     };
   };
 
