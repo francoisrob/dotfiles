@@ -69,17 +69,11 @@ in {
       adwaita-icon-theme
       gnome-themes-extra
       adwaita-qt
-      qt6Packages.qt6ct
-      catppuccin-qt5ct
     ];
 
     sessionVariables = {
       TERMINAL = "kitty";
       XDG_DATA_DIRS = "${pkgs.lib.makeSearchPath "share" ["/var/lib/flatpak/exports" "/home/${user}/.local/share/flatpak/exports"]}:$XDG_DATA_DIRS";
-      GTK_THEME = "Adwaita-dark";
-      XCURSOR_THEME = "Bibata-Modern-Classic";
-      XCURSOR_SIZE = "24";
-      QT_QPA_PLATFORMTHEME = "qt6ct";
     };
 
     pointerCursor = {
@@ -96,6 +90,18 @@ in {
   };
 
   xdg.autostart.enable = true;
+  xdg.configFile = {
+    "xdg-desktop-portal/hyprland-portals.conf".text = ''
+      [preferred]
+      default=hyprland;gtk
+    '';
+  };
+  xdg.dataFile = {
+    "flatpak/overrides/global".text = ''
+      [Context]
+      filesystems=~/.icons:ro;~/.themes:ro
+    '';
+  };
   xdg.desktopEntries = {
     mongodb-compass = {
       name = "MongoDB Compass (Wayland)";
@@ -110,21 +116,6 @@ in {
       mimeType = ["x-scheme-handler/mongodb" "x-scheme-handler/mongodb+srv"];
     };
   };
-  xdg.configFile."qt6ct/qt6ct.conf".text = ''
-    [Appearance]
-    color_scheme_path=/home/${user}/.config/qt6ct/colors/Catppuccin-Mocha.conf
-    custom_palette=true
-    icon_theme=Papirus
-    standard_dialogs=default
-    style=Fusion
-  '';
-  xdg.configFile."qt6ct/colors/Catppuccin-Mocha.conf".text = ''
-    [ColorScheme]
-    active_colors=#cdd6f4, #1e1e2e, #45475a, #313244, #f5e0dc, #89b4fa, #1e1e2e, #cdd6f4, #181825, #11111b, #cdd6f4, #1e1e2e, #cdd6f4, #11111b, #6c7086, #b4befe, #1e1e2e, #89b4fa, #1e1e2e, #11111b, #cdd6f4
-    disabled_colors=#6c7086, #1e1e2e, #45475a, #313244, #6c7086, #89b4fa, #1e1e2e, #6c7086, #181825, #11111b, #6c7086, #1e1e2e, #6c7086, #11111b, #6c7086, #b4befe, #1e1e2e, #89b4fa, #1e1e2e, #11111b, #6c7086
-    inactive_colors=#cdd6f4, #1e1e2e, #45475a, #313244, #f5e0dc, #89b4fa, #1e1e2e, #cdd6f4, #181825, #11111b, #cdd6f4, #1e1e2e, #cdd6f4, #11111b, #6c7086, #b4befe, #1e1e2e, #89b4fa, #1e1e2e, #11111b, #cdd6f4
-  '';
-
   services = {
     kanshi.enable = true;
     gpg-agent = {
@@ -163,7 +154,11 @@ in {
   qt = {
     enable = true;
     platformTheme = {
-      name = "qt6ct";
+      name = "gtk3";
+    };
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
     };
   };
 
