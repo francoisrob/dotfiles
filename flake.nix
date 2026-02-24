@@ -13,6 +13,14 @@
         };
       };
     };
+    serena = {
+      url = "github:oraios/serena";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
     hyprland = {
       url = "github:hyprwm/Hyprland";
     };

@@ -5,6 +5,7 @@
   ...
 }: let
   tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
+  serena = inputs.serena.packages.${pkgs.stdenv.hostPlatform.system}.serena;
 in {
   home = {
     username = user;
@@ -15,6 +16,7 @@ in {
       ansible
       mqttx
       tagstudio
+      serena
       retext
 
       gnome-calculator
@@ -127,6 +129,7 @@ in {
     hypridle.enable = true;
     cliphist.enable = true;
     hyprpaper.enable = true;
+    swaync.enable = true;
   };
 
   gtk = {

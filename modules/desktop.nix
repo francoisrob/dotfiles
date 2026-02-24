@@ -31,7 +31,7 @@ in {
 
   services = {
     gnome.gnome-keyring.enable = true;
-    # teamviewer.enable = true;
+    teamviewer.enable = true;
     libinput = {
       enable = true;
     };
