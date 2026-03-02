@@ -1,5 +1,7 @@
 {pkgs, ...}: {
   services = {
+    tailscale.enable = true;
+
     flatpak = {
       enable = true;
     };

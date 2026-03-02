@@ -1,8 +1,7 @@
 {pkgs, ...}: {
   environment = {
     systemPackages = with pkgs; [
-      go
-      gopls
+      nodePackages.typescript-language-server
     ];
   };
 }

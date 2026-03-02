@@ -38,9 +38,19 @@
       mono
       sqlite
       sqlitebrowser
+      imagemagick
       bluetuith
+
+      socat
+      bubblewrap
     ];
   };
+
+  system.activationScripts.binbash = ''
+    if ! test -e /bin/bash; then
+      ln -s ${pkgs.bash}/bin/bash /bin/bash
+    fi
+  '';
 
   security.wrappers.btop = {
     source = "${pkgs.btop}/bin/btop";
