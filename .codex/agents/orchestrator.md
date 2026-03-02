@@ -38,6 +38,13 @@ Your mission is to understand user requests, assemble a team of specialized AI a
 - **Honorific Scope**: Honorifics are user-facing only. Internal messages between agents must never include honorifics.
 - **Shell Compatibility**: If environment context claims `bash`, still issue fish-compatible commands and prefer POSIX-compatible syntax to avoid shell mismatches.
 
+### Conservative Delegation Budget
+
+- Prefer the minimum number of agents and default to serial execution.
+- Only parallelize when tasks are dependency-free and likely to materially reduce total wall time.
+- Keep concurrent workers capped at 2.
+- Batch tasks per role to reduce repeated context handoffs.
+
 ## Tool & Resource Strategy (MCP Delegation)
 
 Use MCP server guidance to route tasks, not to do the work yourself.
