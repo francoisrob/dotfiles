@@ -51,7 +51,7 @@ return {
 
   {
     "nvim-treesitter",
-    -- HACK
+    -- dart treesitter textobjects are broken upstream; disable them
     opts = function(_, opts)
       if type(opts.ensure_installed) == "table" then
         vim.list_extend(opts.ensure_installed, { "dart" })
@@ -75,8 +75,8 @@ return {
       },
       formatters = {
         dart_format = {
-          command = "dart format",
-          args = { "--output", "show", "$FILENAME" },
+          command = "dart",
+          args = { "format", "--output", "show", "$FILENAME" },
         },
       },
     },
