@@ -1,0 +1,48 @@
+# ncspot configuration
+# https://github.com/hrkfdn/ncspot
+
+use_nerdfont = true
+bitrate = 320
+gapless = true
+volnorm = true
+volnorm_pregain = -3.0
+audio_cache = true
+audio_cache_size = 2048
+hide_display_names = true
+initial_screen = "library"
+library_tabs = ["playlists", "artists", "albums", "tracks", "podcasts"]
+statusbar_format = "%title - %artists"
+cover_max_scale = 2.0
+
+[track_format]
+left = "%title"
+center = "%artists"
+right = "%saved %duration"
+
+[theme]
+background = "#1E1E2E"
+primary = "#CDD6F4"
+secondary = "#A6ADC8"
+title = "#CBA6F7"
+playing = "#A6E3A1"
+playing_selected = "#94E2D5"
+playing_bg = "#1E1E2E"
+highlight = "#CDD6F4"
+highlight_bg = "#313244"
+highlight_inactive_bg = "#181825"
+error = "#F38BA8"
+error_bg = "#1E1E2E"
+statusbar = "#CDD6F4"
+statusbar_bg = "#181825"
+statusbar_progress = "#A6E3A1"
+statusbar_progress_bg = "#45475A"
+cmdline = "#CDD6F4"
+cmdline_bg = "#181825"
+search_match = "#F9E2AF"
+
+[keybindings]
+"Shift+f" = "seek +10s"
+"Shift+b" = "seek -10s"
+"+" = "volume +10"
+"-" = "volume -10"
+"Shift+s" = "share current"
