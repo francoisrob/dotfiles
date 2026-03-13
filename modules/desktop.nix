@@ -20,6 +20,10 @@ in {
       withUWSM = true;
       package = hyprland.hyprland;
       portalPackage = hyprland.xdg-desktop-portal-hyprland;
+      plugins = [
+        inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
+        inputs.hypr-dynamic-cursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
+      ];
     };
     hyprlock = {
       enable = true;
@@ -110,6 +114,7 @@ in {
       hyprwayland-scanner
       hyprlauncher
       hyprlock
+      hyprsunset
 
       iwgtk
       blueman
