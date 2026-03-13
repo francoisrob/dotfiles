@@ -1,8 +1,9 @@
-log
-sessions
-shell_snapshots
-tmp
 auth.json
+cache/
 history.jsonl
+log/
 models_cache.json
-version.json
+sessions/
+shell_snapshots/
+state_5.sqlite
+tmp/
