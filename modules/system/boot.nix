@@ -5,7 +5,7 @@
   ...
 }: {
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_6_12; # LTS; 6.19 has CONFIG_FUTEX_PRIVATE_HASH=y which crashes MongoDB
     loader = {
       timeout = 0;
       systemd-boot = {

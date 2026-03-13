@@ -59,14 +59,14 @@
         };
       };
     };
-    tagstudio = {
-      url = "github:TagStudioDev/TagStudio";
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-    };
+    # tagstudio = {
+    #   url = "github:TagStudioDev/TagStudio";
+    #   inputs = {
+    #     nixpkgs = {
+    #       follows = "nixpkgs";
+    #     };
+    #   };
+    # };
   };
 
   outputs = {
