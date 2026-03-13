@@ -4,7 +4,7 @@
   inputs,
   ...
 }: let
-  tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
+  # tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
   serena = inputs.serena.packages.${pkgs.stdenv.hostPlatform.system}.serena;
 in {
   home = {
@@ -15,9 +15,8 @@ in {
     packages = with pkgs; [
       ansible
       mqttx
-      tagstudio
+      # tagstudio
       serena
-      retext
 
       gnome-calculator
       # hyprcursor
@@ -178,6 +177,7 @@ in {
   };
 
   programs = {
+    spotify-player.enable = true;
     waybar = {
       enable = true;
       systemd.enable = true;

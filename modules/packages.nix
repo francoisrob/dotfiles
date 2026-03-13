@@ -47,9 +47,7 @@
   };
 
   system.activationScripts.binbash = ''
-    if ! test -e /bin/bash; then
-      ln -s ${pkgs.bash}/bin/bash /bin/bash
-    fi
+    ln -sfn ${pkgs.bash}/bin/bash /bin/bash
   '';
 
   security.wrappers.btop = {

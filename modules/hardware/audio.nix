@@ -68,13 +68,14 @@
           "92-low-latency" = {
             "context.properties" = {
               "default.clock.rate" = 44100;
-              "default.clock.quantum" = 512;
+              "default.clock.quantum" = 1024;
               "default.clock.min-quantum" = 512;
-              "default.clock.max-quantum" = 512;
+              "default.clock.max-quantum" = 8192;
             };
           };
-          "92-disable-unstable-codecs" = {
-            "bluez5.codecs" = ["sbc" "aac"];
+          "92-bluetooth-codecs" = {
+            "bluez5.codecs" = ["sbc" "aac" "ldac"];
+            "bluez5.a2dp.ldac.quality" = "auto";
           };
         };
       };
