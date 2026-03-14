@@ -103,6 +103,7 @@
       };
       modules = [
         {nixpkgs.overlays = overlays;}
+        inputs.hyprland.nixosModules.default
         home-manager.nixosModules.home-manager
         solaar.nixosModules.default
         nix-index-database.nixosModules.nix-index
