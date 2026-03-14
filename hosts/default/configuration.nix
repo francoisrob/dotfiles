@@ -26,15 +26,9 @@
     # Development
     ../../modules/development
 
-    # TODO: REFACTOR
     ../../modules/home.nix
     ../../modules/packages.nix
     ../../modules/services.nix
     ../../modules/user.nix
-
-    # ../../modules/home.nix
-    # ../../modules/packages.nix
-    # ../../modules/services.nix
-    # ../../modules/user.nix
   ];
 }

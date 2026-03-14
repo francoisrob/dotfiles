@@ -15,10 +15,6 @@
       enable = true;
       package = pkgs.mongodb-ce;
     };
-
-    # qdrant = {
-    #   enable = true;
-    # };
   };
 
   # mongodb soft limits

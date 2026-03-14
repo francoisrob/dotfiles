@@ -35,11 +35,7 @@ run_bg() {
 # }
 
 start_gui_apps() {
-  # run_bg 'hyprpaper' uwsm-app -- hyprpaper -c ~/.config/hypr/hyprpaper.conf
-  # run_bg 'ashell' uwsm-app -- ashell
-  ghostty --gtk-single-instance=true --quit-after-last-window-closed=false --initial-window=true
-  # run_bg 'waytrogen' uwsm-app -- waytrogen -r
-  # uwsm-app -- ghostty --gtk-single-instance=true --quit-after-last-window-closed=false --initial-window=true &> null
+  : # ghostty is managed by home-manager systemd service
 }
 
 # setup_system_services() {

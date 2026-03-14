@@ -59,14 +59,6 @@
         };
       };
     };
-    # tagstudio = {
-    #   url = "github:TagStudioDev/TagStudio";
-    #   inputs = {
-    #     nixpkgs = {
-    #       follows = "nixpkgs";
-    #     };
-    #   };
-    # };
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
       inputs = {

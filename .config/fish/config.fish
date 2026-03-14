@@ -9,11 +9,6 @@ set -gx FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git'
 set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
 set -gx FZF_ALT_C_COMMAND 'fd --type directory --follow --hidden --exclude .git'
 
-# Load ASDF only if it exists
-if test -f "$HOME/.local/state/nix/profiles/home-manager/home-path/share/asdf-vm/asdf.fish"
-    source "$HOME/.local/state/nix/profiles/home-manager/home-path/share/asdf-vm/asdf.fish"
-end
-
 # Load secrets if they exist
 if test -f ~/.secrets.fish
     source ~/.secrets.fish

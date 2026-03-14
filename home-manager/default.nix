@@ -4,7 +4,6 @@
   inputs,
   ...
 }: let
-  # tagstudio = inputs.tagstudio.packages.${pkgs.stdenv.hostPlatform.system}.tagstudio;
   serena = inputs.serena.packages.${pkgs.stdenv.hostPlatform.system}.serena;
 in {
   home = {
@@ -15,18 +14,14 @@ in {
     packages = with pkgs; [
       ansible
       mqttx
-      # tagstudio
       serena
 
       gnome-calculator
-      # hyprcursor
-      # asdf-vm
       grayjay
       bitwarden-desktop
 
       slack
       discord
-      # galaxy-buds-client
 
       font-manager
 
@@ -46,9 +41,6 @@ in {
       obs-studio
       spotify
 
-      # mindustry
-
-      # swaynotificationcenter
       wl-clipboard
 
       starship
@@ -57,7 +49,6 @@ in {
       lazygit
       uv
 
-      # aws-sam-cli # broken
       awscli2
       ssm-session-manager-plugin
 
@@ -189,6 +180,13 @@ in {
     };
     git = {
       enable = true;
+      userName = "Francois Robbertze";
+      userEmail = "67432234+francoisrob@users.noreply.github.com";
+      extraConfig = {
+        init.defaultBranch = "main";
+        pull.rebase = true;
+        push.autoSetupRemote = true;
+      };
       lfs = {
         enable = true;
       };
@@ -197,12 +195,12 @@ in {
       enable = true;
       enableFishIntegration = true;
     };
-    # direnv = {
-    #   enable = true;
-    #   nix-direnv = {
-    #     enable = true;
-    #   };
-    # };
+    direnv = {
+      enable = true;
+      nix-direnv = {
+        enable = true;
+      };
+    };
 
     # Let Home Manager install and manage itself.
     home-manager = {

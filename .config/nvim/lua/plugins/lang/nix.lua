@@ -21,7 +21,7 @@ return {
               options = {
                 nixos = {
                   expr = string.format(
-                    '(builtins.getFlake "path:%s/dotfiles").nixosConfigurations.inspiron-7400.options',
+                    '(builtins.getFlake "path:%s/dotfiles").nixosConfigurations.nixos.options',
                     os.getenv "HOME"
                   ),
                 },
