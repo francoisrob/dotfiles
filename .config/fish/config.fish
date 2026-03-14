@@ -5,31 +5,9 @@ set fish_home ~/.config/fish
 # Path additions - consolidated for better performance
 fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin" "$HOME/.cargo/bin"
 
-set -gx FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git'
-set -gx FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
-set -gx FZF_ALT_C_COMMAND 'fd --type directory --follow --hidden --exclude .git'
-
 # Load secrets if they exist
 if test -f ~/.secrets.fish
     source ~/.secrets.fish
-end
-
-if status is-interactive
-    if type -q starship
-        starship init fish | source
-    end
-
-    if type -q zoxide
-        zoxide init fish | source
-    end
-
-    if type -q fzf
-        fzf --fish | source
-    end
-
-    if type -q mise
-        mise activate fish | source
-    end
 end
 
 function dev-api -d "npm run dev-api in current directory"

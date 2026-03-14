@@ -43,7 +43,6 @@ in {
 
       wl-clipboard
 
-      starship
       ncdu
       gh
       lazygit
@@ -177,6 +176,20 @@ in {
       enable = true;
       enableFishIntegration = true;
       systemd.enable = true;
+      settings = {
+        theme = "catppuccin-mocha";
+        font-family = "JetBrainsMono Nerd Font";
+        font-size = 13;
+        window-padding-x = 8;
+        window-padding-y = 4;
+        window-decoration = false;
+        gtk-titlebar = false;
+        cursor-style = "block";
+        cursor-style-blink = false;
+        mouse-hide-while-typing = true;
+        confirm-close-surface = false;
+        copy-on-select = "clipboard";
+      };
     };
     git = {
       enable = true;
@@ -192,6 +205,21 @@ in {
       };
     };
     mise = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
+      defaultCommand = "fd --type file --follow --hidden --exclude .git";
+      changeDirWidgetCommand = "fd --type directory --follow --hidden --exclude .git";
+      fileWidgetCommand = "fd --type file --follow --hidden --exclude .git";
+    };
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    starship = {
       enable = true;
       enableFishIntegration = true;
     };

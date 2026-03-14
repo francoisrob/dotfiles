@@ -23,32 +23,12 @@ run_bg() {
   ) &
 }
 
-# start_keyring() {
-#   # gnome-keyring is started via NixOS/Home Manager service.
-#   # Keeping this function as a no-op to avoid hardcoded paths.
-#   :
-# }
-
-# start_clipboard_monitoring() {
-#   run_bg 'wl-paste text' uwsm-app -- wl-paste --type text --watch cliphist store
-#   run_bg 'wl-paste image' uwsm-app -- wl-paste --type image --watch cliphist store
-# }
-
 start_gui_apps() {
   : # ghostty is managed by home-manager systemd service
 }
 
-# setup_system_services() {
-#   # systemctl --user enable --now hypridle.service &
-#   run_bg 'hyprpolkitagent.service' systemctl --user enable --now hyprpolkitagent.service
-#   run_bg 'systemctl --user enable --now hypridle.service'
-# }
-
 main() {
-  # start_keyring
-  # start_clipboard_monitoring
   start_gui_apps
-  # setup_system_services
 }
 
 main
