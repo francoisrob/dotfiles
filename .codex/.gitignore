@@ -7,3 +7,4 @@ sessions/
 shell_snapshots/
 state_5.sqlite
 tmp/
+version.json
