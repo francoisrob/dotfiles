@@ -27,6 +27,7 @@ in {
 
       firefox
       chromium
+      google-chrome
 
       inkscape-with-extensions
       gimp3-with-plugins
