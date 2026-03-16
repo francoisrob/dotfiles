@@ -63,11 +63,6 @@ in {
       adwaita-qt
     ];
 
-    sessionVariables = {
-      TERMINAL = "ghostty";
-      XDG_DATA_DIRS = "${pkgs.lib.makeSearchPath "share" ["/var/lib/flatpak/exports" "/home/${user}/.local/share/flatpak/exports"]}:$XDG_DATA_DIRS";
-    };
-
     pointerCursor = {
       gtk = {
         enable = true;

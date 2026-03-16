@@ -33,6 +33,14 @@ in {
     };
   };
 
+  environment.sessionVariables = {
+    TERMINAL = "ghostty";
+    XDG_DATA_DIRS = [
+      "/var/lib/flatpak/exports/share"
+      "/home/${user}/.local/share/flatpak/exports/share"
+    ];
+  };
+
   services = {
     gnome.gnome-keyring.enable = true;
     teamviewer.enable = true;
