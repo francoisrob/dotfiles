@@ -80,7 +80,6 @@ in {
     systemPackages = with pkgs; [
       wayland # Needed for Hyprland
       libnotify # Needed for notifications
-      rofi
 
       # ashell
       waytrogen

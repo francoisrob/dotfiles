@@ -1,7 +1,9 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   services = {
-    tailscale.enable = true;
-
     flatpak = {
       enable = true;
     };
@@ -34,10 +36,12 @@
   systemd = {
     services = {
       mongodb = {
+        wantedBy = lib.mkForce [];
         environment = {
           "GLIBC_TUNABLES" = "glibc.pthread.rseq=0";
         };
       };
+      teamviewerd.wantedBy = lib.mkForce [];
     };
   };
 }

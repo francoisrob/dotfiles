@@ -178,7 +178,7 @@ in {
       enableFishIntegration = true;
       systemd.enable = true;
       settings = {
-        theme = "catppuccin-mocha";
+        theme = "Catppuccin Mocha";
         font-family = "JetBrainsMono Nerd Font";
         font-size = 13;
         window-padding-x = 8;
@@ -190,13 +190,16 @@ in {
         mouse-hide-while-typing = true;
         confirm-close-surface = false;
         copy-on-select = "clipboard";
+        desktop-notifications = true;
       };
     };
     git = {
       enable = true;
-      userName = "Francois Robbertze";
-      userEmail = "67432234+francoisrob@users.noreply.github.com";
-      extraConfig = {
+      settings = {
+        user = {
+          name = "Francois Robbertze";
+          email = "67432234+francoisrob@users.noreply.github.com";
+        };
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;

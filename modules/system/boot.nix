@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   inputs,
   hostName,
@@ -19,7 +20,7 @@
     };
     supportedFilesystems = ["ntfs"];
     kernelModules = [
-      "bt_iso"
+      "tcp_bbr"
     ];
 
     consoleLogLevel = 0;
@@ -45,9 +46,6 @@
         # "kernel.sched_migration_cost_ns" = 500000;
         # "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
-        "vm.nr_hugepages" = 128;
-        "vm.transparent_hugepages" = "always";
-        # "vm.transparent_hugepages" = "madvise";
 
         # network optimizations
         "net.core.rmem_max" = 16777216;
@@ -56,6 +54,8 @@
         "net.ipv4.tcp_rmem" = "4096 87380 16777216";
         "net.ipv4.tcp_wmem" = "4096 87380 16777216";
         # "net.ipv4.tcp_mtu_probing" = 1;
+        "net.core.default_qdisc" = "fq";
+        "net.ipv4.tcp_congestion_control" = "bbr";
       };
     };
 
@@ -70,10 +70,7 @@
       "mitigations=off"
 
       "sysrq_always_enabled=1"
-      "rcu_nocbs=0-7"
       "pcie_aspm=force"
-      "nvme.noacpi=1"
-      "usbcore.autosuspend=-1"
 
       # "acpi_osi=" # breaks touchpad multitouch gestures
       # "acpi_backlight=vendor"
@@ -170,14 +167,11 @@
         };
       };
     };
-    # services.systemd-networkd-wait-online.enable = false;
+    services.systemd-networkd-wait-online.enable = lib.mkForce false;
   };
 
   powerManagement = {
     enable = true;
-    powertop = {
-      enable = true;
-    };
   };
 
   programs = {
@@ -269,6 +263,10 @@
 
     openssh = {
       enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        PermitRootLogin = "no";
+      };
     };
 
     journald = {
@@ -284,6 +282,15 @@
       extraConfig = ''
         Defaults!/run/current-system/sw/bin/true !syslog
       '';
+      extraRules = [{
+        groups = [ "wheel" ];
+        commands = [
+          { command = "/run/current-system/sw/bin/systemctl start mongodb"; options = [ "NOPASSWD" ]; }
+          { command = "/run/current-system/sw/bin/systemctl stop mongodb"; options = [ "NOPASSWD" ]; }
+          { command = "/run/current-system/sw/bin/systemctl start teamviewerd"; options = [ "NOPASSWD" ]; }
+          { command = "/run/current-system/sw/bin/systemctl stop teamviewerd"; options = [ "NOPASSWD" ]; }
+        ];
+      }];
     };
     polkit = {
       enable = true;
@@ -340,6 +347,15 @@
         settings = {
           General = {
             EnableNetworkConfiguration = false; # systemd-networkd will handle this
+            RoamThreshold = -75;
+            RoamThreshold5G = -80;
+            RoamRetryInterval = 120;
+          };
+          Network = {
+            EnableIPv6 = true;
+          };
+          Scan = {
+            DisablePeriodicScan = true;
           };
         };
       };

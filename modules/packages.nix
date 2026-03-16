@@ -48,6 +48,11 @@
     ln -sfn ${pkgs.bash}/bin/bash /bin/bash
   '';
 
+  system.activationScripts.usrbinsh = ''
+    mkdir -p /usr/bin
+    ln -sfn ${pkgs.bash}/bin/sh /usr/bin/sh
+  '';
+
   security.wrappers.btop = {
     source = "${pkgs.btop}/bin/btop";
     owner = "root";
