@@ -10,6 +10,24 @@ if test -f ~/.secrets.fish
     source ~/.secrets.fish
 end
 
+if status is-interactive
+    if type -q starship
+        starship init fish | source
+    end
+
+    if type -q zoxide
+        zoxide init fish | source
+    end
+
+    if type -q fzf
+        fzf --fish | source
+    end
+
+    if type -q mise
+        mise activate fish | source
+    end
+end
+
 function dev-api -d "npm run dev-api in current directory"
     npm run dev-api
 end
@@ -33,3 +51,103 @@ function reload-fish -d "Reload the fish configuration"
 end
 
 alias cat="bat"
+
+# MongoDB management
+function mongo-toggle -d "Toggle MongoDB service"
+    if systemctl is-active --quiet mongodb
+        sudo systemctl stop mongodb
+        echo "MongoDB stopped"
+    else
+        sudo systemctl start mongodb
+        echo "MongoDB started"
+    end
+end
+
+function mongo-start -d "Start MongoDB service"
+    sudo systemctl start mongodb
+    echo "MongoDB started"
+end
+
+function mongo-stop -d "Stop MongoDB service"
+    sudo systemctl stop mongodb
+    echo "MongoDB stopped"
+end
+
+# TeamViewer management (requires teamviewerd daemon)
+function teamviewer-start -d "Start TeamViewer daemon and app"
+    sudo systemctl start teamviewerd
+    echo "TeamViewer daemon started"
+    teamviewer &
+    disown
+end
+
+function teamviewer-stop -d "Stop TeamViewer daemon"
+    sudo systemctl stop teamviewerd
+    echo "TeamViewer daemon stopped"
+end
+
+# Port management
+function port-open -d "Open a TCP port in nftables (runtime)"
+    if test (count $argv) -ne 1
+        echo "Usage: port-open <port>"
+        return 1
+    end
+    sudo nft add rule inet filter input tcp dport $argv[1] accept
+    echo "Port $argv[1] opened"
+end
+
+function port-close -d "Close a TCP port in nftables (runtime)"
+    if test (count $argv) -ne 1
+        echo "Usage: port-close <port>"
+        return 1
+    end
+    set -l handle (sudo nft -a list ruleset | grep "tcp dport $argv[1] accept" | grep -oP 'handle \K\d+' | head -1)
+    if test -n "$handle"
+        sudo nft delete rule inet filter input handle $handle
+        echo "Port $argv[1] closed"
+    else
+        echo "No rule found for port $argv[1]"
+    end
+end
+
+function port-list -d "Show listening ports and custom-opened ports"
+    echo "=== Listening ports ==="
+    ss -tlnp
+    if test -f ~/.config/open-ports
+        echo ""
+        echo "=== Persistent custom ports ==="
+        command cat ~/.config/open-ports
+    end
+end
+
+function port-persist -d "Open a port and persist across reboots"
+    if test (count $argv) -ne 1
+        echo "Usage: port-persist <port>"
+        return 1
+    end
+    port-open $argv[1]
+    if not grep -qx "$argv[1]" ~/.config/open-ports 2>/dev/null
+        echo $argv[1] >> ~/.config/open-ports
+        echo "Port $argv[1] persisted"
+    end
+end
+
+function port-unpersist -d "Close a port and remove from persistence"
+    if test (count $argv) -ne 1
+        echo "Usage: port-unpersist <port>"
+        return 1
+    end
+    port-close $argv[1]
+    if test -f ~/.config/open-ports
+        grep -vx "$argv[1]" ~/.config/open-ports > ~/.config/open-ports.tmp
+        mv ~/.config/open-ports.tmp ~/.config/open-ports
+        echo "Port $argv[1] unpersisted"
+    end
+end
+
+# Restore persistent ports on login
+if status is-login; and test -f ~/.config/open-ports
+    while read -l port
+        test -n "$port"; and sudo nft add rule inet filter input tcp dport $port accept 2>/dev/null
+    end < ~/.config/open-ports
+end
