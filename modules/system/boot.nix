@@ -382,7 +382,7 @@
       automatic = true;
       dates = "weekly";
       randomizedDelaySec = "45min";
-      options = "--delete-older-than 2d";
+      options = "--delete-older-than 14d";
     };
     nixPath = ["nixpkgs=${inputs.nixpkgs}"];
   };

@@ -14,10 +14,8 @@
       icu
 
       kitty
-      zoxide
 
       ripgrep
-      fzf
       sd
       fd
       bat

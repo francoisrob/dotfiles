@@ -90,36 +90,42 @@
 
     overlays = import ./modules/overlays.nix {inherit inputs;};
 
-    devshells = import ./devshells {
-      inherit inputs;
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = overlays;
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+      overlays = overlays;
+    };
+
+    nixosConfig = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs user hostName;
       };
+      modules = [
+        {nixpkgs.overlays = overlays;}
+        inputs.hyprland.nixosModules.default
+        home-manager.nixosModules.home-manager
+        solaar.nixosModules.default
+        nix-index-database.nixosModules.nix-index
+        ./hosts/default/configuration.nix
+      ];
+    };
+
+    homeConfig = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = {inherit inputs user;};
+      modules = [./home-manager];
     };
   in {
-    devShells.${system} = devshells;
+    devShells.${system} = import ./devshells {inherit inputs pkgs;};
 
-    nixosConfigurations = {
-      ${hostName} = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit user;
-          inherit hostName;
-        };
-        modules = [
-          {
-            nixpkgs = {
-              overlays = overlays;
-            };
-          }
-          home-manager.nixosModules.home-manager
-          solaar.nixosModules.default
-          nix-index-database.nixosModules.nix-index
-          ./hosts/default/configuration.nix
-        ];
-      };
+    homeConfigurations.${user} = homeConfig;
+
+    nixosConfigurations.${hostName} = nixosConfig;
+
+    checks.${system} = {
+      nixos = nixosConfig.config.system.build.toplevel;
+      home = homeConfig.activationPackage;
     };
   };
 }

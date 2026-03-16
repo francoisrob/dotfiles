@@ -1,4 +1,6 @@
 {pkgs, ...}: {
+  environment.sessionVariables.LIBVA_DRIVER_NAME = "iHD";
+
   boot = {
     kernelModules = [
       "i915"

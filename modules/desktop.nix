@@ -55,29 +55,6 @@ in {
     pam.services.greetd.enableGnomeKeyring = true;
   };
 
-  console = {
-    font = "Goha-16";
-    packages = [pkgs.kbd];
-    colors = [
-      "11111b"
-      "f38ba8"
-      "a6e3a1"
-      "f9e2af"
-      "89b4fa"
-      "f5c2e7"
-      "94e2d5"
-      "bac2de"
-      "181825"
-      "f38ba8"
-      "a6e3a1"
-      "f9e2af"
-      "89b4fa"
-      "f5c2e7"
-      "94e2d5"
-      "cdd6f4"
-    ];
-  };
-
   xdg = {
     mime = {
       enable = true;
