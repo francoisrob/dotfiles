@@ -4,24 +4,24 @@
   "exclusive": true,
   "modules-left": ["clock", "hyprland/workspaces", "hyprland/submap"],
   "modules-center": ["hyprland/window"],
-  "modules-right": ["tray", "pulseaudio", "backlight", "network", "custom/notification", "battery"],
+  "modules-right": ["tray", "custom/mongodb", "cpu", "memory", "temperature", "pulseaudio", "backlight", "network", "custom/notification", "battery"],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
     "format": "<sub>{icon}</sub> {windows}",
-    "window-rewrite-default": "",
+    "window-rewrite-default": "",
     "format-window-separator": "  ",
     "window-rewrite": {
-      "firefox": "",
+      "firefox": "",
       "kitty": "󰆍",
       "ghostty": "󰆍",
-      "steam": "",
-      "discord": "",
-      "Chromium": "",
-      "thunar": "",
+      "steam": "",
+      "discord": "",
+      "Chromium": "",
+      "thunar": "",
       "spotify": "󰓇",
       "slack": "󰒱",
-      "stremio": ""
+      "stremio": ""
     },
     "persistent-workspaces": {
       "*": 3
@@ -46,9 +46,10 @@
   },
 
   "network": {
-    "format-wifi": "",
-    "format-ethernet": "",
-    "format-disconnected": ""
+    "format-wifi": " {essid}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
+    "format-ethernet": "",
+    "format-disconnected": ""
   },
 
   "pulseaudio": {
@@ -56,13 +57,13 @@
     "format-bluetooth": " {icon} {volume}",
     "format-muted": " 󰝟 ",
     "format-icons": {
-      "headphones": "   ",
-      "handsfree": "   ",
-      "headset": "   ",
-      "phone": "   ",
-      "portable": "   ",
-      "car": "   ",
-      "default": ["  ", "  ", "   "]
+      "headphones": "   ",
+      "handsfree": "   ",
+      "headset": "   ",
+      "phone": "   ",
+      "portable": "   ",
+      "car": "   ",
+      "default": ["  ", "  ", "   "]
     },
     "on-click": "pavucontrol"
   },
@@ -74,7 +75,7 @@
       "critical": 20
     },
     "format": "{capacity}% {icon}",
-    "format-icons": ["   ", "   ", "   ", "   ", "   "],
+    "format-icons": ["   ", "   ", "   ", "   ", "   "],
     "max-length": 25
   },
 
@@ -82,14 +83,14 @@
     "tooltip": false,
     "format": "{icon} {}",
     "format-icons": {
-      "notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "none": "   ",
-      "dnd-notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "dnd-none": "   ",
-      "inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "inhibited-none": "   ",
-      "dnd-inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "dnd-inhibited-none": "   "
+      "notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "none": "   ",
+      "dnd-notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "dnd-none": "   ",
+      "inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "inhibited-none": "   ",
+      "dnd-inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
+      "dnd-inhibited-none": "   "
     },
     "return-type": "json",
     "exec-if": "which swaync-client",
@@ -104,5 +105,38 @@
     "format": "{}",
     "max-length": 8,
     "tooltip": false
+  },
+
+  "cpu": {
+    "interval": 5,
+    "format": " {usage}%",
+    "tooltip": true,
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
+  },
+
+  "memory": {
+    "interval": 10,
+    "format": " {used:0.1f}G",
+    "tooltip-format": "{used:0.1f}G / {total:0.1f}G ({percentage}%)"
+  },
+
+  "temperature": {
+    "interval": 5,
+    "format": " {temperatureC}°C",
+    "critical-threshold": 80,
+    "format-critical": " {temperatureC}°C",
+    "tooltip": false
+  },
+
+  "custom/mongodb": {
+    "exec": "~/.config/waybar/scripts/mongodb-status.sh",
+    "return-type": "json",
+    "interval": 5,
+    "format": "🍃 {}",
+    "on-click": "~/.config/waybar/scripts/mongodb-toggle.sh",
+    "tooltip-format": "Click to toggle MongoDB"
   }
 }

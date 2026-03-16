@@ -112,3 +112,40 @@ label#window {
   padding: 4px 8px 4px 8px;
   color: @text;
 }
+
+/* System metrics group */
+#cpu,
+#memory,
+#temperature {
+  padding: 0 8px;
+  color: @text;
+  background-color: @surface0;
+  border-radius: 4px;
+  margin: 2px 1px;
+}
+
+#cpu.warning {
+  color: @peach;
+}
+
+#cpu.critical {
+  color: @red;
+}
+
+#temperature.critical {
+  color: @red;
+}
+
+/* MongoDB toggle */
+#custom-mongodb {
+  padding: 0 8px;
+  margin: 2px 1px;
+}
+
+#custom-mongodb.active {
+  color: @green;
+}
+
+#custom-mongodb.inactive {
+  color: @overlay0;
+}
