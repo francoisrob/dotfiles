@@ -1,0 +1,43 @@
+# Credentials and secrets
+.credentials.json
+
+# Session and runtime data
+projects/
+file-history/
+tasks/
+todos/
+plans/
+history.jsonl
+stats-cache.json
+paste-cache/
+shell-snapshots/
+session-env/
+downloads/
+plugins/*
+
+# Image cache
+image-cache/
+
+# Sessions
+sessions/
+
+# Debug and logs
+debug/
+logs/
+
+# Caches
+cache/
+
+# Backups (runtime-generated, not config)
+backups/
+
+# Telemetry
+telemetry/
+
+# Other runtime/sensitive
+chrome/
+mcp-needs-auth-cache.json
+teams/
+settings.local.json
+server.lock
+plugins/installed_plugins.json
