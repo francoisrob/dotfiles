@@ -76,31 +76,33 @@ in {
     };
   };
 
-  xdg.autostart.enable = true;
-  xdg.configFile = {
-    "xdg-desktop-portal/hyprland-portals.conf".text = ''
-      [preferred]
-      default=hyprland;gtk
-    '';
-  };
-  xdg.dataFile = {
-    "flatpak/overrides/global".text = ''
-      [Context]
-      filesystems=~/.icons:ro;~/.themes:ro
-    '';
-  };
-  xdg.desktopEntries = {
-    mongodb-compass = {
-      name = "MongoDB Compass (Wayland)";
-      comment = "The MongoDB GUI";
-      genericName = "MongoDB Compass";
-      exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland --password-store=gnome-libsecret";
-      type = "Application";
-      icon = "mongodb-compass";
-      startupNotify = true;
-      terminal = false;
-      categories = ["Development" "Utility" "GTK"];
-      mimeType = ["x-scheme-handler/mongodb" "x-scheme-handler/mongodb+srv"];
+  xdg = {
+    autostart.enable = true;
+    configFile = {
+      "xdg-desktop-portal/hyprland-portals.conf".text = ''
+        [preferred]
+        default=hyprland;gtk
+      '';
+    };
+    dataFile = {
+      "flatpak/overrides/global".text = ''
+        [Context]
+        filesystems=~/.icons:ro;~/.themes:ro
+      '';
+    };
+    desktopEntries = {
+      mongodb-compass = {
+        name = "MongoDB Compass (Wayland)";
+        comment = "The MongoDB GUI";
+        genericName = "MongoDB Compass";
+        exec = "env XDG_SESSION_TYPE=wayland OZONE_PLATFORM_HINT=wayland mongodb-compass --ignore-additional-command-line-flags --enable-features=UseOzonePlatform --ozone-platform=wayland --password-store=gnome-libsecret";
+        type = "Application";
+        icon = "mongodb-compass";
+        startupNotify = true;
+        terminal = false;
+        categories = ["Development" "Utility" "GTK"];
+        mimeType = ["x-scheme-handler/mongodb" "x-scheme-handler/mongodb+srv"];
+      };
     };
   };
   services = {
@@ -172,21 +174,6 @@ in {
       enable = true;
       enableFishIntegration = true;
       systemd.enable = true;
-      settings = {
-        theme = "Catppuccin Mocha";
-        font-family = "JetBrainsMono Nerd Font";
-        font-size = 13;
-        window-padding-x = 8;
-        window-padding-y = 4;
-        window-decoration = false;
-        gtk-titlebar = false;
-        cursor-style = "block";
-        cursor-style-blink = false;
-        mouse-hide-while-typing = true;
-        confirm-close-surface = false;
-        copy-on-select = "clipboard";
-        desktop-notifications = true;
-      };
     };
     git = {
       enable = true;
