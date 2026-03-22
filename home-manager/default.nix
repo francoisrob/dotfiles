@@ -40,6 +40,7 @@ in {
       libreoffice-fresh
       postman
       obs-studio
+      stremio-linux-shell
       spotify
 
       wl-clipboard
@@ -84,12 +85,7 @@ in {
         default=hyprland;gtk
       '';
     };
-    dataFile = {
-      "flatpak/overrides/global".text = ''
-        [Context]
-        filesystems=~/.icons:ro;~/.themes:ro
-      '';
-    };
+    dataFile = {};
     desktopEntries = {
       mongodb-compass = {
         name = "MongoDB Compass (Wayland)";

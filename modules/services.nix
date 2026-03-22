@@ -4,10 +4,6 @@
   ...
 }: {
   services = {
-    flatpak = {
-      enable = true;
-    };
-
     solaar = {
       enable = true;
       package = pkgs.solaar;

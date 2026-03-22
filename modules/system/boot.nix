@@ -82,7 +82,7 @@
 
     tmp = {
       useTmpfs = true;
-      tmpfsSize = "20%";
+      tmpfsSize = "10G";
     };
   };
 
