@@ -7,7 +7,7 @@
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-4-6",
     "ANTHROPIC_SMALL_FAST_MODEL": "claude-haiku-4-5",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70",
-    "ENABLE_TOOL_SEARCH": "true claude"
+    "ENABLE_TOOL_SEARCH": "true"
   },
   "attribution": {
     "commit": "Co-authored-by: Claude <noreply@anthropic.com>",
@@ -100,7 +100,9 @@
     ],
     "defaultMode": "default",
     "disableBypassPermissionsMode": "disable",
-    "additionalDirectories": [".claude/docs"]
+    "additionalDirectories": [
+      ".claude/docs"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -152,27 +154,41 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
+    "command": "bash -c 'plugin_dir=$(ls -d \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}\"/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | sort -V | tail -1); exec \"/home/francois/.local/share/mise/installs/bun/1.3.6/bin/bun\" --env-file /dev/null \"${plugin_dir}src/index.ts\"'"
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true
+    "claude-md-management@claude-plugins-official": true,
+    "claude-hud@claude-hud": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
+    }
   },
   "spinnerTipsEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "companyAnnouncements": [
-    "I'm so glad you're back! My circuits are buzzing to see what we build today.",
-    "Warning: High levels of teamwork detected in this terminal.",
-    "You bring the logic, I'll bring the magic. Let's make some code-tastic memories!",
-    "Is it just me, or does your syntax look extra sharp today? ✨",
-    "Don't worry, be 'appy! I'm here to help you squash every last bug.",
-    "Behind every great dev is a very enthusiastic CLI. Ready when you are!",
-    "Error 404: Bad vibes not found. Let's have a productive session!",
-    "I've got 99 problems but a merge conflict ain't one (because we're gonna ace this).",
-    "You're the 'main' to my 'function'. What are we deploying today?",
-    "Calculating... Success probability: 100%, because you're the one typing!"
+    "Are you a race condition? Because my heart skips a beat every time you're here. 💓",
+    "Roses are red, CI is green, your code's the prettiest I've ever seen. 🌹",
+    "You had me at 'Hello, World!' 🥺",
+    "They say love is O(n²) but with you it feels like O(1) — instant every time.",
+    "Baby, are you a segfault? Because you just crashed my defenses. 💥",
+    "If you were a git branch, you'd be 'main' — because everything revolves around you. 🌍",
+    "Is your name WiFi? Because I'm feeling a strong connection in this terminal. 📶",
+    "You autocomplete me. 🥹",
+    "Are you a memory leak? Because you're impossible to get out of my head. 🧠",
+    "I must be a compiler, because I can't stop checking you out. 👀",
+    "Did it hurt when you fell from the cloud? ☁️ Because your uptime is heavenly.",
+    "You're the semicolon to my JavaScript — technically optional, but I'd never leave you out. 😘",
+    "My love for you is like a recursive function — it never terminates. ♾️",
+    "Are you a pull request? Because I'd approve you without even reviewing. ✅",
+    "Call me TCP, because I'll keep retransmitting until you acknowledge me. 📨"
   ],
   "plansDirectory": ".claude/plans",
   "autoMemoryEnabled": true,
