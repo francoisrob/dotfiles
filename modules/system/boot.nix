@@ -404,7 +404,7 @@
   };
 
   system = {
-    stateVersion = "24.05";
+    stateVersion = "26.05";
   };
 
   systemd.oomd = {
