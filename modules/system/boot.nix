@@ -41,8 +41,15 @@
 
     kernel = {
       sysctl = {
-        "vm.swappiness" = 20;
+        # zram-primary: swap aggressively to cheap in-memory compressed pages
+        "vm.swappiness" = 180;
         "vm.lru_gen.min_ttl_ms" = 1000;
+        # Wake kswapd earlier so reclaim doesn't spike under sudden demand
+        "vm.watermark_scale_factor" = 200;
+        # Keep inode/dentry cache longer to avoid re-reads after free
+        "vm.vfs_cache_pressure" = 50;
+        # Enable magic SysRq (kernel param sysrq_always_enabled=1 is not a real flag)
+        "kernel.sysrq" = 1;
         # "kernel.sched_migration_cost_ns" = 500000;
         # "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
@@ -69,7 +76,6 @@
 
       "mitigations=off"
 
-      "sysrq_always_enabled=1"
       "pcie_aspm=force"
 
       # "acpi_osi=" # breaks touchpad multitouch gestures
@@ -245,6 +251,7 @@
       enable = true;
     };
     system76-scheduler = {
+      enable = true;
       settings = {
         cfsProfiles = {
           enable = true;
@@ -393,6 +400,7 @@
       ];
 
       experimental-features = ["nix-command" "flakes"];
+      download-buffer-size = 524288000;
     };
     gc = {
       automatic = true;
@@ -419,6 +427,6 @@
 
   zramSwap = {
     enable = true;
-    memoryPercent = 20;
+    memoryPercent = 50;
   };
 }
