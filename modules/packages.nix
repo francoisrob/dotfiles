@@ -77,7 +77,7 @@
       defaultEditor = true;
       vimAlias = true;
       viAlias = true;
-      package = with pkgs; neovim;
+      package = pkgs.neovim;
     };
   };
 }

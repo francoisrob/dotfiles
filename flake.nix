@@ -6,6 +6,7 @@
       url = "github:nixos/nixpkgs?ref=nixos-unstable";
     };
     home-manager = {
+      # master tracks nixos-unstable; home-manager has no separate unstable branch
       url = "github:nix-community/home-manager/master";
       inputs = {
         nixpkgs = {
@@ -26,14 +27,6 @@
     };
     solaar = {
       url = "github:Svenum/Solaar-Flake/main";
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-    };
-    android-nixpkgs = {
-      url = "github:tadfisher/android-nixpkgs";
       inputs = {
         nixpkgs = {
           follows = "nixpkgs";
@@ -82,12 +75,6 @@
 
     overlays = import ./modules/overlays.nix {inherit inputs;};
 
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-      overlays = overlays;
-    };
-
     nixosConfig = nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -102,22 +89,13 @@
         ./hosts/default/configuration.nix
       ];
     };
-
-    homeConfig = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = {inherit inputs user;};
-      modules = [./home-manager];
-    };
   in {
-    devShells.${system} = import ./devshells {inherit inputs pkgs;};
-
-    homeConfigurations.${user} = homeConfig;
+    devShells.${system} = import ./devshells {inherit inputs; pkgs = nixosConfig.pkgs;};
 
     nixosConfigurations.${hostName} = nixosConfig;
 
     checks.${system} = {
       nixos = nixosConfig.config.system.build.toplevel;
-      home = homeConfig.activationPackage;
     };
   };
 }
