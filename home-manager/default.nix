@@ -1,20 +1,16 @@
 {
   pkgs,
   user,
-  inputs,
   ...
-}: let
-  serena = inputs.serena.packages.${pkgs.stdenv.hostPlatform.system}.serena;
-in {
+}: {
   home = {
     username = user;
     homeDirectory = "/home/${user}";
-    stateVersion = "24.11";
+    stateVersion = "26.05";
 
     packages = with pkgs; [
       ansible
       mqttx
-      serena
 
       gnome-calculator
       grayjay
@@ -33,7 +29,7 @@ in {
       gimp3-with-plugins
       kdePackages.gwenview
 
-      protonvpn-gui
+      proton-vpn
 
       evince
       ffmpeg
@@ -48,6 +44,7 @@ in {
       ncdu
       gh
       lazygit
+      just
       uv
 
       awscli2
@@ -164,11 +161,6 @@ in {
     spotify-player.enable = true;
     waybar = {
       enable = true;
-      systemd.enable = true;
-    };
-    ghostty = {
-      enable = true;
-      enableFishIntegration = true;
       systemd.enable = true;
     };
     git = {

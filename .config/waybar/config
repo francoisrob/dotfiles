@@ -2,9 +2,28 @@
   "layer": "top",
   "position": "top",
   "exclusive": true,
-  "modules-left": ["clock", "hyprland/workspaces", "hyprland/submap"],
-  "modules-center": ["hyprland/window"],
-  "modules-right": ["tray", "custom/mongodb", "cpu", "memory", "temperature", "pulseaudio", "backlight", "network", "custom/notification", "battery"],
+  "modules-left": [
+    "clock",
+    "hyprland/workspaces",
+    "hyprland/submap"
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
+  "modules-right": [
+    "tray",
+    "custom/mongodb",
+    "mpris",
+    "cpu",
+    "memory",
+    "temperature",
+    "network",
+    "custom/vpn",
+    "pulseaudio",
+    "backlight",
+    "custom/notification",
+    "battery"
+  ],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": true,
@@ -14,7 +33,6 @@
     "window-rewrite": {
       "firefox": "",
       "kitty": "󰆍",
-      "ghostty": "󰆍",
       "steam": "",
       "discord": "",
       "Chromium": "",
@@ -27,33 +45,38 @@
       "*": 3
     }
   },
-
   "tray": {
     "icon-size": 14,
     "spacing": 12,
     "reverse-direction": true
   },
-
   "backlight": {
-    "format": "{icon} {percent}",
-    "format-icons": [" 󰃞  ", " 󰃟  ", " 󰃝  ", " 󰃠 "],
+    "format": "{icon} {percent}%",
+    "format-icons": [
+      " 󰃞  ",
+      " 󰃟  ",
+      " 󰃝  ",
+      " 󰃠 "
+    ],
     "tooltip": false
   },
-
   "clock": {
     "format": "{:%H:%M}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>"
   },
-
   "network": {
-    "format-wifi": "",
+    "format-wifi": "  {signalStrength}%",
     "format-ethernet": "",
-    "format-disconnected": ""
+    "format-disconnected": "",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Disconnected",
+    "max-length": 20,
+    "on-click": "iwgtk"
   },
-
   "pulseaudio": {
-    "format": "{icon} {volume}",
-    "format-bluetooth": " {icon} {volume}",
+    "format": "{icon} {volume}%",
+    "format-bluetooth": " {icon} {volume}%",
     "format-muted": " 󰝟 ",
     "format-icons": {
       "headphones": "   ",
@@ -62,11 +85,14 @@
       "phone": "   ",
       "portable": "   ",
       "car": "   ",
-      "default": ["  ", "  ", "   "]
+      "default": [
+        "  ",
+        "  ",
+        "   "
+      ]
     },
     "on-click": "pavucontrol"
   },
-
   "battery": {
     "interval": 60,
     "states": {
@@ -74,22 +100,27 @@
       "critical": 20
     },
     "format": "{capacity}% {icon}",
-    "format-icons": ["   ", "   ", "   ", "   ", "   "],
+    "format-icons": [
+      "   ",
+      "   ",
+      "   ",
+      "   ",
+      "   "
+    ],
     "max-length": 25
   },
-
   "custom/notification": {
     "tooltip": false,
-    "format": "{icon} {}",
+    "format": "{icon}",
     "format-icons": {
-      "notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "none": "   ",
-      "dnd-notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "dnd-none": "   ",
-      "inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "inhibited-none": "   ",
-      "dnd-inhibited-notification": " <span foreground='#fab387'><sup></sup></span>  ",
-      "dnd-inhibited-none": "   "
+      "notification": "󰂚<span foreground='#fab387'><sup></sup></span>",
+      "none": "󰂚",
+      "dnd-notification": "󰂛<span foreground='#fab387'><sup></sup></span>",
+      "dnd-none": "󰂛",
+      "inhibited-notification": "󰂚<span foreground='#fab387'><sup></sup></span>",
+      "inhibited-none": "󰂚",
+      "dnd-inhibited-notification": "󰂛<span foreground='#fab387'><sup></sup></span>",
+      "dnd-inhibited-none": "󰂛"
     },
     "return-type": "json",
     "exec-if": "which swaync-client",
@@ -99,13 +130,11 @@
     "on-click-right": "swaync-client -d -sw",
     "escape": true
   },
-
   "hyprland/submap": {
     "format": "{}",
     "max-length": 8,
     "tooltip": false
   },
-
   "cpu": {
     "interval": 5,
     "format": " {usage}%",
@@ -115,13 +144,11 @@
       "critical": 90
     }
   },
-
   "memory": {
     "interval": 10,
     "format": " {used:0.1f}G",
     "tooltip-format": "{used:0.1f}G / {total:0.1f}G ({percentage}%)"
   },
-
   "temperature": {
     "interval": 5,
     "format": " {temperatureC}°C",
@@ -129,7 +156,6 @@
     "format-critical": " {temperatureC}°C",
     "tooltip": false
   },
-
   "custom/mongodb": {
     "exec": "~/.config/waybar/scripts/mongodb-status.sh",
     "return-type": "json",
@@ -137,5 +163,33 @@
     "format": "🍃 {}",
     "on-click": "~/.config/waybar/scripts/mongodb-toggle.sh",
     "tooltip-format": "Click to toggle MongoDB"
+  },
+  "mpris": {
+    "format": "{player_icon} {artist} - {title}",
+    "format-paused": "{status_icon} {artist} - {title}",
+    "player-icons": {
+      "default": "󰐊",
+      "spotify": "󰳇",
+      "firefox": "󰈹"
+    },
+    "status-icons": {
+      "paused": "󰏤"
+    },
+    "max-length": 30,
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
+  },
+  "custom/vpn": {
+    "exec": "~/.config/waybar/scripts/vpn-status.sh",
+    "return-type": "json",
+    "interval": 5,
+    "format": "{icon}",
+    "format-icons": {
+      "connected": "󰌾",
+      "disconnected": ""
+    },
+    "tooltip-format": "{}",
+    "escape": true
   }
 }

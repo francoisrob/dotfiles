@@ -21,6 +21,6 @@ map("n", "<C-q>", "<cmd> bd <CR>")
 map(
   "n",
   "<c-S-Enter>",
-  "<cmd> exe 'silent !ghostty --working-directory=' . expand('%:p:h') . ' &' | redraw! <CR>",
-  { desc = "new Ghostty Terminal" }
+  "<cmd> exe 'silent !kitty --directory=' . expand('%:p:h') . ' &' | redraw! <CR>",
+  { desc = "new Kitty Terminal" }
 )

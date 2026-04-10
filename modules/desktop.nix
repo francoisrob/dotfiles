@@ -34,7 +34,7 @@ in {
   };
 
   environment.sessionVariables = {
-    TERMINAL = "ghostty";
+    TERMINAL = "kitty";
     XDG_DATA_DIRS = [];
   };
 

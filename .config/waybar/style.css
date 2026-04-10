@@ -6,7 +6,7 @@
   min-height: 0;
   margin: 0;
   padding: 0;
-  font-family: "Ubuntu", "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
+  font-family: "Ubuntu", "JetBrainsMono Nerd Font", "Font Awesome 7 Free Solid", "Font Awesome 7 Free", "Font Awesome 7 Brands";
   font-size: 14px;
 }
 
@@ -19,19 +19,19 @@ window#waybar {
   border-radius: 0 4px 4px 0;
 }
 
-/* workspaces */
+/* ── Workspaces ── */
 #workspaces {
-  padding: 0 4px 0 4px;
+  padding: 0 4px;
 }
 
 #workspaces button {
   background-color: inherit;
-  margin: 2px 0 2px 0;
+  margin: 2px 0;
   border-radius: 4px;
 }
 
 #workspaces button box {
-  padding: 2px 12px 2px 12px;
+  padding: 2px 12px;
   border-radius: 4px;
 }
 
@@ -55,14 +55,16 @@ window#waybar {
   font-weight: bold;
 }
 
+/* ── Window Title ── */
 label#window {
   color: @text;
   font-weight: bold;
 }
 
+/* ── Clock ── */
 #clock {
   background-color: @surface0;
-  padding: 0 8px 0 8px;
+  padding: 0 10px;
   border-radius: 4px;
   margin: 2px;
   font-family: "Ubuntu";
@@ -71,57 +73,71 @@ label#window {
   color: @text;
 }
 
+/* ── Right Side ── */
 .modules-right {
   background: inherit;
   border-radius: 4px;
 }
 
+/* ── Tray ── */
 #tray {
-  margin: 0 8px 0 8px;
-  padding: 4px 8px 4px 8px;
+  margin: 0 8px;
+  padding: 0 8px;
 }
+
 #tray menu {
   background-color: @crust;
   color: @text;
 }
 
-#battery {
-  padding: 4px 16px 4px 8px;
+/* ── MongoDB Toggle ── */
+#custom-mongodb {
+  padding: 0 8px;
+  margin: 2px 1px;
+}
+
+#custom-mongodb.active {
+  color: @green;
+}
+
+#custom-mongodb.inactive {
+  color: @overlay0;
+}
+
+/* ── MPRIS Media ── */
+#mpris {
+  padding: 0 8px;
+  margin: 2px 4px;
+  color: @mauve;
+}
+
+#mpris.paused {
+  color: @overlay1;
+}
+
+/* ── System Metrics (connected pill) ── */
+#cpu {
+  padding: 0 8px 0 10px;
   color: @text;
+  background-color: @surface0;
+  border-radius: 4px 0 0 4px;
+  margin: 2px 0 2px 4px;
 }
 
-#battery.warning {
-  color: @peach;
-}
-
-#battery.critical {
-  color: @red;
-}
-
-#backlight {
-  padding: 4px 8px 4px 8px;
-  color: @text;
-}
-
-#pulseaudio {
-  padding: 4px 0px 4px 0px;
-  color: @text;
-}
-
-#custom-notification {
-  padding: 4px 8px 4px 8px;
-  color: @text;
-}
-
-/* System metrics group */
-#cpu,
-#memory,
-#temperature {
+#memory {
   padding: 0 8px;
   color: @text;
   background-color: @surface0;
-  border-radius: 4px;
-  margin: 2px 1px;
+  border-radius: 0;
+  margin: 2px 0;
+}
+
+#temperature {
+  padding: 0 10px 0 8px;
+  color: @text;
+  background-color: @surface0;
+  border-radius: 0 4px 4px 0;
+  margin: 2px 4px 2px 0;
 }
 
 #cpu.warning {
@@ -136,16 +152,87 @@ label#window {
   color: @red;
 }
 
-/* MongoDB toggle */
-#custom-mongodb {
+/* ── Network ── */
+#network {
   padding: 0 8px;
   margin: 2px 1px;
+  color: @blue;
 }
 
-#custom-mongodb.active {
-  color: @green;
-}
-
-#custom-mongodb.inactive {
+#network.disconnected {
   color: @overlay0;
+}
+
+/* ── VPN ── */
+#custom-vpn {
+  padding: 0 8px;
+  margin: 2px 1px;
+  color: @blue;
+}
+
+#custom-vpn.disconnected {
+  color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Pulseaudio ── */
+#pulseaudio {
+  padding: 0 8px;
+  margin: 2px 1px;
+  color: @yellow;
+}
+
+#pulseaudio.muted {
+  color: @overlay0;
+}
+
+/* ── Backlight ── */
+#backlight {
+  padding: 0 8px;
+  margin: 2px 1px;
+  color: @yellow;
+}
+
+/* ── Notification ── */
+#custom-notification {
+  padding: 4px 8px;
+  margin: 2px 1px;
+  color: @text;
+  font-family: "Noto Color Emoji", "JetBrainsMono Nerd Font";
+}
+
+/* ── Battery ── */
+#battery {
+  padding: 0 12px 0 8px;
+  margin: 2px 1px;
+  color: @text;
+}
+
+#battery.warning {
+  color: @peach;
+}
+
+#battery.critical {
+  color: @red;
+}
+
+/* ── Submap ── */
+#submap {
+  padding: 0 8px;
+  margin: 2px;
+  color: @peach;
+  font-weight: bold;
+}
+
+/* ── Hover States ── */
+#custom-mongodb:hover,
+#mpris:hover,
+#network:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#battery:hover,
+#custom-notification:hover {
+  background-color: @surface1;
+  border-radius: 4px;
 }

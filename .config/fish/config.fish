@@ -51,6 +51,7 @@ function reload-fish -d "Reload the fish configuration"
 end
 
 alias cat="bat"
+alias ssh="kitten ssh"
 
 # MongoDB management
 function mongo-toggle -d "Toggle MongoDB service"
@@ -92,7 +93,7 @@ function port-open -d "Open a TCP port in nftables (runtime)"
         echo "Usage: port-open <port>"
         return 1
     end
-    sudo nft add rule inet filter input tcp dport $argv[1] accept
+    sudo nft add element inet nixos-fw temp-ports "{ tcp . $argv[1] }"
     echo "Port $argv[1] opened"
 end
 
@@ -101,9 +102,8 @@ function port-close -d "Close a TCP port in nftables (runtime)"
         echo "Usage: port-close <port>"
         return 1
     end
-    set -l handle (sudo nft -a list ruleset | grep "tcp dport $argv[1] accept" | grep -oP 'handle \K\d+' | head -1)
-    if test -n "$handle"
-        sudo nft delete rule inet filter input handle $handle
+    sudo nft delete element inet nixos-fw temp-ports "{ tcp . $argv[1] }"
+    if test $status -eq 0
         echo "Port $argv[1] closed"
     else
         echo "No rule found for port $argv[1]"
