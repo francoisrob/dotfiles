@@ -6,7 +6,7 @@
   home = {
     username = user;
     homeDirectory = "/home/${user}";
-    stateVersion = "26.05";
+    stateVersion = "24.11";
 
     packages = with pkgs; [
       ansible
