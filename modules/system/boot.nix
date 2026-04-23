@@ -43,7 +43,7 @@
       sysctl = {
         # zram-primary: swap aggressively to cheap in-memory compressed pages
         "vm.swappiness" = 180;
-        "vm.lru_gen.min_ttl_ms" = 1000;
+
         # Wake kswapd earlier so reclaim doesn't spike under sudden demand
         "vm.watermark_scale_factor" = 200;
         # Keep inode/dentry cache longer to avoid re-reads after free
@@ -81,7 +81,7 @@
       # "acpi_osi=" # breaks touchpad multitouch gestures
       # "acpi_backlight=vendor"
 
-      "ucsi_acpi.trace=0"
+
       "ucsi_ccg.skip_ucsi=1"
       # "i2c_hid.ignore_special_reports=1"
     ];
@@ -294,12 +294,6 @@
     polkit = {
       enable = true;
     };
-    acme = {
-      acceptTerms = true;
-      defaults = {
-        email = "francoisdprob@gmail.com";
-      };
-    };
   };
 
   time = {
@@ -406,6 +400,10 @@
   system = {
     stateVersion = "26.05";
   };
+
+  systemd.tmpfiles.rules = [
+    "w /sys/kernel/mm/lru_gen/min_ttl_ms - - - - 1000"
+  ];
 
   systemd.oomd = {
     enableRootSlice = true;

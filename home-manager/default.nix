@@ -10,6 +10,12 @@
 
     packages = with pkgs; [
       ansible
+      ansible-lint
+      sops
+      age
+      yamllint
+      shellcheck
+      (python3.withPackages (ps: with ps; [ pytest ]))
       mqttx
 
       gnome-calculator

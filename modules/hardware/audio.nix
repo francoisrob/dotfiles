@@ -26,6 +26,12 @@
         }
         {
           domain = "@audio";
+          item = "nice";
+          type = "-";
+          value = "-20";
+        }
+        {
+          domain = "@audio";
           item = "nofile";
           type = "soft";
           value = "99999";

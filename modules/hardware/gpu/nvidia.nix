@@ -3,14 +3,14 @@
   pkgs,
   ...
 }: let
-  nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.stable;
+  nvidiaPackage = config.boot.kernelPackages.nvidiaPackages.legacy_580;
 in {
   boot = {
     kernelModules = [
       "nvidia_uvm"
     ];
     kernelParams = [
-      "nvidia-drm.fbdev=1"
+
       "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
     ];
   };
