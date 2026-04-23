@@ -4,7 +4,7 @@ return {
     opts = {
       servers = {
         html = {
-          filetypes = { "html", "typescript", "htmlangular" },
+          filetypes = { "html", "htmlangular" },
         },
       },
     },
