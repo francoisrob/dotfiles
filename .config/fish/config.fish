@@ -40,14 +40,14 @@ function please -d "Run the last command with sudo"
     eval sudo (history --max=1)
 end
 
+function cc
+    claude
+end
+
 function gitclean -d "Remove stale branches (deleted at origin but stil local) + Garbage Collection"
     git remote prune origin
     git gc --auto
     echo "Stale branches removed and garbage collection performed."
-end
-
-function reload-fish -d "Reload the fish configuration"
-    source $fish_home/config.fish
 end
 
 alias cat="bat"
@@ -118,36 +118,4 @@ function port-list -d "Show listening ports and custom-opened ports"
         echo "=== Persistent custom ports ==="
         command cat ~/.config/open-ports
     end
-end
-
-function port-persist -d "Open a port and persist across reboots"
-    if test (count $argv) -ne 1
-        echo "Usage: port-persist <port>"
-        return 1
-    end
-    port-open $argv[1]
-    if not grep -qx "$argv[1]" ~/.config/open-ports 2>/dev/null
-        echo $argv[1] >> ~/.config/open-ports
-        echo "Port $argv[1] persisted"
-    end
-end
-
-function port-unpersist -d "Close a port and remove from persistence"
-    if test (count $argv) -ne 1
-        echo "Usage: port-unpersist <port>"
-        return 1
-    end
-    port-close $argv[1]
-    if test -f ~/.config/open-ports
-        grep -vx "$argv[1]" ~/.config/open-ports > ~/.config/open-ports.tmp
-        mv ~/.config/open-ports.tmp ~/.config/open-ports
-        echo "Port $argv[1] unpersisted"
-    end
-end
-
-# Restore persistent ports on login
-if status is-login; and test -f ~/.config/open-ports
-    while read -l port
-        test -n "$port"; and sudo nft add rule inet filter input tcp dport $port accept 2>/dev/null
-    end < ~/.config/open-ports
 end
