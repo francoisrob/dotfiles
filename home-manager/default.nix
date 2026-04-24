@@ -17,6 +17,7 @@
       shellcheck
       (python3.withPackages (ps: with ps; [ pytest ]))
       mqttx
+      aws-sam-cli
 
       gnome-calculator
       grayjay
