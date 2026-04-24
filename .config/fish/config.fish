@@ -41,7 +41,7 @@ function please -d "Run the last command with sudo"
 end
 
 function cc
-    claude
+    codex
 end
 
 function gitclean -d "Remove stale branches (deleted at origin but stil local) + Garbage Collection"
