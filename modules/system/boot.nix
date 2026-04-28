@@ -157,26 +157,6 @@
         RebootWatchdogSec = "0";
       };
     };
-    network = {
-      enable = true;
-      wait-online = {
-        anyInterface = true;
-      };
-      networks = {
-        primary = {
-          matchConfig = {
-            Name = [
-              "en*"
-              "wl*"
-            ];
-          };
-          networkConfig = {
-            DHCP = "ipv4";
-            IPv6AcceptRA = true;
-          };
-        };
-      };
-    };
     services.systemd-networkd-wait-online.enable = lib.mkForce false;
   };
 
@@ -351,7 +331,7 @@
         enable = true;
         settings = {
           General = {
-            EnableNetworkConfiguration = false; # systemd-networkd will handle this
+            EnableNetworkConfiguration = false; # NetworkManager handles IP configuration
             RoamThreshold = -75;
             RoamThreshold5G = -80;
             RoamRetryInterval = 120;
