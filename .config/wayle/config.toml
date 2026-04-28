@@ -12,8 +12,8 @@ shadow = "none"
 
 [[bar.layout]]
 monitor = "*"
-left = ["dashboard", "clock", "hyprland-workspaces"]
-center = ["cava", "window-title"]
+left = ["dashboard", "clock", "hyprland-workspaces", "cava"]
+center = ["window-title"]
 right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network"] }, { name = "controls", modules = ["custom-backlight", "volume", "battery"] }, "notifications"]
 
 [modules.dashboard]
