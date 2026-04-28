@@ -5,6 +5,16 @@
   hostName,
   ...
 }: {
+  specialisation = {
+    legacy-hda-audio.configuration = {
+      system.nixos.tags = ["legacy-hda-audio"];
+      # Fallback profile for SOF regressions on Intel laptops. This prefers the
+      # legacy HDA driver and may restore playback at the cost of DSP/DMIC
+      # features on some machines.
+      boot.kernelParams = ["snd_intel_dspcfg.dsp_driver=1"];
+    };
+  };
+
   boot = {
     kernelPackages = pkgs.linuxPackages_6_12; # LTS; 6.19 has CONFIG_FUTEX_PRIVATE_HASH=y which crashes MongoDB
     loader = {
@@ -76,7 +86,9 @@
 
       "mitigations=off"
 
-      "pcie_aspm=force"
+      # The kernel explicitly warns that forcing ASPM can cause lockups. Keep
+      # the default PCIe policy on this Tiger Lake + Thunderbolt setup because
+      # the dock/monitor path is already showing D3cold/D0 resume failures.
 
       # "acpi_osi=" # breaks touchpad multitouch gestures
       # "acpi_backlight=vendor"

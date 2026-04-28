@@ -73,7 +73,11 @@
         pipewire = {
           "92-low-latency" = {
             "context.properties" = {
-              "default.clock.rate" = 44100;
+              # Keep the graph at 48 kHz on this Tiger Lake SOF/HDA laptop.
+              # Forcing 44.1 kHz started tripping hw_params failures after the
+              # recent kernel update and resulted in silent internal audio.
+              "default.clock.rate" = 48000;
+              "default.clock.allowed-rates" = [48000];
               "default.clock.quantum" = 1024;
               "default.clock.min-quantum" = 512;
               "default.clock.max-quantum" = 8192;
