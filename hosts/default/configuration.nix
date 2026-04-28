@@ -15,6 +15,7 @@
     ../../modules/system/boot.nix
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
+    ../../modules/system/networking.nix
 
     # Virtualization
     ../../modules/virtualisation/default.nix

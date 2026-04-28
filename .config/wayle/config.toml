@@ -14,7 +14,7 @@ shadow = "none"
 monitor = "*"
 left = ["dashboard", "clock", "hyprland-workspaces", "cava"]
 center = ["window-title"]
-right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network"] }, { name = "controls", modules = ["custom-backlight", "volume", "battery"] }, "notifications"]
+right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network", "netstat"] }, { name = "controls", modules = ["custom-backlight", "volume", "battery"] }, "notifications"]
 
 [modules.dashboard]
 right-click = "wayle panel settings"
