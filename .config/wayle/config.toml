@@ -3,12 +3,15 @@ scale = 0.72
 padding = 0.2
 padding-ends = 0.35
 module-gap = 0.35
-bg = "transparent"
+bg = "bg-base"
 button-icon-padding = 0.9
 button-icon-size = 0.9
 button-label-size = 0.95
 rounding = "none"
 shadow = "none"
+
+[general]
+font-sans = "Ubuntu Sans"
 
 [[bar.layout]]
 monitor = "*"

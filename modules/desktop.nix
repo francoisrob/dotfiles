@@ -92,6 +92,8 @@ in {
       hyprlock
       hyprsunset
 
+      papirus-icon-theme
+
     ];
   };
 }
