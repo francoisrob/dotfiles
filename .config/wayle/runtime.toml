@@ -1,0 +1,11 @@
+[bar]
+bg = "bg-base"
+button-icon-padding = 0.8999999761581421
+button-icon-size = 0.8999999761581421
+button-label-size = 0.949999988079071
+
+[general]
+font-sans = "Ubuntu Sans"
+
+[modules.notification]
+popup-duration = 3000
