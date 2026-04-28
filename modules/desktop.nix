@@ -84,9 +84,6 @@ in {
       wayland # Needed for Hyprland
       libnotify # Needed for notifications
 
-      # ashell
-      waytrogen
-
       hyprland-contrib.grimblast
       hyprland-contrib.shellevents
 
@@ -95,8 +92,6 @@ in {
       hyprlock
       hyprsunset
 
-      iwgtk
-      blueman
     ];
   };
 }

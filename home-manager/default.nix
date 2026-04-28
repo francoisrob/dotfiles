@@ -9,6 +9,8 @@
     stateVersion = "26.05";
 
     packages = with pkgs; [
+      awww
+
       ansible
       ansible-lint
       sops
@@ -107,6 +109,7 @@
   };
   services = {
     kanshi.enable = true;
+    wayle.enable = true;
     gpg-agent = {
       enable = true;
       defaultCacheTtl = 31536000;
@@ -115,7 +118,7 @@
     hyprpolkitagent.enable = true;
     hypridle.enable = true;
     cliphist.enable = true;
-    hyprpaper.enable = true;
+    # hyprpaper replaced by wayle wallpaper engine
     swaync.enable = true;
   };
 
@@ -166,10 +169,6 @@
 
   programs = {
     spotify-player.enable = true;
-    waybar = {
-      enable = true;
-      systemd.enable = true;
-    };
     git = {
       enable = true;
       settings = {
