@@ -136,7 +136,6 @@
       Unit.Description = "Disable hyprsunset at 07:00";
       Timer = {
         OnCalendar = "*-*-* 07:00:00";
-        Persistent = true;
       };
       Install.WantedBy = ["timers.target"];
     };
