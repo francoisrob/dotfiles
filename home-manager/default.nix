@@ -10,6 +10,7 @@
 
     packages = with pkgs; [
       awww
+      cava
 
       ansible
       ansible-lint
@@ -107,6 +108,40 @@
       };
     };
   };
+  systemd.user = {
+    services.hyprsunset-on = {
+      Unit.Description = "Enable hyprsunset night light";
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.hyprsunset}/bin/hyprsunset -t 4500";
+        Restart = "on-failure";
+      };
+    };
+    timers.hyprsunset-on = {
+      Unit.Description = "Enable hyprsunset at 19:00";
+      Timer = {
+        OnCalendar = "*-*-* 19:00:00";
+        Persistent = true;
+      };
+      Install.WantedBy = ["timers.target"];
+    };
+    services.hyprsunset-off = {
+      Unit.Description = "Disable hyprsunset night light";
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.procps}/bin/pkill hyprsunset";
+      };
+    };
+    timers.hyprsunset-off = {
+      Unit.Description = "Disable hyprsunset at 07:00";
+      Timer = {
+        OnCalendar = "*-*-* 07:00:00";
+        Persistent = true;
+      };
+      Install.WantedBy = ["timers.target"];
+    };
+  };
+
   services = {
     kanshi.enable = true;
     wayle.enable = true;

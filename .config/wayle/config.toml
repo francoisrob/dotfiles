@@ -3,15 +3,18 @@ scale = 0.72
 padding = 0.2
 padding-ends = 0.35
 module-gap = 0.35
-bg = "bg-base"
-rounding = "md"
-shadow = "floating"
+bg = "transparent"
+button-icon-padding = 0.9
+button-icon-size = 0.9
+button-label-size = 0.95
+rounding = "none"
+shadow = "none"
 
 [[bar.layout]]
 monitor = "*"
 left = ["dashboard", "clock", "hyprland-workspaces"]
-center = ["window-title"]
-right = ["systray", "custom-mongodb", "hyprsunset", "cpu", "ram", "bluetooth", "network", "custom-backlight", "volume", "battery", "notifications"]
+center = ["cava", "window-title"]
+right = ["systray", "custom-mongodb", "hyprsunset", ["cpu", "ram"], ["bluetooth", "network"], ["custom-backlight", "volume", "battery"], "notifications"]
 
 [modules.dashboard]
 right-click = "wayle panel settings"
@@ -52,6 +55,13 @@ format = "{{ percent }}%"
 [modules.battery]
 format = "{{ percent }}%"
 
+[modules.cava]
+bars = 12
+framerate = 60
+noise-reduction = 0.65
+
+[modules.notifications]
+popup-duration = 3000
 
 [[modules.custom]]
 id = "backlight"
@@ -76,7 +86,7 @@ left-click = "sh -c ~/.config/waybar/scripts/mongodb-toggle.sh"
 [wallpaper]
 engine-enabled = true
 cycling-enabled = true
-cycling-directory = "~/dotfiles/resources"
+cycling-directory = "/home/francois/dotfiles/resources/"
 cycling-mode = "sequential"
 cycling-interval-mins = 60
 cycling-same-image = true
