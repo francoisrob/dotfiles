@@ -11,6 +11,12 @@
     mongodb = {
       enable = true;
       package = pkgs.mongodb-ce;
+      extraConfig = ''
+        storage:
+          wiredTiger:
+            engineConfig:
+              cacheSizeGB: 2
+      '';
     };
   };
 

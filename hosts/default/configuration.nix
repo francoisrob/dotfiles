@@ -6,6 +6,7 @@
     ../../modules/hardware/cpu/intel.nix
     ../../modules/hardware/gpu/nvidia.nix
     ../../modules/hardware/audio.nix
+    ../../modules/hardware/bluetooth.nix
 
     # Programs
     ../../modules/programs/steam.nix
@@ -16,6 +17,7 @@
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
     ../../modules/system/networking.nix
+    ../../modules/system/oomd.nix
 
     # Virtualization
     ../../modules/virtualisation/default.nix
