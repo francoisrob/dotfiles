@@ -3,6 +3,23 @@
     systemPackages = with pkgs; [
       alsa-utils
     ];
+
+    # PipeWire/WirePlumber's spa-alsa needs to find UCM configs to expose
+    # HiFi profiles for SOF/HDA cards (otherwise only "off" + "pro-audio"
+    # show up and the sink falls back to dummy output).
+    sessionVariables = {
+      ALSA_CONFIG_UCM2_DIR = "${pkgs.alsa-ucm-conf}/share/alsa/ucm2";
+    };
+  };
+
+  systemd.user.services = let
+    ucmEnv = {
+      ALSA_CONFIG_UCM2_DIR = "${pkgs.alsa-ucm-conf}/share/alsa/ucm2";
+    };
+  in {
+    pipewire.environment = ucmEnv;
+    wireplumber.environment = ucmEnv;
+    pipewire-pulse.environment = ucmEnv;
   };
 
   security = {

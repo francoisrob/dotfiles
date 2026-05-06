@@ -53,9 +53,12 @@
       sysctl = {
         # zram-primary: swap aggressively to cheap in-memory compressed pages
         "vm.swappiness" = 180;
-
+        # Disable watermark boost: it causes thrashing spikes with zram
+        "vm.watermark_boost_factor" = 0;
         # Wake kswapd earlier so reclaim doesn't spike under sudden demand
         "vm.watermark_scale_factor" = 200;
+        # No swap readahead — zram is random-access, clusters waste CPU
+        "vm.page-cluster" = 0;
         # Keep inode/dentry cache longer to avoid re-reads after free
         "vm.vfs_cache_pressure" = 50;
         # Enable magic SysRq (kernel param sysrq_always_enabled=1 is not a real flag)
@@ -100,7 +103,7 @@
 
     tmp = {
       useTmpfs = true;
-      tmpfsSize = "10G";
+      tmpfsSize = "4G";
     };
   };
 
@@ -398,10 +401,13 @@
   ];
 
   systemd.oomd = {
+    enable = true;
     enableRootSlice = true;
     enableSystemSlice = true;
     enableUserSlices = true;
     settings.OOM = {
+      # Kill cgroups before swap is exhausted, not after
+      SwapUsedLimit = "80%";
       DefaultMemoryPressureLimit = "55%";
       DefaultMemoryPressureDurationSec = "10s";
     };

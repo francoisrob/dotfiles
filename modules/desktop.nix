@@ -60,6 +60,34 @@ in {
     pam.services.greetd.enableGnomeKeyring = true;
   };
 
+  # Force eDP-1 back on after Thunderbolt undock via a fresh modesetting commit.
+  # kanshi's wlr-output-management enable is insufficient when the TB hot-unplug
+  # leaves the DRM CRTC in a broken state (D3cold/D0 resume failure).
+  systemd.services.undock-wake-display = {
+    description = "Re-enable internal display after Thunderbolt undock";
+    serviceConfig = {
+      Type = "oneshot";
+      User = user;
+      ExecStart = "${pkgs.writeShellScript "undock-wake-display" ''
+        sleep 2
+        for dir in /tmp/hypr/*/; do
+          hs=$(basename "$dir")
+          if [ -S "/tmp/hypr/$hs/.socket.sock" ]; then
+            HYPRLAND_INSTANCE_SIGNATURE="$hs" \
+              ${hyprland.hyprland}/bin/hyprctl keyword monitor eDP-1,2560x1600@60,0x0,1
+            HYPRLAND_INSTANCE_SIGNATURE="$hs" \
+              ${hyprland.hyprland}/bin/hyprctl dispatch dpms on eDP-1
+            break
+          fi
+        done
+      ''}";
+    };
+  };
+
+  services.udev.extraRules = ''
+    ACTION=="remove", SUBSYSTEM=="thunderbolt", RUN+="${pkgs.systemd}/bin/systemctl start --no-block undock-wake-display.service"
+  '';
+
   xdg = {
     mime = {
       enable = true;

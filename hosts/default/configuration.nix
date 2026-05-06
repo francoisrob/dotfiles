@@ -17,7 +17,6 @@
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
     ../../modules/system/networking.nix
-    ../../modules/system/oomd.nix
 
     # Virtualization
     ../../modules/virtualisation/default.nix
