@@ -16,7 +16,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_6_12; # LTS; 6.19 has CONFIG_FUTEX_PRIVATE_HASH=y which crashes MongoDB
+    kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       timeout = 0;
       systemd-boot = {
@@ -51,8 +51,10 @@
 
     kernel = {
       sysctl = {
-        # zram-primary: swap aggressively to cheap in-memory compressed pages
-        "vm.swappiness" = 180;
+        # Bias toward zram (priority 32767) but allow disk swapfile (priority 10)
+        # as a backstop. 100 keeps anon pages resident longer than the
+        # zram-only 180 so node test heaps don't immediately spill to SSD.
+        "vm.swappiness" = 100;
         # Disable watermark boost: it causes thrashing spikes with zram
         "vm.watermark_boost_factor" = 0;
         # Wake kswapd earlier so reclaim doesn't spike under sudden demand
@@ -233,6 +235,14 @@
     };
     tlp = {
       enable = true;
+      settings = {
+        # Don't autosuspend the Intel AX201 Bluetooth controller. TLP's default
+        # (USB_EXCLUDE_BTUSB=0) powers it down after 2s idle, which causes the
+        # controller to fail resume mid-stream — A2DP dropouts and "firmware
+        # bug / missing completion reports" glitches on the WH-1000XM6. This
+        # also lets the power/control=on udev rule below actually stick.
+        USB_EXCLUDE_BTUSB = 1;
+      };
     };
     thermald = {
       enable = true;
@@ -264,9 +274,12 @@
     };
 
     journald = {
-      storage = "volatile";
+      storage = "persistent";
       rateLimitBurst = 1000;
-      extraConfig = "RuntimeMaxUse=512M";
+      extraConfig = ''
+        SystemMaxUse=1G
+        RuntimeMaxUse=512M
+      '';
     };
   };
 
@@ -360,15 +373,30 @@
   nixpkgs = {
     config = {
       allowUnfree = true;
+      # Electron 39 is EOL upstream but still pulled in by Electron-based
+      # desktop apps (slack, discord, mongodb-compass, etc.). Allow it until
+      # those packages bump to a supported Electron. Re-checked 2026-06-13:
+      # still required on nixos-unstable.
+      permittedInsecurePackages = [
+        "electron-39.8.10"
+      ];
     };
   };
 
   nix = {
+    # Build at low priority so nixos-rebuild can't freeze the desktop: SCHED_IDLE
+    # means interactive tasks preempt builds instantly, and idle I/O class yields
+    # the disk to foreground work.
+    daemonCPUSchedPolicy = "idle";
+    daemonIOSchedClass = "idle";
     settings = {
-      max-jobs = "auto";
+      # 4 jobs x 2 cores = 8 threads max on this 4c/8t machine. Was max-jobs=auto
+      # (8) x cores=0 (all 8) which oversubscribed to ~64 build threads and spiked
+      # load past 15, starving the desktop.
+      max-jobs = 4;
       # hard link duplicates
       auto-optimise-store = true;
-      cores = 0;
+      cores = 2;
       substituters = [
         "https://nix-community.cachix.org"
         "https://neovim-nightly.cachix.org"
@@ -416,5 +444,16 @@
   zramSwap = {
     enable = true;
     memoryPercent = 50;
+    # Must outrank the disk swapfile (priority 10) so anon pages compress into
+    # RAM first and the SSD is only a backstop. Without this, zramSwap defaults
+    # to priority 5 and the kernel pages to the slow swapfile first, causing
+    # I/O-thrash freezes under memory pressure.
+    priority = 100;
   };
+
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 8 * 1024;
+    priority = 10;
+  }];
 }
