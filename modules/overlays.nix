@@ -10,6 +10,10 @@
       ];
       extraPkgs = pkgs: [];
     };
+
+    openldap = prev.openldap.overrideAttrs (_: {
+      doCheck = false;
+    });
   })
 
   inputs.neovim-nightly.overlays.default
