@@ -12,14 +12,35 @@
     };
   };
 
-  systemd.user.services = let
+  systemd.user = let
     ucmEnv = {
       ALSA_CONFIG_UCM2_DIR = "${pkgs.alsa-ucm-conf}/share/alsa/ucm2";
     };
+    # PipeWire user units start for every user session, including greetd's
+    # `greeter` (system user, HOME=/var/empty), whose wireplumber fails state
+    # writes on every boot. Restrict the audio stack to real users.
+    realUsersOnly = {
+      ConditionUser = "!@system";
+    };
   in {
-    pipewire.environment = ucmEnv;
-    wireplumber.environment = ucmEnv;
-    pipewire-pulse.environment = ucmEnv;
+    services = {
+      pipewire = {
+        environment = ucmEnv;
+        unitConfig = realUsersOnly;
+      };
+      wireplumber = {
+        environment = ucmEnv;
+        unitConfig = realUsersOnly;
+      };
+      pipewire-pulse = {
+        environment = ucmEnv;
+        unitConfig = realUsersOnly;
+      };
+    };
+    sockets = {
+      pipewire.unitConfig = realUsersOnly;
+      pipewire-pulse.unitConfig = realUsersOnly;
+    };
   };
 
   security = {
