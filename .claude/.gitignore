@@ -15,6 +15,17 @@ session-env/
 downloads/
 plugins/*
 
+# Daemon / job runtime state
+daemon/
+daemon.lock
+daemon.log
+jobs/
+
+# Update / cleanup markers and autonomous session log
+.last-cleanup
+.last-update-result.json
+progress.md
+
 # Image cache
 image-cache/
 
