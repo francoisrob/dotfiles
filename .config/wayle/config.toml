@@ -1,4 +1,5 @@
 [bar]
+background-opacity = 85
 scale = 0.72
 padding = 0.2
 padding-ends = 0.35
@@ -7,6 +8,9 @@ bg = "bg-base"
 button-icon-padding = 0.9
 button-icon-size = 0.9
 button-label-size = 0.95
+dropdown-autohide = true
+dropdown-freeze-label = false
+dropdown-opacity = 98
 rounding = "none"
 shadow = "none"
 
@@ -15,15 +19,17 @@ font-sans = "Ubuntu Sans"
 
 [[bar.layout]]
 monitor = "*"
-left = ["dashboard", "clock", "hyprland-workspaces", "cava"]
+left = [{ name = "group", modules = ["dashboard", "clock"] }, "hyprland-workspaces", "cava"]
 center = ["window-title"]
-right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network"] }, { name = "controls", modules = ["custom-backlight", "volume", "battery"] }, "notifications"]
+right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network"] }, { name = "controls", modules = ["volume", "battery"] }, "notifications"]
 
 [modules.dashboard]
 right-click = "wayle panel settings"
 
 [modules.clock]
 format = "%H:%M"
+border-show = true
+dropdown-show-seconds = true
 icon-show = false
 
 [modules.hyprland-workspaces]
@@ -33,8 +39,12 @@ min-workspace-count = 2
 monitor-specific = false
 show-special = false
 app-icons-show = true
-app-icons-dedupe = true
+app-icons-dedupe = false
 divider = " "
+icon-size = 0.9
+
+[modules.cpu]
+format = "{{ percent }}"
 
 [modules.systray]
 icon-scale = 0.85
@@ -56,14 +66,32 @@ format = "{{ temp }}{{ temp_unit }}"
 format = "{{ percent }}%"
 
 [modules.battery]
-format = "{{ percent }}%"
+level-icons = [
+    "tb-battery-vertical-symbolic",
+    "tb-battery-vertical-1-symbolic",
+    "tb-battery-vertical-2-symbolic",
+    "tb-battery-vertical-3-symbolic",
+    "tb-battery-vertical-4-symbolic",
+]
+charging-icon = "ld-battery-charging-symbolic"
+alert-icon = "tb-alert-triangle-symbolic"
+format = "{{ percent }}"
 
 [modules.cava]
 bars = 12
-framerate = 60
-noise-reduction = 0.65
+button-bg-color = "transparent"
+framerate = 15
+high-cutoff = 15000
+noise-reduction = 0.2
 
-[modules.notifications]
+[modules.hyprsunset]
+label-show = false
+
+[modules.network]
+label-show = false
+
+[modules.notification]
+label-show = false
 popup-duration = 3000
 
 [[modules.custom]]
@@ -85,6 +113,11 @@ tooltip-format = "{{ tooltip }}"
 icon-show = true
 icon-name = "ld-leaf-symbolic"
 left-click = "sh -c ~/.config/waybar/scripts/mongodb-toggle.sh"
+
+[osd]
+border = false
+duration = 800
+margin = 0.0
 
 [wallpaper]
 engine-enabled = true

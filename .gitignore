@@ -1,1 +1,8 @@
 .serena
+
+# wayle generated/runtime artifacts (regenerated on launch/version bump)
+.config/wayle/runtime.toml
+.config/wayle/schema.json
+.config/wayle/themes/schema.json
+.config/wayle/config.toml.example
+.config/wayle/tombi.toml
