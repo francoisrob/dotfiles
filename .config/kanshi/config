@@ -1,11 +1,13 @@
-# Docked: both Dells connected -> laptop panel off
+output eDP-1 mode 2560x1600@60Hz scale 1
+output "Dell Inc. DELL U2724DE BR2DDP3" mode 2560x1440@120Hz scale 1 alias $left-dell
+output "Dell Inc. DELL U2724D JCJK9P3" mode 2560x1440@120Hz scale 1 alias $right-dell
+
 profile docked {
-    output "Dell Inc. DELL U2724DE BR2DDP3" mode 2560x1440@120Hz position 0,0 scale 1
-    output "Dell Inc. DELL U2724D JCJK9P3"  mode 2560x1440@120Hz position 2560,0 scale 1
+    output $left-dell position 0,0
+    output $right-dell position 2560,0
     output eDP-1 disable
 }
 
-# Undocked: no Dells -> laptop panel on
 profile undocked {
-    output eDP-1 enable mode 2560x1600@60Hz position 0,0 scale 1
+    output eDP-1 enable position 0,0
 }
