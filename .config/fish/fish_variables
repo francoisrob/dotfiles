@@ -1,4 +1,5 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR __fish_initialized:4300
+SETUVAR fish_features:no\x2dquery\x2dterm
 SETUVAR fish_user_paths:/home/francois/\x2ecache/\x2ebun/bin

@@ -40,18 +40,16 @@ function please -d "Run the last command with sudo"
     eval sudo (history --max=1)
 end
 
-function cc
-    codex
-end
-
 function gitclean -d "Remove stale branches (deleted at origin but stil local) + Garbage Collection"
     git remote prune origin
     git gc --auto
     echo "Stale branches removed and garbage collection performed."
 end
 
-alias cat="bat"
+alias cat="bat -p"
 alias ssh="kitten ssh"
+alias cc="claude"
+# alias cd="z"
 
 # MongoDB management
 function mongo-toggle -d "Toggle MongoDB service"
