@@ -16,6 +16,7 @@
           "lp"
           "scanner"
           "storage"
+          "gamemode" # allow feral gamemode to renice/raise CPU governor
         ];
         shell = pkgs.fish;
       };
