@@ -122,7 +122,12 @@
             };
           };
           "92-bluetooth-codecs" = {
-            "bluez5.codecs" = ["sbc" "aac" "ldac"];
+            # lc3 is the LE Audio (BAP) codec — without it WirePlumber only
+            # offers Classic A2DP/HFP, so a mic-using app (voice call) forces
+            # HFP and lands on mSBC. lc3 enables the bap-duplex profile:
+            # high-quality audio + mic in one LE Audio stream. sbc_xq lifts
+            # A2DP voice quality on the Classic fallback.
+            "bluez5.codecs" = ["sbc" "sbc_xq" "aac" "ldac" "lc3"];
             "bluez5.a2dp.ldac.quality" = "auto";
           };
         };
