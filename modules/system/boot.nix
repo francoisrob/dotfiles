@@ -163,6 +163,18 @@
       };
     };
     services.systemd-networkd-wait-online.enable = lib.mkForce false;
+
+    # Cap core dumps so a crashing multi-GB process (bun/chromium/electron/node)
+    # can't flood the LUKS disk and freeze the machine. A bun SIGILL crash-loop
+    # once produced ~10-12G dumps that saturated the ext4 journal (I/O pressure
+    # 86%, load 9 on 8 cores). Over ProcessSizeMax the dump is skipped, but
+    # systemd-coredump still logs the crashing exe+cmdline to the journal, so the
+    # trigger stays identifiable without writing the giant core.
+    coredump.settings.Coredump = {
+      ProcessSizeMax = "1G";
+      ExternalSizeMax = "1G";
+      MaxUse = "2G";
+    };
   };
 
   powerManagement = {
