@@ -33,6 +33,14 @@
       "tcp_bbr"
     ];
 
+    # Disable Intel WiFi firmware power management (CAM / "active"). power_scheme
+    # is read-only at runtime, so this can't be made AC-conditional — it applies
+    # on battery too. Lowers WiFi latency/jitter and steadies 2.4GHz Wi-Fi/BT
+    # coexistence (AX201 shares one radio), at some idle-battery cost on DC.
+    extraModprobeConfig = ''
+      options iwlmvm power_scheme=1
+    '';
+
     consoleLogLevel = 0;
 
     initrd = {
@@ -254,6 +262,16 @@
         # bug / missing completion reports" glitches on the WH-1000XM6. This
         # also lets the power/control=on udev rule below actually stick.
         USB_EXCLUDE_BTUSB = 1;
+
+        # Balanced on AC, deliberately NOT full 'performance': this i7-1165G7 is
+        # thermally limited (PL1 unbounded, ~83C at light load, frequent package
+        # throttling), so pinning max clocks only raised idle temps without a
+        # sustained-throughput gain. balance_performance lets HWP/turbo ramp
+        # under load without sitting at Tjmax.
+        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+        PLATFORM_PROFILE_ON_AC = "balanced";
+        # Keep WiFi radio fully awake on AC (explicit; matches TLP default).
+        WIFI_PWR_ON_AC = "off";
       };
     };
     thermald = {
