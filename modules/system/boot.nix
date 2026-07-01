@@ -47,13 +47,6 @@
       verbose = false;
       systemd = {
         enable = true;
-        services = {
-          "*" = {
-            serviceConfig = {
-              DefaultDependencies = false;
-            };
-          };
-        };
       };
     };
 
@@ -111,6 +104,11 @@
       "rd.udev.log_level=3"
       "udev.log_priority=3"
 
+      # Intentional: disable all CPU speculative-execution mitigations to reclaim
+      # throughput on this thermally-limited i7-1165G7. This is a deliberate
+      # perf-over-security trade-off (Spectre/MDS/L1TF/Downfall/etc. left
+      # unmitigated); revert to the kernel default with "mitigations=auto" if
+      # the threat model changes.
       "mitigations=off"
 
       # The kernel explicitly warns that forcing ASPM can cause lockups. Keep
@@ -171,8 +169,7 @@
       options = [
         "noatime"
         "nodiratime"
-        "commit=120"
-        "data=ordered"
+        "commit=60"
         "discard"
       ];
     };
@@ -184,7 +181,9 @@
         RebootWatchdogSec = "0";
       };
     };
-    services.systemd-networkd-wait-online.enable = lib.mkForce false;
+    # This host uses NetworkManager, so the networkd variant is inert; disable
+    # the NetworkManager wait-online unit that actually gates boot here.
+    services.NetworkManager-wait-online.enable = lib.mkForce false;
 
     # Cap core dumps so a crashing multi-GB process (bun/chromium/electron/node)
     # can't flood the LUKS disk and freeze the machine. A bun SIGILL crash-loop

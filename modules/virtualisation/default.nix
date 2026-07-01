@@ -49,7 +49,6 @@
       spice-gtk
       spice-protocol
       virtio-win
-      OVMFFull
       win-spice
     ];
   };

@@ -12,7 +12,7 @@ switch:
 
 .PHONY: update
 update:
-	@sudo nix flake update
+	@nix flake update
 	@$(MAKE) switch
 
 .PHONY: clean

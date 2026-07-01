@@ -19,6 +19,7 @@ plugins/*
 daemon/
 daemon.lock
 daemon.log
+daemon.status.json
 jobs/
 
 # Update / cleanup markers and autonomous session log
@@ -44,6 +45,7 @@ backups/
 
 # Telemetry
 telemetry/
+usage-data/
 
 # Other runtime/sensitive
 chrome/

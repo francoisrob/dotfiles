@@ -56,5 +56,5 @@ for _, provider in ipairs({ "node", "perl", "ruby" }) do
   vim.g["loaded_" .. provider .. "_provider"] = 0
 end
 
-local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
+local is_windows = vim.uv.os_uname().sysname == "Windows_NT"
 vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
