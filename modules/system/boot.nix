@@ -74,8 +74,22 @@
         # Enable magic SysRq (kernel param sysrq_always_enabled=1 is not a real flag)
         "kernel.sysrq" = 1;
         # "kernel.sched_migration_cost_ns" = 500000;
-        # "vm.dirty_background_ratio" = 5;
-        "vm.dirty_ratio" = 10;
+
+        # Cap the dirty-page writeback backlog by BYTES, not ratio. The old
+        # config set dirty_ratio=10 and left dirty_background_ratio at its
+        # default of 10 too -- equal thresholds mean there is no gentle
+        # background-drain window: the kernel jumps straight to the hard
+        # synchronous stall at dirty_ratio, where ALL writers block until the
+        # backlog drains. On 16G RAM, 10% is ~1.6G of dirty pages, so a single
+        # bulk writer (a browser download, a build artifact) could build that
+        # backlog and freeze every other writer system-wide -- the recurring
+        # I/O-pressure freeze (PSI io full was ~70%). *_bytes and *_ratio are
+        # mutually exclusive (writing *_bytes zeroes the matching *_ratio):
+        # start background writeback at 64M, hard-throttle at 256M -- small
+        # enough the NVMe clears it in well under a second, so the throttle
+        # point is a brief hiccup instead of a multi-second whole-system stall.
+        "vm.dirty_background_bytes" = 64 * 1024 * 1024;
+        "vm.dirty_bytes" = 256 * 1024 * 1024;
 
         # network optimizations
         "net.core.rmem_max" = 16777216;
