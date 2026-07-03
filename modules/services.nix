@@ -1,8 +1,14 @@
 {
   pkgs,
   lib,
+  user,
+  config,
   ...
 }: {
+  # Expose the client tools (psql, pg_dump, createdb, pg_isready, …) on PATH.
+  # finalPackage tracks the enabled server version, so they never drift apart.
+  environment.systemPackages = [config.services.postgresql.finalPackage];
+
   services = {
     solaar = {
       enable = true;
@@ -17,6 +23,27 @@
             engineConfig:
               cacheSizeGB: 2
       '';
+    };
+
+    postgresql = {
+      enable = true;
+      # Pin the major version explicitly: the data directory lives in
+      # /var/lib/postgresql/<version>, so letting the nixpkgs default drift
+      # would silently require a dump/restore migration on upgrade.
+      package = pkgs.postgresql_18;
+
+      # Provision a role + database matching the login user. The default
+      # local-socket auth is "peer", which maps OS user ${user} to the
+      # same-named role, so `psql` works out of the box with no password;
+      # ensureDBOwnership makes ${user} own the same-named database.
+      ensureDatabases = [user];
+      ensureUsers = [
+        {
+          name = user;
+          ensureDBOwnership = true;
+          ensureClauses.superuser = true;
+        }
+      ];
     };
   };
 

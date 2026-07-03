@@ -172,6 +172,7 @@
   };
 
   programs = {
+    dbeaver.enable = true;
     spotify-player.enable = true;
     git = {
       enable = true;
