@@ -48,6 +48,10 @@
       systemd = {
         enable = true;
       };
+      # Without this the dm-crypt mapper advertises no discard support
+      # (DISC-GRAN 0B), so TRIM never reaches the SSD, neither via a discard
+      # mount option nor via fstrim.
+      luks.devices."luks-42daaaa8-649b-4c1f-b76d-28a33b522eba".allowDiscards = true;
     };
 
     kernel = {
@@ -166,11 +170,12 @@
 
   fileSystems = {
     "/" = {
+      # TRIM is handled by the weekly fstrim timer below, not a continuous
+      # discard mount option (per-delete discards add write latency on NVMe).
       options = [
         "noatime"
         "nodiratime"
         "commit=60"
-        "discard"
       ];
     };
   };
@@ -234,6 +239,8 @@
 
   services = {
     resolved.enable = true;
+    # Weekly TRIM of the LUKS-backed root; needs allowDiscards on the mapper above.
+    fstrim.enable = true;
     # Disable autosuspend for Bluetooth USB controller
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", TEST=="power/control", ATTR{power/control}="on"
