@@ -23,11 +23,11 @@ see all options:
 
 - **`make update`**  
   Updates flake inputs and rebuilds the system.  
-  _Command:_ `sudo nix flake update && make switch`
+  _Command:_ `nix flake update && make switch`
 
 - **`make clean`**  
   Cleans the Nix store and optimizes it.  
-  _Command:_ `sudo nix-collect-garbage -d && nix-store --optimise`
+  _Command:_ `sudo nix-collect-garbage -d && sudo nix-store --optimise`
 
 - **`make apply-dotfiles`**  
   Applies dotfiles by creating symlinks with Stow.  
