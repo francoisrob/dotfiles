@@ -57,4 +57,6 @@ for _, provider in ipairs({ "node", "perl", "ruby" }) do
 end
 
 local is_windows = vim.uv.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+-- Append, never prepend: mason's dynamically-linked binaries must not shadow
+-- nix-provided servers (a mason marksman SIGABRTs on NixOS).
+vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath("data") .. "/mason/bin"
