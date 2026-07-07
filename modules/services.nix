@@ -10,6 +10,10 @@
   environment.systemPackages = [config.services.postgresql.finalPackage];
 
   services = {
+    # LVFS firmware updates (`fwupdmgr refresh && fwupdmgr update`); covers
+    # Dell UEFI/BIOS, SSD, and dock firmware on this machine.
+    fwupd.enable = true;
+
     solaar = {
       enable = true;
     };
