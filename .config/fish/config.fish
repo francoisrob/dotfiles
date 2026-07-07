@@ -48,8 +48,15 @@ end
 
 alias cat="bat -p"
 alias ssh="kitten ssh"
-alias cc="claude"
 # alias cd="z"
+
+# `cc` opens Claude Code in the ~/hub workspace — that's where the hub-canon MCP
+# server, the scratch dir, and the design context live, so kb.draft's scratch_ref
+# resolves correctly and the agent has the hub repo at hand. Forwards any args
+# (e.g. `cc --resume`). Stays in ~/hub after Claude exits.
+function cc -d "Open Claude Code in the ~/hub workspace"
+    cd ~/hub; and claude $argv
+end
 
 # MongoDB management
 function mongo-toggle -d "Toggle MongoDB service"
