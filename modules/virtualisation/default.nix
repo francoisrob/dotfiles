@@ -9,7 +9,9 @@
 
   virtualisation = {
     libvirtd = {
-      enable = true;
+      # Kept off until VMs are needed (flip to true + rebuild). Docker is
+      # independent: it lives in docker.nix with its own daemon.
+      enable = false;
       onShutdown = "shutdown";
       qemu = {
         package = pkgs.qemu_kvm;
