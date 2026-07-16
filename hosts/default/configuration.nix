@@ -29,7 +29,6 @@
     # Development
     ../../modules/development
 
-    ../../modules/home.nix
     ../../modules/packages.nix
     ../../modules/services.nix
     ../../modules/user.nix

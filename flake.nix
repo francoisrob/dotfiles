@@ -59,6 +59,15 @@
 
     overlays = import ./modules/overlays.nix {inherit inputs;};
 
+    # Home-manager is standalone, so it builds its own package set. Same
+    # overlays and nixpkgs config as the system (modules/system/boot.nix
+    # imports the same file), so user packages see the identical nixpkgs
+    # they did under the NixOS module.
+    pkgs = import nixpkgs {
+      inherit system overlays;
+      config = import ./modules/nixpkgs-config.nix;
+    };
+
     nixosConfig = nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -67,19 +76,36 @@
       modules = [
         {nixpkgs.overlays = overlays;}
         inputs.hyprland.nixosModules.default
-        home-manager.nixosModules.home-manager
         solaar.nixosModules.default
         nix-index-database.nixosModules.nix-index
         ./hosts/default/configuration.nix
+      ];
+    };
+
+    homeConfig = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = {
+        inherit inputs user;
+      };
+      modules = [
+        ./home-manager
       ];
     };
   in {
     formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
 
     nixosConfigurations.${hostName} = nixosConfig;
+    homeConfigurations.${user} = homeConfig;
+
+    # The pinned home-manager CLI, so `make home` works even before the
+    # first activation puts programs.home-manager on PATH.
+    packages.${system} = {
+      home-manager = home-manager.packages.${system}.default;
+    };
 
     checks.${system} = {
       nixos = nixosConfig.config.system.build.toplevel;
+      home = homeConfig.activationPackage;
     };
   };
 }

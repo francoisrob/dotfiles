@@ -16,8 +16,8 @@ in {
   #     modules/system/fonts.nix exactly.
   #
   # Home Manager now writes both app.toml and theme.toml. The old hand-written
-  # app.toml is moved aside as app.toml.backup on the next switch, per
-  # home-manager.backupFileExtension in modules/home.nix.
+  # app.toml is moved aside as app.toml.backup on the next switch, per the
+  # `-b backup` flag `make home` passes to home-manager.
   programs.spotify-player = {
     enable = true;
 
