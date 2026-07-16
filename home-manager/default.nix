@@ -87,6 +87,7 @@ in {
     ];
 
     pointerCursor = {
+      enable = true;
       gtk = {
         enable = true;
       };
@@ -248,8 +249,8 @@ in {
       enable = true;
       enableFishIntegration = true;
       defaultCommand = "fd --type file --follow --hidden --exclude .git";
-      changeDirWidgetCommand = "fd --type directory --follow --hidden --exclude .git";
-      fileWidgetCommand = "fd --type file --follow --hidden --exclude .git";
+      changeDirWidget.command = "fd --type directory --follow --hidden --exclude .git";
+      fileWidget.command = "fd --type file --follow --hidden --exclude .git";
     };
     zoxide = {
       enable = true;
