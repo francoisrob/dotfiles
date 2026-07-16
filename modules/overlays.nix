@@ -1,5 +1,8 @@
 {inputs}: [
   (final: prev: {
+    gruvbox-kvantum-medium = final.callPackage ./pkgs/gruvbox-kvantum-medium {};
+    gruvbox-gtk-morhetz = final.callPackage ./pkgs/gruvbox-gtk-morhetz {};
+
     mpv = prev.mpv.override {
       scripts = [final.mpvScripts.webtorrent-mpv-hook];
     };
