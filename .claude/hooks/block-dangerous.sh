@@ -26,21 +26,13 @@ block_if_matches() {
 }
 
 # Git safety
-block_if_matches "(git\s+push\s+.*(-f|--force))" \
+block_if_matches "(git\s+push\s+(.*\s)?(-f|--force|--force-with-lease)(\s|$))" \
   "Force push is destructive" \
   "Use git push without --force"
 
 block_if_matches "(git\s+push\s+.*\b(main|master)\b)" \
   "Direct push to main/master" \
   "Push to a feature branch and create a PR"
-
-block_if_matches "(git\s+merge\s+.*\b(main|master)\b)" \
-  "Merge to/from main/master" \
-  "Human merges via PR"
-
-block_if_matches "(git\s+checkout\s+(main|master)\s*$)" \
-  "Checkout main/master" \
-  "Work in feature branches or worktrees"
 
 block_if_matches "(gh\s+pr\s+merge)" \
   "Auto-merging PRs" \

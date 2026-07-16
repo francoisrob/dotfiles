@@ -21,7 +21,7 @@ font-sans = "Ubuntu Sans"
 monitor = "*"
 left = [{ name = "group", modules = ["dashboard", "clock"] }, "hyprland-workspaces", "cava"]
 center = ["window-title"]
-right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network"] }, { name = "controls", modules = ["volume", "battery"] }, "notifications"]
+right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network", "custom-vpn"] }, { name = "controls", modules = ["volume", "battery"] }, "notifications"]
 
 [modules.dashboard]
 right-click = "wayle panel settings"
@@ -103,6 +103,16 @@ icon-show = true
 icon-name = "ld-sun-symbolic"
 scroll-up = "brightnessctl s 5%+"
 scroll-down = "brightnessctl s 5%-"
+
+[[modules.custom]]
+id = "vpn"
+command = "~/.config/wayle/scripts/vpn-status.sh"
+interval-ms = 3000
+format = "{{ output }}"
+icon-show = true
+icon-name = "tb-lock-symbolic"
+left-click = "~/.config/wayle/scripts/vpn-toggle.sh"
+tooltip-format = "merqube VPN — click to toggle"
 
 [[modules.custom]]
 id = "mongodb"

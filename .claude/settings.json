@@ -7,17 +7,15 @@
     "ENABLE_TOOL_SEARCH": "true"
   },
   "attribution": {
-    "commit": "Co-authored-by: Claude <noreply@anthropic.com>",
-    "pr": "🤖 Generated with Claude Code"
+    "commit": "",
+    "pr": ""
   },
   "includeGitInstructions": true,
   "permissions": {
     "allow": [
       "Read(./**/*)",
       "Edit(./**/*)",
-      "Write(./**/*)",
       "Grep(./**/*)",
-      "Glob(./**./)",
       "Bash(npm *)",
       "Bash(bun *)",
       "Bash(bunx *)",
@@ -55,8 +53,6 @@
       "Agent(Plan)",
       "WebFetch",
       "WebSearch",
-      "mcp__serena__*",
-      "mcp__plugin_serena__*",
       "Read(//tmp/**)",
       "Bash(python3 -c ':*)"
     ],
@@ -75,18 +71,40 @@
       "Bash(git push --force *)",
       "Bash(git push * main)",
       "Bash(git push * master)",
-      "Bash(git merge * main)",
-      "Bash(git merge * master)",
-      "Bash(git checkout main)",
-      "Bash(git checkout master)",
       "Bash(gh pr merge *)",
       "Bash(sed *)",
       "Bash(awk *)",
-      "Write(./.env*)",
-      "Read(./.env*)",
+      "Edit(./.env)",
+      "Read(./.env)",
       "Read(**/*secret*)",
       "Read(**/*private_key*)",
-      "Read(**/.ssh/*)"
+      "Read(**/.ssh/*)",
+      "Bash(sf data create *)",
+      "Bash(sf data update *)",
+      "Bash(sf data delete *)",
+      "Bash(sf data upsert *)",
+      "Bash(sf data import *)",
+      "Bash(sf apex run *)",
+      "Bash(sf project deploy *)",
+      "Bash(sf package install *)",
+      "Bash(sfdx data create *)",
+      "Bash(sfdx data update *)",
+      "Bash(sfdx data delete *)",
+      "Bash(sfdx data upsert *)",
+      "Bash(sfdx data import *)",
+      "Bash(sfdx apex run *)",
+      "Bash(sfdx project deploy *)",
+      "Bash(sfdx package install *)",
+      "Bash(sfdx force:data:record:create *)",
+      "Bash(sfdx force:data:record:update *)",
+      "Bash(sfdx force:data:record:delete *)",
+      "Bash(sfdx force:data:bulk:upsert *)",
+      "Bash(sfdx force:data:bulk:delete *)",
+      "Bash(sfdx force:apex:execute *)",
+      "Bash(sfdx force:source:deploy *)",
+      "Bash(sfdx force:source:push *)",
+      "Bash(sfdx force:mdapi:deploy *)",
+      "Bash(sfdx force:package:install *)"
     ],
     "ask": [
       "Bash(rm *)",
@@ -100,7 +118,7 @@
       ".claude/docs"
     ]
   },
-  "model": "opus",
+  "model": "fable",
   "hooks": {
     "PreToolUse": [
       {
@@ -109,22 +127,6 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/block-dangerous.sh",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/enforce-mcp.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/pre-compact.sh",
             "timeout": 10
           }
         ]
@@ -147,8 +149,7 @@
     }
   },
   "spinnerTipsEnabled": true,
-  "effortLevel": "xhigh",
-  "advisorModel": "opus",
+  "effortLevel": "high",
   "companyAnnouncements": [
     "Are you a race condition? Because my heart skips a beat every time you're here. 💓",
     "Roses are red, CI is green, your code's the prettiest I've ever seen. 🌹",
@@ -177,6 +178,7 @@
   "theme": "auto",
   "editorMode": "vim",
   "autoCompactEnabled": true,
+  "switchModelsOnFlag": false,
   "showTurnDuration": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
