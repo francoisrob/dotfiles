@@ -1,21 +1,23 @@
 {pkgs, ...}: let
-  catppuccinColors = [
-    "1e1e2e" # Black (Base)
-    "f38ba8" # Red
-    "a6e3a1" # Green
-    "f9e2af" # Yellow
-    "89b4fa" # Blue
-    "f5c2e7" # Magenta
-    "94e2d5" # Cyan
-    "cdd6f4" # White
-    "45475a" # Bright Black
-    "f38ba8" # Bright Red
-    "a6e3a1" # Bright Green
-    "f9e2af" # Bright Yellow
-    "89b4fa" # Bright Blue
-    "f5c2e7" # Bright Magenta
-    "94e2d5" # Bright Cyan
-    "b1b6c9" # Bright White
+  # Gruvbox Dark, medium contrast (bg0 = #282828)
+  # Palette: https://github.com/morhetz/gruvbox
+  gruvboxColors = [
+    "282828" # Black (bg0)
+    "cc241d" # Red
+    "98971a" # Green
+    "d79921" # Yellow
+    "458588" # Blue
+    "b16286" # Magenta
+    "689d6a" # Cyan
+    "a89984" # White
+    "928374" # Bright Black
+    "fb4934" # Bright Red
+    "b8bb26" # Bright Green
+    "fabd2f" # Bright Yellow
+    "83a598" # Bright Blue
+    "d3869b" # Bright Magenta
+    "8ec07c" # Bright Cyan
+    "ebdbb2" # Bright White
   ];
 in {
   console = {
@@ -23,7 +25,7 @@ in {
     keyMap = "us";
     font = "ter-132n";
     packages = with pkgs; [terminus_font];
-    colors = catppuccinColors;
+    colors = gruvboxColors;
     earlySetup = true;
   };
 
