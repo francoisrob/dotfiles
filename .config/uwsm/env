@@ -3,7 +3,6 @@ export XCURSOR_SIZE=24
 export XCURSOR_THEME="Bibata-Modern-Classic"
 export HYPRCURSOR_THEME='Bibata-Modern-Classic'
 export HYPRCURSOR_SIZE=24
-export GTK_THEME="Adwaita-dark"
 
 # Wayland toolkit
 export MOZ_ENABLE_WAYLAND=1
