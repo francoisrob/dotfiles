@@ -118,7 +118,7 @@
       ".claude/docs"
     ]
   },
-  "model": "fable",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -173,7 +173,7 @@
     "enabled": true,
     "mode": "tap"
   },
-  "autoMemoryEnabled": true,
+  "autoMemoryEnabled": false,
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "editorMode": "vim",
