@@ -297,13 +297,17 @@
     thermald = {
       enable = true;
     };
-    system76-scheduler = {
+    # Auto-nice daemon: boosts foreground/interactive processes and idles out
+    # background ones (the ananicy lineage this box used before). Replaces
+    # system76-scheduler, whose PipeWire-monitor child crash-looped on SIGABRT
+    # (nixpkgs pins a stale 2025-01 upstream snapshot). Audio realtime priority
+    # is unaffected: rtkit grants it independently. Note this drops the CFS
+    # latency-profile tuning system76-scheduler also did; sched_ext/scx_lavd is
+    # the modern home for that half if we want it later.
+    ananicy = {
       enable = true;
-      settings = {
-        cfsProfiles = {
-          enable = true;
-        };
-      };
+      package = pkgs.ananicy-cpp;
+      rulesProvider = pkgs.ananicy-rules-cachyos;
     };
 
     dbus = {
