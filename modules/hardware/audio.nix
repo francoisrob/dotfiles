@@ -99,6 +99,25 @@
       };
       wireplumber = {
         enable = true;
+        # bluez5.codecs is a WirePlumber bluez-monitor property, so it MUST
+        # live in wireplumber.conf.d. The old copy under pipewire.extraConfig
+        # rendered into pipewire.conf.d and was inert (WirePlumber never reads
+        # it), which is why a stray ~/.config/wireplumber/51-bluez-codec.conf
+        # with `bluez5.codecs = [ ldac ]` silently won and stripped mSBC.
+        extraConfig = {
+          "92-bluetooth-codecs" = {
+            "monitor.bluez.properties" = {
+              # msbc is the wideband HFP codec. Without it a mic-using app
+              # forces HFP down to CVSD (8 kHz narrowband) call audio. ldac
+              # stays the A2DP pick for playback; lc3 enables LE Audio
+              # bap-duplex (hi-fi + mic in one stream). sbc_xq lifts the
+              # Classic A2DP fallback.
+              "bluez5.codecs" = ["ldac" "sbc_xq" "sbc" "aac" "lc3" "msbc"];
+              "bluez5.a2dp.ldac.quality" = "auto";
+              "bluez5.enable-hw-volume" = true;
+            };
+          };
+        };
       };
       jack = {
         enable = true;
@@ -120,15 +139,6 @@
               "default.clock.min-quantum" = 512;
               "default.clock.max-quantum" = 8192;
             };
-          };
-          "92-bluetooth-codecs" = {
-            # lc3 is the LE Audio (BAP) codec — without it WirePlumber only
-            # offers Classic A2DP/HFP, so a mic-using app (voice call) forces
-            # HFP and lands on mSBC. lc3 enables the bap-duplex profile:
-            # high-quality audio + mic in one LE Audio stream. sbc_xq lifts
-            # A2DP voice quality on the Classic fallback.
-            "bluez5.codecs" = ["sbc" "sbc_xq" "aac" "ldac" "lc3"];
-            "bluez5.a2dp.ldac.quality" = "auto";
           };
         };
       };
