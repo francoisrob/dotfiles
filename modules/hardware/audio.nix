@@ -115,6 +115,21 @@
               "bluez5.codecs" = ["ldac" "sbc_xq" "sbc" "aac" "lc3" "msbc"];
               "bluez5.a2dp.ldac.quality" = "auto";
               "bluez5.enable-hw-volume" = true;
+              # Upstream default is the full set:
+              #   [ a2dp_sink a2dp_source bap_sink bap_source
+              #     hsp_hs hsp_ag hfp_hf hfp_ag ]
+              # hfp_hf/hsp_hs make this laptop act as a *handsfree unit* that
+              # connects to a remote Audio Gateway (a phone). Registering them
+              # makes BlueZ probe every connected device for an HFP-AG SDP
+              # record; the WH-1000XM6 only offers Handsfree (0x111e), never
+              # HandsfreeAudioGateway (0x111f), so bluetoothd logged
+              # "Unable to get Hands-Free Voice gateway SDP record: Host is
+              # down" once a minute forever - 4,947 error lines in four days,
+              # 94% of the journal's errors, enough to evict every prior boot
+              # from the 1G SystemMaxUse cap.
+              # hfp_ag/hsp_ag stay: those are the roles that give the headset
+              # its microphone with this machine as the gateway.
+              "bluez5.roles" = ["a2dp_sink" "a2dp_source" "bap_sink" "bap_source" "hsp_ag" "hfp_ag"];
             };
           };
         };

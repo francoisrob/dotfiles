@@ -143,7 +143,21 @@
       ntfs3g
       xdg-user-dirs
       xdg-utils
-      uutils-coreutils-noprefix
+      # uutils-coreutils-noprefix removed. It shadowed 105 GNU coreutils names,
+      # and its `pr` balloons without bound on ordinary input: a plain 96 MiB
+      # text file drove it past 4 GiB in 3.2s (>20x amplification, still
+      # climbing), and `pr -W 100000000` does the same from a 13 KB file. That
+      # took this machine down with two system-wide OOM kills on 2026-08-03
+      # (11.08 GiB and 11.49 GiB, both with Free swap = 16kB). Separately, du,
+      # stat, tsort and dirname abort on a write error when SIGPIPE is ignored.
+      # There is no upgrade path: 0.9.0 is both the latest upstream release and
+      # what nixpkgs ships, and the panic-on-write-error class is still being
+      # found one utility at a time upstream.
+      #
+      # GNU coreutils-full is already in the closure, so this costs no download.
+      # nettools restores `hostname`, which uutils was the only provider of;
+      # `arch` is gone, use `uname -m`.
+      nettools
       findutils
       libva-utils
       pciutils
@@ -245,6 +259,12 @@
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", TEST=="power/control", ATTR{power/control}="on"
     '';
+    # Activate brightnessctl's shipped udev rule (chgrp backlight -> video, g+w).
+    # Without this the sysfs brightness file is root:root 0644, so brightnessctl
+    # falls back to logind SetBrightness, which logind refuses for processes in
+    # the compositor's user-manager cgroup (not the active seat session) with
+    # "Invalid request descriptor" -> XF86MonBrightness keys silently do nothing.
+    udev.packages = [pkgs.brightnessctl];
 
     # envfs.enable = true;
 
@@ -402,16 +422,28 @@
         settings = {
           General = {
             EnableNetworkConfiguration = false; # NetworkManager handles IP configuration
-            RoamThreshold = -75;
-            RoamThreshold5G = -80;
-            RoamRetryInterval = 120;
+            # "Helderspruit" is a multi-AP mesh: 3c:6a:d2:06:ca:5c and :5d plus a
+            # node at 5c:62:8b:f1:25:9c that reads -18 dBm from this desk. The old
+            # values (-75 / -80 / 120s) were LOOSER than iwd's defaults (-70 / -76
+            # / 60s), so iwd would sit on a -73 dBm BSS at MCS 1 while a far
+            # stronger one was in range, ride it down through repeated
+            # "missed beacons exceeds threshold" storms, and take a local
+            # reason-4 (inactivity) deauth. 45 NetworkManager activation
+            # failures in four days. -70 on both bands makes it leave a bad BSS
+            # while a better one exists; the 60s retry interval is what stops
+            # that turning into ping-pong.
+            RoamThreshold = -70;
+            RoamThreshold5G = -70;
+            RoamRetryInterval = 60;
           };
           Network = {
             EnableIPv6 = true;
           };
-          Scan = {
-            DisablePeriodicScan = true;
-          };
+          # DisablePeriodicScan only suppresses scans while DISCONNECTED, which
+          # is exactly the window that matters here: after each deauth iwd went
+          # straight to autoconnect_quick off a stale BSS list and re-picked the
+          # same mediocre AP instead of discovering the near one. Left at the
+          # iwd default (periodic scan enabled) so a reconnect can see the mesh.
         };
       };
     };
@@ -455,6 +487,24 @@
 
       experimental-features = ["nix-command" "flakes"];
       download-buffer-size = 524288000;
+
+      # Nix builds were unpacking and compiling straight into RAM. /tmp is a 4G
+      # tmpfs (boot.tmp.useTmpfs below), nix-daemon.service has PrivateTmp=no
+      # and no TMPDIR in its Environment, and `nix config show` reported
+      # build-dir empty, so builds fell through to /tmp. tmpfs pages are shmem:
+      # they cannot be dropped, only swapped. The 2026-08-02 15:08:54 kernel OOM
+      # is timestamped to the same second as system-154-link, i.e. it happened
+      # during a `make switch`. build-dir is a store setting in nix.conf, so it
+      # is honoured by whichever process builds, including a root nixos-rebuild
+      # (TMPDIR alone has a known gap there, nixpkgs#293114).
+      #
+      # Nix validates EVERY ANCESTOR of build-dir for world-writability, not
+      # just the leaf ("Path ... is world-writable or a symlink. That's not
+      # allowed for security."). So nothing under /tmp or /var/tmp can ever
+      # work, both being 1777 - a 0755 subdirectory under them still fails on
+      # the parent. /nix/var/nix is drwxr-xr-x root:root the whole way up, and
+      # is on the same filesystem as the store, so builds never cross devices.
+      build-dir = "/nix/var/nix/builds";
     };
     gc = {
       automatic = true;
@@ -469,21 +519,88 @@
     stateVersion = "26.05";
   };
 
+  # KEEP THIS AT 1000. It is what fired the 2026-07-30 kill, and that was the
+  # right outcome. MGLRU's min_ttl_ms tells the kernel not to evict anything
+  # touched in the last N ms, and to invoke the OOM killer rather than thrash
+  # when it cannot keep that promise (the balance_pgdat -> out_of_memory path in
+  # lru_gen_age_node). By the time it fired, swap was 99.98% consumed (Free swap
+  # = 3468kB of 16436216kB), so a kill was already unavoidable; min_ttl_ms only
+  # chose a bounded ~1s kill over an unbounded freeze. Setting it to 0 buys a
+  # livelock, not a rescue. Upstream flags 3000 as the risky end of the range,
+  # so 1000 is already conservative.
   systemd.tmpfiles.rules = [
     "w /sys/kernel/mm/lru_gen/min_ttl_ms - - - - 1000"
+    # Backing directory for nix.settings.build-dir above. Every ancestor must be
+    # non-world-writable too, which is why this lives under /nix/var/nix rather
+    # than anywhere below /tmp or /var/tmp.
+    "d /nix/var/nix/builds 0755 root root -"
   ];
 
+  # systemd-oomd's PRESSURE path is switched off here, deliberately. It watches
+  # each cgroup's PSI `full avg10`, and measurement on this box shows that
+  # signal never gets anywhere near a kill threshold during the failure we
+  # actually have. While a runaway fills swap the system is only ~30% stalled
+  # (6.50s of stall over a 20.4s reclaim span), so avg10 asymptotes near 31 and
+  # NEVER crosses 80. It is not that oomd reacts late: at this limit it cannot
+  # fire at all. Pressure only spikes once swap is exhausted, which is the same
+  # instant the kernel OOMs anyway.
+  #
+  # Two further reasons this path was never going to help:
+  #   - DefaultMemoryPressureLimit was dead config. The NixOS module stamps
+  #     ManagedOOMMemoryPressureLimit = mkDefault "80%" on every slice it
+  #     enables, and a per-cgroup value beats the oomd.conf default, so the old
+  #     "55%" here was silently ignored (oomctl reported 80.00% everywhere).
+  #   - oomd kills a whole cgroup. hyprlauncher puts everything it launches in
+  #     one shared scope, so a pressure kill there takes out slack, spotify and
+  #     thunar together.
+  #
+  # The thrash case this path was meant to cover is already handled, faster, by
+  # MGLRU min_ttl_ms above: that fires in ~1s where oomd needs ~28s.
   systemd.oomd = {
     enable = true;
-    enableRootSlice = true;
-    enableSystemSlice = true;
-    enableUserSlices = true;
+    enableRootSlice = false;
+    enableSystemSlice = false;
+    enableUserSlices = false;
     settings.OOM = {
-      # Kill cgroups before swap is exhausted, not after
-      SwapUsedLimit = "80%";
-      DefaultMemoryPressureLimit = "55%";
-      DefaultMemoryPressureDurationSec = "10s";
+      # The one oomd rule worth keeping. Polled every 150ms
+      # (SWAP_INTERVAL_USEC), and it fires only when memory-used AND swap-used
+      # are both over this. 70% of 15.7G swap means zram (7.7G) is exhausted
+      # and the SSD swapfile has taken over, a state idle overnight swap-out
+      # never reaches.
+      SwapUsedLimit = "70%";
     };
+  };
+
+  # nixpkgs sets ManagedOOMMemoryPressure but NEVER ManagedOOMSwap anywhere, so
+  # `oomctl` printed "Swap Monitored CGroups:" with nothing under it and the old
+  # SwapUsedLimit had zero subscribers. Both real OOMs on this machine were swap
+  # exhaustion, so this was the single relevant rule and it was inert.
+  systemd.slices."-".sliceConfig.ManagedOOMSwap = "kill";
+
+  # The actual fix. earlyoom polls MemAvailable every 100ms, and MemAvailable is
+  # the only leading indicator here: during a measured balloon it fell from 6473
+  # to 2951 MB in THREE SECONDS while PSI read exactly 0.00 at every sample, and
+  # SwapFree sat perfectly flat for 29s because the kernel evicts file cache
+  # long before it touches swap.
+  services.earlyoom = {
+    enable = true;
+    # Tune the MEMORY side and treat swap as a backstop only, which is the
+    # reverse of the usual advice, because SwapFree is actively misleading on
+    # this machine (see above).
+    freeMemThreshold = 15;
+    freeMemKillThreshold = 5;
+    # earlyoom ANDs the memory and swap conditions, so the stock -s 10 would sit
+    # idle until ~14G of the 15.7G of swap was consumed, i.e. the exact state
+    # the machine already died in. 50% = zram exhausted, swapfile taking load.
+    freeSwapThreshold = 50;
+    freeSwapKillThreshold = 25;
+    enableNotifications = true;
+    extraArgs = [
+      "--avoid"
+      "^(systemd|systemd-oomd|earlyoom|dbus-broker|sshd|greetd|\\.Hyprland-wrapp|\\.kitty-wrapped)$"
+      "--prefer"
+      "^(chromium|node|electron|\\.electron-wrappe|java|rustc|cargo|clangd|mongod)$"
+    ];
   };
 
   zramSwap = {

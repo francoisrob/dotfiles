@@ -62,10 +62,32 @@
       teamviewerd.wantedBy = lib.mkForce [];
     };
 
-    # When kernel OOM-killer kills a child of the compositor unit (e.g. an app
-    # launched without `uwsm-app --` ends up in this cgroup), the default
-    # OOMPolicy=stop reaps the whole unit, taking Hyprland down. Continue keeps
-    # the compositor alive on a kernel-OOM event.
-    user.services."wayland-wm@hyprland-uwsm.desktop".serviceConfig.OOMPolicy = "continue";
+    # Target the TEMPLATE, not the instance. uwsm escapes the dash in the
+    # instance name, so the live unit is `wayland-wm@hyprland\x2duwsm.desktop
+    # .service`, while naming it "wayland-wm@hyprland-uwsm.desktop" here made
+    # NixOS generate a differently-named unit that systemd never loads. Verified
+    # broken: `systemctl --user show` on the running instance returned
+    # OOMPolicy=stop despite this line existing.
+    #
+    # Correcting the earlier comment here: apps launched WITHOUT `uwsm-app --`
+    # do not land in the compositor's cgroup. Hyprland itself runs in the ROOT
+    # cgroup, and cgroup membership is inherited across fork, so those apps land
+    # in root too (proven with `hyprctl dispatch exec`). Root has no memory
+    # knobs and no cgroup for oomd to kill, which is why raw-exec'd apps are the
+    # ones no containment scheme can reach. Prefer `uwsm-app --` for anything
+    # that might grow.
+    user.services."wayland-wm@".serviceConfig = {
+      # OOMPolicy=stop would reap the whole unit when the kernel kills one of
+      # its children, taking Hyprland down with it.
+      OOMPolicy = "continue";
+      # Everything in the session inherits oom_score_adj=200: user@.service runs
+      # at 100 and the user manager defaults children to its own value +100. So
+      # 97 of 337 processes sit at exactly 200, INCLUDING Hyprland, kitty,
+      # pipewire and fish, which gives the OOM killer no way to tell a runaway
+      # from the compositor. 100 is the floor a user manager can assign (going
+      # lower needs CAP_SYS_RESOURCE) and makes Hyprland a less-preferred victim
+      # than the apps around it.
+      OOMScoreAdjust = 100;
+    };
   };
 }
