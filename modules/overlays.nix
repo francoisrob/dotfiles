@@ -1,6 +1,8 @@
 {inputs}: [
   (final: prev: {
     gruvbox-kvantum-medium = final.callPackage ./pkgs/gruvbox-kvantum-medium {};
+    # nixpkgs removed gruvbox-gtk-theme (murrine fallout); vendored locally.
+    gruvbox-gtk-theme = final.callPackage ./pkgs/gruvbox-gtk-theme {};
     gruvbox-gtk-morhetz = final.callPackage ./pkgs/gruvbox-gtk-morhetz {};
 
     mpv = prev.mpv.override {
