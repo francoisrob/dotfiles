@@ -3,18 +3,9 @@
   pkgs,
   inputs,
   hostName,
+  tuning,
   ...
 }: {
-  specialisation = {
-    legacy-hda-audio.configuration = {
-      system.nixos.tags = ["legacy-hda-audio"];
-      # Fallback profile for SOF regressions on Intel laptops. This prefers the
-      # legacy HDA driver and may restore playback at the cost of DSP/DMIC
-      # features on some machines.
-      boot.kernelParams = ["snd_intel_dspcfg.dsp_driver=1"];
-    };
-  };
-
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -36,7 +27,11 @@
     # Disable Intel WiFi firmware power management (CAM / "active"). power_scheme
     # is read-only at runtime, so this can't be made AC-conditional — it applies
     # on battery too. Lowers WiFi latency/jitter and steadies 2.4GHz Wi-Fi/BT
-    # coexistence (AX201 shares one radio), at some idle-battery cost on DC.
+    # coexistence, at some idle-battery cost on DC.
+    #
+    # Shared between hosts on purpose: the laptop's AX201 and the mini PC's
+    # AX200 are both iwlwifi/iwlmvm parts that share one radio between Wi-Fi
+    # and Bluetooth, so the same tuning applies to each.
     extraModprobeConfig = ''
       options iwlmvm power_scheme=1
     '';
@@ -48,10 +43,9 @@
       systemd = {
         enable = true;
       };
-      # Without this the dm-crypt mapper advertises no discard support
-      # (DISC-GRAN 0B), so TRIM never reaches the SSD, neither via a discard
-      # mount option nor via fstrim.
-      luks.devices."luks-42daaaa8-649b-4c1f-b76d-28a33b522eba".allowDiscards = true;
+      # The LUKS allowDiscards line moved to modules/system/laptop.nix: it names
+      # a specific mapper UUID that only exists on that machine, and the mini PC
+      # root is unencrypted.
     };
 
     kernel = {
@@ -108,11 +102,14 @@
       "rd.udev.log_level=3"
       "udev.log_priority=3"
 
-      # Intentional: disable all CPU speculative-execution mitigations to reclaim
-      # throughput on this thermally-limited i7-1165G7. This is a deliberate
-      # perf-over-security trade-off (Spectre/MDS/L1TF/Downfall/etc. left
-      # unmitigated); revert to the kernel default with "mitigations=auto" if
-      # the threat model changes.
+      # Intentional: disable all CPU speculative-execution mitigations to
+      # reclaim throughput. This is a deliberate perf-over-security trade-off
+      # (Spectre/MDS/L1TF/Downfall/etc. left unmitigated) applied to both
+      # single-user personal machines; revert to the kernel default with
+      # "mitigations=auto" if the threat model changes. Note the two hosts are
+      # exposed differently -- the laptop's Tiger Lake carries more open
+      # microarchitectural issues than Zen5 does -- so this is the line to
+      # revisit first if either machine ever runs untrusted code.
       "mitigations=off"
 
       # The kernel explicitly warns that forcing ASPM can cause lockups. Keep
@@ -122,8 +119,8 @@
       # "acpi_osi=" # breaks touchpad multitouch gestures
       # "acpi_backlight=vendor"
 
-
-      "ucsi_ccg.skip_ucsi=1"
+      # ucsi_ccg.skip_ucsi=1 moved to modules/system/laptop.nix -- it targets
+      # the Cypress CCGx controller on that machine's Thunderbolt dock path.
       # "i2c_hid.ignore_special_reports=1"
     ];
 
@@ -282,39 +279,17 @@
           KillUserProcesses = true;
           HandlePowerKey = "lock";
           HandlePowerKeyLongPress = "reboot";
-          HandleLidSwitch = "suspend";
-          HandleLidSwitchExternalPower = "ignore";
-          HandleLidSwitchDocked = "ignore";
+          # The three HandleLidSwitch* options are in modules/system/laptop.nix;
+          # the mini PC has no lid, so logind would never act on them.
         };
       };
     };
 
-    # Power
+    # Power. upower stays shared -- it still enumerates UPS/peripheral
+    # batteries (the Logitech mouse reports through it via hidpp), and the
+    # desktop bar reads it on both machines. TLP and thermald are laptop-only
+    # and live in modules/system/laptop.nix.
     upower = {
-      enable = true;
-    };
-    tlp = {
-      enable = true;
-      settings = {
-        # Don't autosuspend the Intel AX201 Bluetooth controller. TLP's default
-        # (USB_EXCLUDE_BTUSB=0) powers it down after 2s idle, which causes the
-        # controller to fail resume mid-stream — A2DP dropouts and "firmware
-        # bug / missing completion reports" glitches on the WH-1000XM6. This
-        # also lets the power/control=on udev rule below actually stick.
-        USB_EXCLUDE_BTUSB = 1;
-
-        # Balanced on AC, deliberately NOT full 'performance': this i7-1165G7 is
-        # thermally limited (PL1 unbounded, ~83C at light load, frequent package
-        # throttling), so pinning max clocks only raised idle temps without a
-        # sustained-throughput gain. balance_performance lets HWP/turbo ramp
-        # under load without sitting at Tjmax.
-        CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
-        PLATFORM_PROFILE_ON_AC = "balanced";
-        # Keep WiFi radio fully awake on AC (explicit; matches TLP default).
-        WIFI_PWR_ON_AC = "off";
-      };
-    };
-    thermald = {
       enable = true;
     };
     # Auto-nice daemon: boosts foreground/interactive processes and idles out
@@ -363,15 +338,29 @@
       extraConfig = ''
         Defaults!/run/current-system/sw/bin/true !syslog
       '';
-      extraRules = [{
-        groups = [ "wheel" ];
-        commands = [
-          { command = "/run/current-system/sw/bin/systemctl start mongodb"; options = [ "NOPASSWD" ]; }
-          { command = "/run/current-system/sw/bin/systemctl stop mongodb"; options = [ "NOPASSWD" ]; }
-          { command = "/run/current-system/sw/bin/systemctl start teamviewerd"; options = [ "NOPASSWD" ]; }
-          { command = "/run/current-system/sw/bin/systemctl stop teamviewerd"; options = [ "NOPASSWD" ]; }
-        ];
-      }];
+      extraRules = [
+        {
+          groups = ["wheel"];
+          commands = [
+            {
+              command = "/run/current-system/sw/bin/systemctl start mongodb";
+              options = ["NOPASSWD"];
+            }
+            {
+              command = "/run/current-system/sw/bin/systemctl stop mongodb";
+              options = ["NOPASSWD"];
+            }
+            {
+              command = "/run/current-system/sw/bin/systemctl start teamviewerd";
+              options = ["NOPASSWD"];
+            }
+            {
+              command = "/run/current-system/sw/bin/systemctl stop teamviewerd";
+              options = ["NOPASSWD"];
+            }
+          ];
+        }
+      ];
     };
     polkit = {
       enable = true;
@@ -467,13 +456,15 @@
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
     settings = {
-      # 4 jobs x 2 cores = 8 threads max on this 4c/8t machine. Was max-jobs=auto
-      # (8) x cores=0 (all 8) which oversubscribed to ~64 build threads and spiked
-      # load past 15, starving the desktop.
-      max-jobs = 4;
+      # jobs x cores == the host's thread count, so builds saturate the machine
+      # without oversubscribing it. The original values were max-jobs=auto (8) x
+      # cores=0 (all 8), which fanned out to ~64 build threads and spiked load
+      # past 15, starving the desktop. Per-host values are in flake.nix:
+      # 4x2 on the laptop's 4c/8t, 6x4 on the mini PC's 12c/24t.
+      max-jobs = tuning.maxJobs;
       # hard link duplicates
       auto-optimise-store = true;
-      cores = 2;
+      cores = tuning.buildCores;
       substituters = [
         "https://nix-community.cachix.org"
         "https://neovim-nightly.cachix.org"
@@ -587,8 +578,13 @@
     # Tune the MEMORY side and treat swap as a backstop only, which is the
     # reverse of the usual advice, because SwapFree is actively misleading on
     # this machine (see above).
-    freeMemThreshold = 15;
-    freeMemKillThreshold = 5;
+    #
+    # These are PERCENTAGES, so they have to be rescaled when RAM changes or
+    # the same number means a very different amount of memory: 15% of the
+    # laptop's 16G is ~2.4G, while 15% of the mini PC's 27G would be ~4G and
+    # would fire far too eagerly. Per-host values live in flake.nix.
+    freeMemThreshold = tuning.earlyoomMemThreshold;
+    freeMemKillThreshold = tuning.earlyoomMemKillThreshold;
     # earlyoom ANDs the memory and swap conditions, so the stock -s 10 would sit
     # idle until ~14G of the 15.7G of swap was consumed, i.e. the exact state
     # the machine already died in. 50% = zram exhausted, swapfile taking load.
@@ -603,9 +599,18 @@
     ];
   };
 
+  # Two-tier swap, and both tiers earn their place. zram absorbs warm anon
+  # pages by compressing them in RAM; the disk swapfile is the only tier that
+  # can actually evict a cold page OUT of RAM, which is what keeps long-idle
+  # Electron apps and parked browser tabs from holding resident memory.
+  #
+  # memoryPercent is the zram device's UNCOMPRESSED capacity, not its RAM
+  # footprint -- the real cost is that divided by the zstd ratio. Per-host
+  # values in flake.nix keep the absolute device size roughly equal across
+  # both machines despite the 16G/32G difference.
   zramSwap = {
     enable = true;
-    memoryPercent = 50;
+    memoryPercent = tuning.zramPercent;
     # Must outrank the disk swapfile (priority 10) so anon pages compress into
     # RAM first and the SSD is only a backstop. Without this, zramSwap defaults
     # to priority 5 and the kernel pages to the slow swapfile first, causing
@@ -613,9 +618,11 @@
     priority = 100;
   };
 
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 8 * 1024;
-    priority = 10;
-  }];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = tuning.swapFileSize;
+      priority = 10;
+    }
+  ];
 }

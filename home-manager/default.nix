@@ -34,7 +34,7 @@ in {
       # markdown LSP — Mason's .NET single-file build SIGABRTs on NixOS, so
       # nvim is configured with `marksman.mason = false` to use this one
       marksman
-      (python3.withPackages (ps: with ps; [ pytest ]))
+      (python3.withPackages (ps: with ps; [pytest]))
       mqttx
       # aws-sam-cli  # TODO: re-enable when nixpkgs fixes jmespath~=1.0.1 vs 1.1.0 mismatch
 

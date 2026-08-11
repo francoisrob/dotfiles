@@ -1,3 +1,7 @@
+# Dell laptop: i7-1165G7 (Tiger Lake) with Intel Iris Xe + NVIDIA MX350 in an
+# Optimus/PRIME setup, LUKS-encrypted root, and a Thunderbolt dock. The
+# battery/lid/dock/SOF-specific pieces live in modules/system/laptop.nix,
+# which only this host imports.
 {
   imports = [
     ./hardware-configuration.nix
@@ -15,6 +19,7 @@
 
     # System
     ../../modules/system/boot.nix
+    ../../modules/system/laptop.nix
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
     ../../modules/system/networking.nix

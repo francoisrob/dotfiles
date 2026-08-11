@@ -53,8 +53,9 @@
     nix-index-database,
     ...
   } @ inputs: let
+    inherit (nixpkgs) lib;
+
     system = "x86_64-linux";
-    hostName = "nixos";
     user = "francois";
 
     overlays = import ./modules/overlays.nix {inherit inputs;};
@@ -68,34 +69,87 @@
       config = import ./modules/nixpkgs-config.nix;
     };
 
-    nixosConfig = nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = {
-        inherit inputs user hostName;
+    # Per-host tuning. Everything here is a function of the MACHINE -- thread
+    # count, RAM size, and the memory-pressure thresholds derived from them --
+    # rather than of taste. Taste-level settings stay in the shared modules so
+    # both hosts keep behaving the same way.
+    #
+    # The attribute name is also the hostname, so `nixos-rebuild switch
+    # --flake .` resolves the right config by hostname on each machine. There
+    # is deliberately no "nixos" alias: a stale hostname then fails loudly with
+    # "attribute not found" instead of silently building the other host's
+    # config (which would mean nvidia + intel + a LUKS UUID that isn't there).
+    hosts = {
+      # i7-1165G7, 4c/8t, 16G RAM, LUKS root, Intel iGPU + NVIDIA MX350
+      laptop = {
+        maxJobs = 4;
+        buildCores = 2;
+        zramPercent = 50;
+        swapFileSize = 8 * 1024;
+        earlyoomMemThreshold = 15;
+        earlyoomMemKillThreshold = 5;
       };
-      modules = [
-        {nixpkgs.overlays = overlays;}
-        inputs.hyprland.nixosModules.default
-        solaar.nixosModules.default
-        nix-index-database.nixosModules.nix-index
-        ./hosts/default/configuration.nix
-      ];
+
+      # Ryzen AI 9 HX 370, 12c/24t, 32G RAM (~27G visible after the iGPU
+      # carve-out), no encryption, Radeon 890M iGPU only.
+      minipc = {
+        # Same rule as the laptop: jobs x cores == thread count, so builds can
+        # saturate the box but never oversubscribe it. nix.daemonCPUSchedPolicy
+        # is "idle" in boot.nix, so the desktop still preempts builds.
+        maxJobs = 6;
+        buildCores = 4;
+        # 25% of 27G is the same ~7G device the laptop gets from 50% of 16G.
+        # memoryPercent is the zram device's UNCOMPRESSED capacity, not the RAM
+        # it consumes -- actual footprint is that divided by the zstd ratio.
+        zramPercent = 25;
+        swapFileSize = 8 * 1024;
+        # 10% of 27G is ~2.7G, matching the laptop's 15%-of-16G in absolute
+        # terms. earlyoom thresholds are percentages, so they need rescaling
+        # when RAM changes or they fire far too early.
+        earlyoomMemThreshold = 10;
+        earlyoomMemKillThreshold = 4;
+      };
     };
 
-    homeConfig = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = {
-        inherit inputs user;
+    mkNixos = hostName: tuning:
+      lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs user hostName tuning;
+        };
+        modules = [
+          {nixpkgs.overlays = overlays;}
+          inputs.hyprland.nixosModules.default
+          solaar.nixosModules.default
+          nix-index-database.nixosModules.nix-index
+          ./hosts/${hostName}/configuration.nix
+        ];
       };
-      modules = [
-        ./home-manager
-      ];
-    };
+
+    mkHome = hostName:
+      home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = {
+          inherit inputs user hostName;
+        };
+        modules = [
+          ./home-manager
+        ];
+      };
+
+    nixosConfigs = lib.mapAttrs mkNixos hosts;
+    homeConfigs = lib.mapAttrs (hostName: _: mkHome hostName) hosts;
   in {
     formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
 
-    nixosConfigurations.${hostName} = nixosConfig;
-    homeConfigurations.${user} = homeConfig;
+    nixosConfigurations = nixosConfigs;
+
+    # Keyed "user@host" so `home-manager switch --flake .` resolves by
+    # $USER@$HOSTNAME without needing an explicit attribute on either machine.
+    homeConfigurations =
+      lib.mapAttrs'
+      (hostName: cfg: lib.nameValuePair "${user}@${hostName}" cfg)
+      homeConfigs;
 
     # The pinned home-manager CLI, so `make home` works even before the
     # first activation puts programs.home-manager on PATH.
@@ -103,9 +157,14 @@
       home-manager = home-manager.packages.${system}.default;
     };
 
-    checks.${system} = {
-      nixos = nixosConfig.config.system.build.toplevel;
-      home = homeConfig.activationPackage;
-    };
+    # `nix flake check` builds every host, so a change that breaks the machine
+    # you are NOT sitting at still fails here.
+    checks.${system} =
+      (lib.mapAttrs'
+        (n: c: lib.nameValuePair "nixos-${n}" c.config.system.build.toplevel)
+        nixosConfigs)
+      // (lib.mapAttrs'
+        (n: c: lib.nameValuePair "home-${n}" c.activationPackage)
+        homeConfigs);
   };
 }
