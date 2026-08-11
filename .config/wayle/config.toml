@@ -90,7 +90,7 @@ label-show = false
 [modules.network]
 label-show = false
 
-[modules.notification]
+[modules.notifications]
 label-show = false
 popup-duration = 3000
 
