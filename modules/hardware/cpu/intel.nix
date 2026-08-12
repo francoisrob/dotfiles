@@ -1,0 +1,27 @@
+{pkgs, ...}: {
+  services.thermald.enable = true;
+
+  environment.sessionVariables.LIBVA_DRIVER_NAME = "iHD";
+
+  boot = {
+    kernelModules = [
+      "i915"
+    ];
+    kernelParams = [
+      "i915.enable_fbc=1"
+      "i915.enable_psr=1"
+      "i915.enable_guc=3"
+    ];
+  };
+
+  hardware = {
+    graphics = {
+      extraPackages = with pkgs; [
+        intel-media-driver
+        vpl-gpu-rt
+        intel-ocl
+        intel-compute-runtime
+      ];
+    };
+  };
+}
