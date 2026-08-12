@@ -14,7 +14,6 @@
 
     # Programs
     ../../modules/programs/steam.nix
-    ../../modules/programs/gaming.nix
     ../../modules/programs/thunar.nix
 
     # System
