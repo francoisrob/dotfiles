@@ -79,9 +79,9 @@ in {
     };
   };
 
-  # Force eDP-1 back on after Thunderbolt undock via a fresh modesetting commit.
-  # kanshi's wlr-output-management enable is insufficient when the TB hot-unplug
-  # leaves the DRM CRTC in a broken state (D3cold/D0 resume failure).
+  # Force eDP-1 back on after Thunderbolt undock via a fresh modesetting commit,
+  # because the TB hot-unplug can leave the DRM CRTC in a broken state
+  # (D3cold/D0 resume failure) that no wlr-output-management commit recovers.
   systemd.services.undock-wake-display = {
     description = "Re-enable internal display after Thunderbolt undock";
     serviceConfig = {

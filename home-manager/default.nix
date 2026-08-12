@@ -49,7 +49,6 @@ in {
 
       firefox
       chromium
-      google-chrome
 
       inkscape-with-extensions
       gimp3-with-plugins
@@ -126,7 +125,6 @@ in {
   };
 
   services = {
-    kanshi.enable = true;
     wayle.enable = true;
     gpg-agent = {
       enable = true;
