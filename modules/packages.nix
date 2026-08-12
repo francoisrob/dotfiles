@@ -38,7 +38,6 @@
       # That matters on a fresh machine, where it would otherwise be the one
       # tool you need to bootstrap the machine but cannot run yet. Unfree, but
       # modules/nixpkgs-config.nix already sets allowUnfree.
-      claude-code
       # git was previously only present via home-manager's programs.git, so a
       # freshly installed host had no git until after `make home` -- awkward,
       # since cloning this repo is what gets you there. home-manager still owns
