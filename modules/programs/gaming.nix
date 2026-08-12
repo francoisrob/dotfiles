@@ -2,10 +2,9 @@
 #
 # feral gamemode is the core: on game launch it switches the CPU governor to
 # `performance`, renices the game, and inhibits the screensaver. Its custom
-# start/end hooks also run gaming-mode.sh, which (a) drops the secondary monitor
-# to 60Hz via kanshi and (b) strips Hyprland eye-candy (blur/shadows/animations)
-# to free the Intel iGPU that composites the game's output. See that script's
-# header for why the monitor part goes through kanshi instead of hyprctl.
+# start/end hooks also run gaming-mode.sh, which strips Hyprland eye-candy
+# (blur/shadows/animations) to free the Intel iGPU that composites the game's
+# output.
 #
 # A game only triggers all this if launched via `gamemoderun`:
 #   * Steam  -> launch options:  gamemoderun mangohud %command%

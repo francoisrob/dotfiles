@@ -126,7 +126,6 @@ in {
   };
 
   services = {
-    kanshi.enable = true;
     wayle.enable = true;
     gpg-agent = {
       enable = true;
