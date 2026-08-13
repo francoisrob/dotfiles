@@ -249,8 +249,10 @@ hl.bind(
 	hl.dsp.exec_cmd([[uwsm-app -- sh -c 'cliphist list | hyprlauncher --dmenu | cliphist decode | wl-copy']])
 )
 
-hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 2, client = 0 }))
-hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen_state({ internal = 0, client = 2 }))
+-- action = "toggle" is required. Without it fullscreen_state only ever SETS the
+-- state, so a second press is a no-op and fullscreen cannot be undone.
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 2, client = 0, action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen_state({ internal = 0, client = 2, action = "toggle" }))
 
 hl.bind(mainMod .. " + P", hl.dsp.window.pin())
 hl.bind(mainMod .. " + O", hl.dsp.window.pseudo())

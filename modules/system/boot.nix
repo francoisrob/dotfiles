@@ -24,17 +24,6 @@
       "tcp_bbr"
     ];
 
-    # Disable Intel WiFi firmware power management (CAM / "active"). power_scheme
-    # is read-only at runtime, so this can't be made AC-conditional — it applies
-    # on battery too. Lowers WiFi latency/jitter and steadies 2.4GHz Wi-Fi/BT
-    # coexistence, at some idle-battery cost on DC.
-    #
-    # Shared between hosts on purpose: the laptop's AX201 and the mini PC's
-    # AX200 are both iwlwifi/iwlmvm parts that share one radio between Wi-Fi
-    # and Bluetooth, so the same tuning applies to each.
-    extraModprobeConfig = ''
-      options iwlmvm power_scheme=1
-    '';
 
     consoleLogLevel = 0;
 

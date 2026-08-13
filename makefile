@@ -17,7 +17,7 @@ HOST ?= $(shell hostname)
 # leaving you to infer it from the store path printed once the build is done.
 .PHONY: banner
 banner:
-	@echo "==> $(HOST)"
+	@echo "host: $(HOST)"
 
 .PHONY: help
 help:
@@ -50,7 +50,7 @@ update:
 # are not sitting at.
 .PHONY: check
 check:
-	@echo "==> $(shell nix eval --raw '.#nixosConfigurations' --apply 'c: builtins.concatStringsSep ", " (builtins.attrNames c)' 2>/dev/null)"
+	@echo "hosts: $(shell nix eval --raw '.#nixosConfigurations' --apply 'c: builtins.concatStringsSep ", " (builtins.attrNames c)' 2>/dev/null)"
 	@nix flake check
 
 .PHONY: clean
