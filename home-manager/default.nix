@@ -45,6 +45,14 @@ in {
       slack
       discord
 
+      # The -fhs variant, not the bare claude-desktop: MCP servers are spawned
+      # by the app as plain `npx`/`uvx` commands against FHS paths, which only
+      # resolve inside the buildFHSEnv. It pulls in qemu_kvm + virtiofsd + OVMF
+      # for Cowork's VM gate, so the closure is ~1.5G larger than the bare one.
+      # The package comes from the claude-desktop flake input via
+      # modules/overlays.nix, which this standalone pkgs set also imports.
+      claude-desktop-fhs
+
       font-manager
 
       firefox

@@ -27,13 +27,6 @@
       lutris
 
       scrcpy
-
-      # The -fhs variant, not the bare one: MCP servers are spawned by the app
-      # as plain `npx`/`uvx` commands against FHS paths, which only resolve
-      # inside the buildFHSEnv. It pulls in qemu_kvm + virtiofsd + OVMF for
-      # Cowork's VM gate, so the closure is ~1.5G larger than the bare package.
-      claude-desktop-fhs
-
       # Developer
       chafa
       gnumake
