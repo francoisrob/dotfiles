@@ -9,12 +9,56 @@ local c = require("gruvbox")
 ---- MONITORS ----
 ------------------
 
+-- Catch-all, kept first so the two explicit rules below win for the desk
+-- monitors. This is what lights up anything else that gets plugged in.
 -- was: monitor=,highrr,auto,1
 hl.monitor({
 	output = "",
 	mode = "highrr",
 	position = "auto",
 	scale = 1,
+})
+
+-- The two desk monitors, keyed by DESCRIPTION rather than connector name.
+-- Connector names on this box are NOT stable: the same two panels enumerated as
+-- DP-9/DP-11 while daisy-chained over MST, then DP-10/DP-13 after a re-probe
+-- mid-session, and are DP-1/DP-5 now that each has its own cable. A rule keyed
+-- to "DP-1" would silently stop matching. The description embeds the panel's
+-- serial, so it survives re-cabling, re-enumeration and reboots.
+--
+-- position: these are set explicitly because "auto" ordered them backwards
+-- relative to how they physically sit on the desk. This is a compositor-level
+-- concern, not a BIOS or early-boot one: nothing before the compositor knows
+-- or cares which panel is on your left.
+--
+-- bitdepth 10: both panels report "Bits per primary color channel: 10" in their
+-- EDID. Verified live as currentFormat XRGB2101010.
+--
+-- vrr 1 (always on): both connectors report vrr_capable=1 now that neither sits
+-- behind an MST hub. amdgpu does not expose VRR on MST connectors at all, which
+-- is why this did nothing while the pair was daisy-chained. The panels
+-- advertise a 48-120 Hz continuous range. Verified live as VRR_ENABLED=1 on
+-- both active CRTCs. misc.vrr below stays at 2 as the conservative default for
+-- any OTHER monitor; these per-monitor values override it.
+
+-- Left: U2724DE, on USB4 (DisplayPort alt mode).
+hl.monitor({
+	output = "desc:Dell Inc. DELL U2724DE BR2DDP3",
+	mode = "2560x1440@120",
+	position = "0x0",
+	scale = 1,
+	bitdepth = 10,
+	vrr = 1,
+})
+
+-- Right: U2724D, on the physical DP port.
+hl.monitor({
+	output = "desc:Dell Inc. DELL U2724D JCJK9P3",
+	mode = "2560x1440@120",
+	position = "2560x0",
+	scale = 1,
+	bitdepth = 10,
+	vrr = 1,
 })
 
 -------------------
@@ -243,10 +287,13 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("uwsm-app -- chromium"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float())
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session $XDG_SESSION_ID"))
 
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("uwsm-app -- hyprlauncher"))
+-- fuzzel replaces hyprlauncher; see modules/desktop.nix for why. Apps launched
+-- from it get their own systemd scope via launch-prefix in fuzzel.ini, rather
+-- than sharing the launcher's.
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("uwsm-app -- fuzzel"))
 hl.bind(
 	mainMod .. " + A",
-	hl.dsp.exec_cmd([[uwsm-app -- sh -c 'cliphist list | hyprlauncher --dmenu | cliphist decode | wl-copy']])
+	hl.dsp.exec_cmd([[uwsm-app -- sh -c 'cliphist list | fuzzel --dmenu | cliphist decode | wl-copy']])
 )
 
 -- action = "toggle" is required. Without it fullscreen_state only ever SETS the
@@ -306,8 +353,21 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl s 10%+"), { repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 10%-"), { repeating = true })
+-- brightnessctl drives /sys/class/backlight, an internal laptop panel. This
+-- machine has none, only two external Dells, so these keys did nothing at all.
+-- brightness.sh talks DDC/CI to both panels over I2C instead. Holding the key is
+-- safe: the script updates its cache instantly and coalesces the actual ddcutil
+-- writes under a lock, so a burst collapses to one write of the final value.
+hl.bind(
+	"XF86MonBrightnessUp",
+	hl.dsp.exec_cmd("~/.config/wayle/scripts/brightness.sh up"),
+	{ repeating = true }
+)
+hl.bind(
+	"XF86MonBrightnessDown",
+	hl.dsp.exec_cmd("~/.config/wayle/scripts/brightness.sh down"),
+	{ repeating = true }
+)
 
 -- Resize submap
 hl.bind("ALT + R", hl.dsp.submap("resize"))
