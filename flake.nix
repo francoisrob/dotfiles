@@ -44,6 +44,17 @@
         };
       };
     };
+    # Anthropic ships no Linux build; this repackages the official .deb.
+    # Since its v3.0 the flake exposes only packages + overlays.default (no
+    # NixOS module), so it is wired in as an overlay in modules/overlays.nix.
+    claude-desktop = {
+      url = "github:aaddrick/claude-desktop-debian";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
   };
 
   outputs = {

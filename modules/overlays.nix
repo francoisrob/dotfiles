@@ -36,6 +36,12 @@
 
   inputs.neovim-nightly.overlays.default
 
+  # Adds pkgs.claude-desktop (bare) and pkgs.claude-desktop-fhs (same app in an
+  # FHS sandbox so MCP servers find node/uv on /usr/bin). The overlay calls the
+  # packages with THIS flake's nixpkgs, so the input's own nixpkgs is never
+  # instantiated -- no second package set in the closure.
+  inputs.claude-desktop.overlays.default
+
   (final: prev: {
     libvirt = prev.libvirt.override {
       enableXen = false;
