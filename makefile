@@ -13,6 +13,12 @@
 # other machine's config.
 HOST ?= $(shell hostname)
 
+# Runs before sudo prompts, so a bare `make switch` names its target instead of
+# leaving you to infer it from the store path printed once the build is done.
+.PHONY: banner
+banner:
+	@echo "==> $(HOST)"
+
 .PHONY: help
 help:
 	@echo "Available make commands:"
@@ -26,11 +32,11 @@ help:
 	@echo "Current HOST=$(HOST) (override with: make switch HOST=minipc)"
 
 .PHONY: switch
-switch:
+switch: banner
 	@sudo nixos-rebuild switch --flake .#$(HOST)
 
 .PHONY: home
-home:
+home: banner
 	@nix run .#home-manager -- switch -b backup --flake .#francois@$(HOST)
 
 .PHONY: update
@@ -44,6 +50,7 @@ update:
 # are not sitting at.
 .PHONY: check
 check:
+	@echo "==> $(shell nix eval --raw '.#nixosConfigurations' --apply 'c: builtins.concatStringsSep ", " (builtins.attrNames c)' 2>/dev/null)"
 	@nix flake check
 
 .PHONY: clean
