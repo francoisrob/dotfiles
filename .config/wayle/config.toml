@@ -21,7 +21,7 @@ font-sans = "Ubuntu Sans"
 monitor = "*"
 left = [{ name = "group", modules = ["dashboard", "clock"] }, "hyprland-workspaces", "cava"]
 center = ["window-title"]
-right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network", "custom-vpn"] }, { name = "controls", modules = ["volume", "battery"] }, "notifications"]
+right = ["systray", "custom-mongodb", "hyprsunset", { name = "resources", modules = ["cpu", "ram"] }, { name = "connectivity", modules = ["bluetooth", "network"] }, { name = "controls", modules = ["volume", "custom-brightness"] }, "notifications"]
 
 [modules.dashboard]
 right-click = "wayle panel settings"
@@ -65,18 +65,6 @@ format = "{{ temp }}{{ temp_unit }}"
 [modules.volume]
 format = "{{ percent }}%"
 
-[modules.battery]
-level-icons = [
-    "tb-battery-vertical-symbolic",
-    "tb-battery-vertical-1-symbolic",
-    "tb-battery-vertical-2-symbolic",
-    "tb-battery-vertical-3-symbolic",
-    "tb-battery-vertical-4-symbolic",
-]
-charging-icon = "ld-battery-charging-symbolic"
-alert-icon = "tb-alert-triangle-symbolic"
-format = "{{ percent }}"
-
 [modules.cava]
 bars = 12
 button-bg-color = "transparent"
@@ -94,35 +82,47 @@ label-show = false
 label-show = false
 popup-duration = 3000
 
+# Monitor brightness over DDC/CI, replacing the old brightnessctl module.
+# brightnessctl drives an internal laptop panel backlight through
+# /sys/class/backlight; this machine has no internal panel, so that module was
+# dead here (and was not even in the layout). The script talks to both Dells
+# over I2C instead. It reads from a cache rather than calling ddcutil, because
+# ddcutil costs ~1s per call and would stall the bar on every poll, so the
+# interval below is cheap no matter how short it is.
+#
+# watch mode, not poll. Brightness is driven from three places: this module's
+# scroll, its click, and the MX Keys keys via a Solaar rule. wayle only knows
+# about the first two, so `on-action` could never see a keypress and the label
+# sat stale until the next poll, which is what made it look like it took forever
+# to catch up. Polling faster would work but burns a process every interval
+# forever. brightness-watch.sh blocks on inotify against the state file instead
+# and prints the moment any of the three writes it, so the label is immediate and
+# idle cost is zero.
 [[modules.custom]]
-id = "backlight"
-command = "brightnessctl -m | awk -F, '{print $4}' | tr -d '%'"
-interval-ms = 2000
+id = "brightness"
+command = "~/.config/wayle/scripts/brightness-watch.sh"
+mode = "watch"
+restart-policy = "on-failure"
 format = "{{ output }}%"
 icon-show = true
 icon-name = "ld-sun-symbolic"
-scroll-up = "brightnessctl s 5%+"
-scroll-down = "brightnessctl s 5%-"
-
-[[modules.custom]]
-id = "vpn"
-command = "~/.config/wayle/scripts/vpn-status.sh"
-interval-ms = 3000
-format = "{{ output }}"
-icon-show = true
-icon-name = "tb-lock-symbolic"
-left-click = "~/.config/wayle/scripts/vpn-toggle.sh"
-tooltip-format = "merqube VPN — click to toggle"
+scroll-up = "~/.config/wayle/scripts/brightness.sh up"
+scroll-down = "~/.config/wayle/scripts/brightness.sh down"
+# Left-click toggles the panels' ambient light sensor (VCP 0x66). The sensor
+# overwrites brightness continuously while it is on, so scrolling turns it off
+# automatically; this is how you turn it back on.
+left-click = "~/.config/wayle/scripts/brightness.sh auto"
+tooltip-format = "Monitor brightness {{ output }}% (both panels, DDC/CI). Scroll to adjust, click to toggle auto-brightness."
 
 [[modules.custom]]
 id = "mongodb"
-command = "~/.config/waybar/scripts/mongodb-status.sh"
+command = "~/.config/wayle/scripts/mongodb-status.sh"
 interval-ms = 5000
 format = "{{ text }}"
 tooltip-format = "{{ tooltip }}"
 icon-show = true
 icon-name = "ld-leaf-symbolic"
-left-click = "sh -c ~/.config/waybar/scripts/mongodb-toggle.sh"
+left-click = "sh -c ~/.config/wayle/scripts/mongodb-toggle.sh"
 
 [osd]
 border = false
