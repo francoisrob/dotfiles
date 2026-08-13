@@ -1,0 +1,45 @@
+%YAML 1.3
+# Solaar rules: MX Keys brightness keys -> DDC/CI brightness on the two Dells.
+#
+# Why this exists rather than a hyprland keybind. The MX Keys F-row sends
+# different keycodes per `multiplatform` (Set OS) profile. Under MacOS the
+# brightness keys emit XF86MonBrightnessUp/Down and a normal compositor keybind
+# works, but that profile breaks the Super key. Under Windows the Super key is
+# correct but the brightness keys emit nothing a compositor can bind. Since both
+# keys are needed, neither profile works on its own.
+#
+# The way out is Key/Button Diversion. With `divert-keys` set to Diverted for
+# these two keys the keyboard stops sending a keycode entirely and instead raises
+# an HID++ notification straight to Solaar, which these rules act on. That is
+# independent of the OS profile, so `multiplatform` stays on Windows and the
+# Super key keeps working.
+#
+# Paired setting, applied with:
+#   solaar config 1 divert-keys 'Brightness Up' Diverted
+#   solaar config 1 divert-keys 'Brightness Down' Diverted
+# It persists in ~/.config/solaar/config.yaml, which Solaar owns and rewrites,
+# so it is recorded here in a comment rather than tracked as a file.
+#
+# pressed/released rather than pressed alone: diversion bypasses the HID keyboard
+# layer, so a held key produces ONE notification instead of the usual auto-repeat
+# stream. `hold` starts a repeat loop and `release` stops it, which is what makes
+# holding the key ramp instead of stepping once.
+#
+# Execute runs via subprocess.Popen with NO shell, so the path must be absolute
+# and the command a list. `~` and `$HOME` would be passed through literally.
+---
+- Key: [Brightness Up, pressed]
+- Execute: [/home/francois/.config/wayle/scripts/brightness.sh, hold, up]
+...
+---
+- Key: [Brightness Up, released]
+- Execute: [/home/francois/.config/wayle/scripts/brightness.sh, release]
+...
+---
+- Key: [Brightness Down, pressed]
+- Execute: [/home/francois/.config/wayle/scripts/brightness.sh, hold, down]
+...
+---
+- Key: [Brightness Down, released]
+- Execute: [/home/francois/.config/wayle/scripts/brightness.sh, release]
+...
