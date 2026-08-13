@@ -87,7 +87,13 @@ in {
       hyprland-contrib.shellevents
 
       hyprwayland-scanner
-      hyprlauncher
+      # fuzzel replaces hyprlauncher. hyprlauncher 0.1.6 has no cosmetic config
+      # at all (it renders straight to Cairo/Pango, no GTK, no stylesheet), and
+      # per the oomd note in modules/system/boot.nix it puts everything it
+      # launches into one shared scope, so an oomd pressure kill took unrelated
+      # apps with it. fuzzel is themeable and its launch-prefix routes each app
+      # through uwsm-app into its own scope.
+      fuzzel
       hyprlock
       hyprsunset
 
