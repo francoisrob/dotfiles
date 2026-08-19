@@ -54,12 +54,18 @@ in {
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
+    # defaultLocale sets LANG, and every unset LC_* category falls back to it,
+    # so restating en_US.UTF-8 per category buys nothing. LC_ALL in particular
+    # was actively harmful: it outranks every other LC_* variable, so nothing
+    # downstream could override a category. That made LC_NUMERIC permanently
+    # en_US.UTF-8, and libmpv refuses to initialise unless it is "C" (it
+    # returns NULL from mpv_create()), which crashed stremio on startup.
+    #
+    # LC_NUMERIC = "C" only drops thousands grouping (1234567 rather than
+    # 1,234,567); the decimal separator is "." under both C and en_US.
     extraLocaleSettings = {
       LANGUAGE = "en_US";
-      LC_MESSAGES = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-      LC_CTYPE = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
+      LC_NUMERIC = "C";
     };
   };
 
