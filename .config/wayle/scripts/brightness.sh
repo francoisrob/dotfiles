@@ -100,8 +100,14 @@ buses() {
 			return
 		fi
 	fi
+	# sort -un, not just the sed. The pattern matches per LINE, not per display,
+	# so a detect run that names one bus on several lines (which happens at
+	# login, while the panels are still settling) cached "9 9 9 13" for two
+	# monitors. ddc_all then fired four calls instead of two and the three on
+	# bus 9 serialized behind that bus's flock, making the left panel react ~3x
+	# slower than the right for the rest of the boot.
 	b=$(ddcutil detect --brief 2>/dev/null |
-		sed -n 's|.*/dev/i2c-\([0-9][0-9]*\).*|\1|p' | tr '\n' ' ')
+		sed -n 's|.*/dev/i2c-\([0-9][0-9]*\).*|\1|p' | sort -un | tr '\n' ' ')
 	b=${b% }
 	[ -n "$b" ] && echo "$b" >"$BUSCACHE"
 	echo "$b"
