@@ -151,17 +151,38 @@ in {
     # #282828, and the accent is aqua #8ec07c, matching hyprland/kitty/wayle.
     theme = gruvboxGtk;
 
-    # Since home-manager 26.05, gtk4.theme no longer defaults to gtk.theme, so
-    # at stateVersion 26.05 it is null and GTK 4 apps get no theme at all.
-    # Setting it writes ~/.config/gtk-4.0/gtk.css, which @imports the theme.
-    # That is the only route that works for libadwaita apps (gnome-calculator),
-    # since they ignore gtk-theme-name entirely.
-    gtk4.theme = gruvboxGtk;
-
-    # Drives gtk-application-prefer-dark-theme for GTK 3 and
-    # gtk-interface-color-scheme=2 for GTK 4. Without it GTK 4 has no dark
-    # preference, so libadwaita renders light regardless of the theme.
+    # Drives gtk-application-prefer-dark-theme for GTK 3. GTK 4 is handled
+    # separately below, since home-manager writes keys GTK 4 rejects.
     colorScheme = "dark";
+
+    gtk4 = {
+      # Since home-manager 26.05, gtk4.theme no longer defaults to gtk.theme,
+      # so at stateVersion 26.05 it is null and GTK 4 apps get no theme at all.
+      # Setting it writes ~/.config/gtk-4.0/gtk.css, which @imports the theme.
+      # That is the only route that works for libadwaita apps
+      # (gnome-calculator), since they ignore gtk-theme-name entirely.
+      theme = gruvboxGtk;
+
+      # home-manager's colorScheme puts two keys GTK 4 rejects into
+      # gtk-4.0/settings.ini (mkGtkSettings, modules/misc/gtk/lib.nix:78-79):
+      #
+      #   gtk-application-prefer-dark-theme=true
+      #     line 78 has no gtkVersion guard, so this GTK 3 key lands in the
+      #     GTK 4 file too, and libadwaita warns that it is unsupported.
+      #   gtk-interface-color-scheme=2
+      #     the settings.ini parser wants the enum nick, so GTK 4.22 rejects
+      #     the integer with "value that cannot be interpreted".
+      #
+      # null emits neither key, and extraConfig writes the correct one.
+      # Dark still applies everywhere: GTK 4 reads the key below, and
+      # libadwaita reads org/gnome/desktop/interface color-scheme, set to
+      # prefer-dark in the dconf block further down. Drop this override once
+      # home-manager fixes lib.nix.
+      colorScheme = null;
+      extraConfig = {
+        gtk-interface-color-scheme = "dark";
+      };
+    };
 
     iconTheme = {
       name = "Gruvbox-Plus-Dark";
