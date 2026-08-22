@@ -6,7 +6,12 @@
     gruvbox-gtk-morhetz = final.callPackage ./pkgs/gruvbox-gtk-morhetz {};
 
     mpv = prev.mpv.override {
-      scripts = [final.mpvScripts.webtorrent-mpv-hook];
+      scripts = with final.mpvScripts; [
+        webtorrent-mpv-hook
+        uosc # OSC replacement; needs osc=no/osd-bar=no/border=no in mpv.conf
+        thumbfast # hover thumbnails on the uosc timeline, zero-config pairing
+        mpris # media keys / playerctl integration
+      ];
     };
 
     lutris = prev.lutris.override {

@@ -397,6 +397,14 @@ hl.window_rule({
 -- float wayle settings
 hl.window_rule({ match = { class = "(com.wayle.settings)" }, float = true, size = { 1300, 800 }, center = true })
 
+-- float mpv
+hl.window_rule({
+	match = { class = "(mpv)" },
+	float = true,
+	size = { 1280, 720 },
+	center = true,
+})
+
 -- float pavucontrol
 hl.window_rule({
 	match = { class = "(org.pulseaudio.pavucontrol)", title = "(Volume Control)" },
