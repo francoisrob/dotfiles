@@ -57,6 +57,7 @@ in {
 
       firefox
       chromium
+      networkmanagerapplet
 
       inkscape-with-extensions
       gimp3-with-plugins
