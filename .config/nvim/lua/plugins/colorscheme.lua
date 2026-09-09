@@ -18,6 +18,20 @@ return {
       -- re-applies these on each colourscheme change but with `default = true`,
       -- which never overwrites an existing definition, so these win.
       overrides = {
+        -- vim-illuminate (the LazyVim editor.illuminate extra) already marks
+        -- every other occurrence of the word under the cursor, but gruvbox
+        -- links its groups to GruvboxYellowBold/GruvboxOrangeBold, which only
+        -- recolours the *text*. Against gruvbox's already-warm syntax that is
+        -- nearly invisible. Give the occurrences a background instead, and set
+        -- no fg so each token keeps its own syntax colour.
+        --
+        -- bg2 (#504945) sits one step above CursorLine's bg1 (#3c3836), so the
+        -- marks stay readable on the cursor's own line. Writes (assignments)
+        -- get the warmer bg so you can tell a mutation from a plain read.
+        IlluminatedWordText = { bg = "#504945" },
+        IlluminatedWordRead = { bg = "#504945" },
+        IlluminatedWordWrite = { bg = "#665c54", underline = true },
+
         SnacksDashboardHeader = { link = "GruvboxAquaBold" },
         SnacksDashboardIcon = { link = "GruvboxAqua" },
         SnacksDashboardKey = { link = "GruvboxAquaBold" },
