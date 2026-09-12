@@ -127,6 +127,26 @@
         "type": "github"
       }
     },
+    "grok-bot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789114195,
+        "narHash": "sha256-sADYHwv/ELlu1M84cLD8pkT2b7vmCMwWBQ/+w348Bwk=",
+        "owner": "jordangarrison",
+        "repo": "grok-bot-flake",
+        "rev": "86d8d9254e366661e6295623e4134d2c6914753e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jordangarrison",
+        "repo": "grok-bot-flake",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -631,6 +651,7 @@
     "root": {
       "inputs": {
         "claude-desktop": "claude-desktop",
+        "grok-bot": "grok-bot",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "hyprland-contrib": "hyprland-contrib",

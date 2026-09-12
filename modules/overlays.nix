@@ -47,6 +47,12 @@
   # instantiated -- no second package set in the closure.
   inputs.claude-desktop.overlays.default
 
+  # Adds pkgs.grok-bot (plus a `sand` alias binary and grok-bot.desktop, which
+  # registers the sand:// login-redirect scheme). The overlay respects THIS
+  # flake's nixpkgs config, so the unfree licence is covered by allowUnfree in
+  # modules/nixpkgs-config.nix rather than by the input's own package set.
+  inputs.grok-bot.overlays.default
+
   (final: prev: {
     libvirt = prev.libvirt.override {
       enableXen = false;

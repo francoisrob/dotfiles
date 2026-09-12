@@ -55,6 +55,17 @@
         };
       };
     };
+    # Grok Bot (xAI's desktop agent) ships an amd64 .deb only; this flake
+    # repackages it. Like claude-desktop it exposes packages + overlays.default
+    # and no module, so it is wired in as an overlay in modules/overlays.nix.
+    grok-bot = {
+      url = "github:jordangarrison/grok-bot-flake";
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+    };
   };
 
   outputs = {

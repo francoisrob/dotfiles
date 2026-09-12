@@ -54,6 +54,12 @@ in {
       # modules/overlays.nix, which this standalone pkgs set also imports.
       claude-desktop-fhs
 
+      # xAI's desktop agent, from the grok-bot flake input via
+      # modules/overlays.nix. Login redirects use sand:// links, which only
+      # route back to the app once grok-bot.desktop is on XDG_DATA_DIRS, i.e.
+      # once it is installed here rather than run via `nix run`.
+      grok-bot
+
       font-manager
 
       firefox
