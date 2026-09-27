@@ -13,6 +13,16 @@
       btop
       icu
 
+      # Hardware forensics. These belong on the machine BEFORE something goes
+      # wrong, not after: diagnosing the 2026-09-20 hard resets on minipc
+      # needed all three and none were installed, so they had to be fetched
+      # by hand mid-incident. nvme-cli carries the unsafe_shutdowns counter,
+      # which is the only durable record of how many times a host has lost
+      # power uncleanly once journald has rotated the evidence away.
+      nvme-cli
+      smartmontools
+      dmidecode
+
       kitty
 
       ripgrep

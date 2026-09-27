@@ -2,11 +2,20 @@
 # sense on the Dell laptop, pulled out so the mini PC does not inherit it.
 #
 # The common thread is that each of these depends on hardware the mini PC
-# does not have: a battery, a lid, an internal eDP panel, a Thunderbolt dock,
-# an Intel SOF audio DSP, or a LUKS-encrypted root. Left in the shared module
-# they were not merely useless -- TLP would have applied its ON_AC branch
-# unconditionally, thermald would have run as a no-op daemon on AMD, and the
-# LUKS allowDiscards line referenced a UUID that does not exist on the mini PC.
+# does not have: a battery, a lid, an internal eDP panel, a Cypress CCGx
+# USB-C controller, an Intel SOF audio DSP, or a LUKS-encrypted root.
+#
+# Note that "no Thunderbolt" is NOT on that list any more, and was wrong when
+# it was: the mini PC's second display is a Dell U2724DE, a Thunderbolt 4 hub
+# monitor, reached over a USB4 DisplayPort tunnel. What the mini PC lacks is
+# specifically the Cypress CCGx controller that ucsi_ccg.skip_ucsi=1 below
+# works around, so that parameter stays laptop-only. Thunderbolt device
+# authorization for the mini PC lives in modules/hardware/thunderbolt.nix.
+#
+# Left in the shared module they were not merely useless -- TLP would have
+# applied its ON_AC branch unconditionally, thermald would have run as a no-op
+# daemon on AMD, and the LUKS allowDiscards line referenced a UUID that does
+# not exist on the mini PC.
 {
   pkgs,
   inputs,

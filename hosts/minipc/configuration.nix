@@ -11,6 +11,7 @@
     ../../modules/hardware/gpu/amd.nix
     ../../modules/hardware/audio.nix
     ../../modules/hardware/bluetooth.nix
+    ../../modules/hardware/thunderbolt.nix
 
     # Programs
     ../../modules/programs/steam.nix
