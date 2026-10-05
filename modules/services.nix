@@ -14,10 +14,6 @@
     # Dell UEFI/BIOS, SSD, and dock firmware on this machine.
     fwupd.enable = true;
 
-    solaar = {
-      enable = true;
-    };
-
     mongodb = {
       enable = true;
       package = pkgs.mongodb-ce;
@@ -49,6 +45,17 @@
         }
       ];
     };
+  };
+
+  # Solaar (Logitech device driver/tray app) comes from nixpkgs' own
+  # programs.solaar module since 26.11. The Svenum/Solaar-Flake input it
+  # replaced is discontinued and its module collides with the nixpkgs one
+  # (both declare programs.solaar.enable). userService mirrors what the flake
+  # did unconditionally: a per-user systemd unit on graphical-session.target
+  # with the window hidden and a tray icon.
+  programs.solaar = {
+    enable = true;
+    userService.enable = true;
   };
 
   systemd = {

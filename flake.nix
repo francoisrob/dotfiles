@@ -25,14 +25,6 @@
         };
       };
     };
-    solaar = {
-      url = "github:Svenum/Solaar-Flake/main";
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-    };
     neovim-nightly = {
       url = "github:nix-community/neovim-nightly-overlay";
     };
@@ -71,7 +63,6 @@
   outputs = {
     nixpkgs,
     home-manager,
-    solaar,
     nix-index-database,
     ...
   } @ inputs: let
@@ -142,7 +133,6 @@
         modules = [
           {nixpkgs.overlays = overlays;}
           inputs.hyprland.nixosModules.default
-          solaar.nixosModules.default
           nix-index-database.nixosModules.nix-index
           ./hosts/${hostName}/configuration.nix
         ];

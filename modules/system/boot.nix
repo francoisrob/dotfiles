@@ -311,13 +311,13 @@
       };
     };
 
-    journald = {
-      storage = "persistent";
-      rateLimitBurst = 1000;
-      extraConfig = ''
-        SystemMaxUse=1G
-        RuntimeMaxUse=512M
-      '';
+    # nixpkgs 26.11 replaced journald.storage/rateLimitBurst/extraConfig with
+    # a typed settings.Journal attrset (keys as in journald.conf(5)).
+    journald.settings.Journal = {
+      Storage = "persistent";
+      RateLimitBurst = 1000;
+      SystemMaxUse = "1G";
+      RuntimeMaxUse = "512M";
     };
   };
 
@@ -382,10 +382,11 @@
     i2c = {
       enable = true;
     };
+    # enableGraphical was renamed to programs.solaar.enable in nixpkgs 26.11;
+    # it is set in modules/services.nix alongside the Solaar user service.
     logitech = {
       wireless = {
         enable = true;
-        enableGraphical = true;
       };
     };
   };
