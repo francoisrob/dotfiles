@@ -6,3 +6,8 @@
 .config/wayle/themes/schema.json
 .config/wayle/config.toml.example
 .config/wayle/tombi.toml
+
+# Claude Code runtime data (session uploads, synced skills, bridge sessions)
+.claude/uploads/
+.claude/skills/synced/
+.claude/bridge-spawn/
