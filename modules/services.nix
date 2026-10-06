@@ -31,6 +31,8 @@
       # /var/lib/postgresql/<version>, so letting the nixpkgs default drift
       # would silently require a dump/restore migration on upgrade.
       package = pkgs.postgresql_18;
+      # pgvector backs axiom's semantic search (statement and subject embeddings).
+      extensions = ps: [ps.pgvector];
 
       # Provision a role + database matching the login user. The default
       # local-socket auth is "peer", which maps OS user ${user} to the
