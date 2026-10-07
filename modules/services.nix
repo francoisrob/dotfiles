@@ -46,6 +46,21 @@
           ensureClauses.superuser = true;
         }
       ];
+
+      # Axiom's service logins are members of the NOLOGIN marker role axiom_login (made by the
+      # canon's roles deploy change). Its members authenticate with scram-sha-256 over the unix
+      # socket only and are refused on every TCP address, so a copied DSN is useless off this
+      # socket. Until `axiom setup` creates the marker, these two lines match nobody. The rest is
+      # the nixpkgs default with md5 raised to scram-sha-256 (every stored password is SCRAM).
+      authentication = lib.mkForce ''
+        local all postgres            peer map=postgres
+        local all +axiom_login        scram-sha-256
+        host  all +axiom_login all    reject
+        local all all                 peer
+        host  all all 127.0.0.1/32    scram-sha-256
+        host  all all ::1/128         scram-sha-256
+      '';
+      settings.password_encryption = "scram-sha-256";
     };
   };
 
