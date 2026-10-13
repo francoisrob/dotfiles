@@ -18,7 +18,7 @@
       ".claude/docs"
     ]
   },
-  "model": "opus",
+  "model": "fable",
   "hooks": {
     "PreToolUse": [
       {
@@ -40,13 +40,20 @@
     "refreshInterval": 10
   },
   "enabledPlugins": {
-    "claude-hud@claude-hud": true
+    "claude-hud@claude-hud": true,
+    "claude-code-wakatime@wakatime": true
   },
   "extraKnownMarketplaces": {
     "claude-hud": {
       "source": {
         "source": "github",
         "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "wakatime": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/wakatime/claude-code-wakatime.git"
       }
     }
   },

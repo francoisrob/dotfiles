@@ -265,7 +265,12 @@
     logind = {
       settings = {
         Login = {
-          KillUserProcesses = true;
+          # false (the NixOS default): the Paperclip server on Tselio runs the Apex
+          # agent here over SSH and starts its callback bridge with nohup inside a
+          # short SSH session; with true, logind kills it the moment that session
+          # ends and every run fails with "Timed out waiting for bridge readiness"
+          # (tselio-paperclip docs/architecture.md, failure model).
+          KillUserProcesses = false;
           HandlePowerKey = "lock";
           HandlePowerKeyLongPress = "reboot";
           # The three HandleLidSwitch* options are in modules/system/laptop.nix;
