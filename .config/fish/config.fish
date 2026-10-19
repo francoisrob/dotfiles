@@ -22,9 +22,16 @@ if status is-interactive
     if type -q fzf
         fzf --fish | source
     end
+end
 
-    if type -q mise
+# mise supplies node, bun and other tools. Full activation at the prompt, shims for
+# scripts and other non-interactive fish (mise's documented fish "auto" layout), so
+# tools such as pi, which run on node, also work from cron, ssh and `fish -c`.
+if type -q mise
+    if status is-interactive
         mise activate fish | source
+    else
+        mise activate fish --shims | source
     end
 end
 
