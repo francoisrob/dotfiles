@@ -8,7 +8,7 @@ const live = join(HOME, ".pi/agent");
 const d = UNDER_MUTATION ? describe.skip : describe;
 
 d("stow links", () => {
-	for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts"]) {
+	for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts", "extensions/metrics"]) {
 		test(`~/.pi/agent/${name} is a link into the dotfiles repo`, () => {
 			expect(lstatSync(join(live, name)).isSymbolicLink()).toBe(true);
 			expect(realpathSync(join(live, name))).toBe(join(REPO, ".pi/agent", name));

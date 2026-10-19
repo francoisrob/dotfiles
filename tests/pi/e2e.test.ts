@@ -59,7 +59,7 @@ d("pi end to end", () => {
 		expect(text).toContain("Reply with the single word: expanded");
 	});
 
-	test("the interactive TUI starts, answers, and quits cleanly", async () => {
+	test("the interactive TUI starts, answers, shows the run in the footer, and quits cleanly", async () => {
 		const session = `pi-e2e-${process.pid}`;
 		const tmux = (...a: string[]) => Bun.spawnSync(["tmux", ...a]).stdout.toString();
 		const screen = () => tmux("capture-pane", "-p", "-t", session);
@@ -85,6 +85,8 @@ d("pi end to end", () => {
 			await waitFor(busy, 15_000);
 			expect(await waitFor((s) => !busy(s) && /\bpong\b/i.test(s.split("Reply with the single word")[1] ?? ""), 120_000)).toBe(true);
 			expect(screen()).not.toMatch(/Request timed out|Error:/);
+			// The metrics extension's footer line: context in tokens, then the finished run.
+			expect(screen()).toMatch(/context [\d.]+k?\/\d+k \(\d+%\), compacts at \d+k │ last run \d+s · [\d.]+k? in · [\d.]+k? out · [\d.]+k? cached( \(\d+%\))? · \$[\d.]+ · 1 model call · 0 tool calls/);
 			tmux("send-keys", "-t", session, "-l", "/quit");
 			tmux("send-keys", "-t", session, "Enter");
 			expect(await waitFor(() => !tmux("list-sessions").includes(session), 20_000)).toBe(true);

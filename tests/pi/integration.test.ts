@@ -21,6 +21,8 @@ beforeAll(() => {
 	for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts"]) {
 		symlinkSync(join(CONFIG_DIR, name), join(agentDir, name));
 	}
+	Bun.spawnSync(["mkdir", "-p", join(agentDir, "extensions")]);
+	symlinkSync(join(CONFIG_DIR, "extensions/metrics"), join(agentDir, "extensions/metrics"));
 });
 afterAll(() => cleanup());
 
@@ -82,6 +84,31 @@ describe("pi's resource loader", () => {
 			expect(p.argumentHint.length).toBeGreaterThan(0);
 			expect(p.content).toContain("$ARGUMENTS");
 		}
+	});
+});
+
+describe("pi's extension loader", () => {
+	// In node, which pi runs on, not inside this bun process.
+	test("loads the metrics extension with no errors, registering /usage and its event handlers", () => {
+		const script = `
+			const pi = await import(${JSON.stringify(join(piPackageDir(), "dist/index.js"))});
+			const [cwd, agentDir] = process.argv.slice(1);
+			const sm = pi.SettingsManager.create(cwd, agentDir);
+			const loader = new pi.DefaultResourceLoader({ cwd, agentDir, settingsManager: sm, noSkills: true, noThemes: true, noPromptTemplates: true });
+			await loader.reload();
+			const { extensions, errors } = loader.getExtensions();
+			const metrics = extensions.filter((e) => e.path.includes("extensions/metrics"));
+			console.log(JSON.stringify({ errors, count: metrics.length, commands: metrics.flatMap((e) => [...e.commands.keys()]), handlers: metrics.flatMap((e) => [...e.handlers.keys()]) }));
+		`;
+		const node = Bun.which("node");
+		expect(node).toBeTruthy();
+		const r = Bun.spawnSync([node!, "--input-type=module", "-e", script, cwd, agentDir], { timeout: 60_000 });
+		expect(r.stderr.toString()).toBe("");
+		const out = JSON.parse(r.stdout.toString().trim().split("\n").at(-1) ?? "{}");
+		expect(out.errors).toEqual([]);
+		expect(out.count).toBe(1);
+		expect(out.commands).toEqual(["usage"]);
+		for (const name of ["session_start", "agent_start", "agent_settled", "session_shutdown"]) expect(out.handlers, name).toContain(name);
 	});
 });
 
