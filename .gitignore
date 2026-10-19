@@ -11,3 +11,7 @@
 .claude/uploads/
 .claude/skills/synced/
 .claude/bridge-spawn/
+
+# pi config tests: dependencies and throwaway sandboxes
+tests/pi/node_modules/
+tests/pi/.sandbox/

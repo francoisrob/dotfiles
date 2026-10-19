@@ -28,6 +28,9 @@ help:
 	@echo "  check          - Evaluate/build BOTH hosts (catches breaking the other machine)"
 	@echo "  clean          - Garbage collect Nix store"
 	@echo "  apply-dotfiles - Apply dotfiles using stow"
+	@echo "  test-pi        - Test the pi config (no model calls)"
+	@echo "  test-pi-e2e    - Same, plus end-to-end runs against the real model"
+	@echo "  mutate-pi      - Mutation-test the pi tests (every deliberate break must be caught)"
 	@echo ""
 	@echo "Current HOST=$(HOST) (override with: make switch HOST=minipc)"
 
@@ -61,3 +64,16 @@ clean:
 .PHONY: apply-dotfiles
 apply-dotfiles:
 	@stow .
+
+# pi coding agent config (.pi/agent). See tests/pi.
+.PHONY: test-pi
+test-pi:
+	@cd tests/pi && bun install --frozen-lockfile && bun test --timeout 30000
+
+.PHONY: test-pi-e2e
+test-pi-e2e: test-pi
+	@cd tests/pi && PI_E2E=1 bun test --timeout 300000 e2e.test.ts
+
+.PHONY: mutate-pi
+mutate-pi:
+	@cd tests/pi && bun install --frozen-lockfile && bun mutate.ts

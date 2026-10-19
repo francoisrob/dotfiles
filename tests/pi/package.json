@@ -1,0 +1,13 @@
+{
+  "name": "pi-config-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test --timeout 30000",
+    "test:e2e": "PI_E2E=1 bun test --timeout 300000 e2e.test.ts",
+    "mutate": "bun mutate.ts"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1"
+  }
+}

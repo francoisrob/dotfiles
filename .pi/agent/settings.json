@@ -1,0 +1,49 @@
+{
+  "defaultProvider": "xai",
+  "defaultModel": "grok-4.7",
+  "defaultThinkingLevel": "medium",
+  "enabledModels": [
+    "xai/*"
+  ],
+  "defaultTools": [
+    "read",
+    "bash",
+    "edit",
+    "write",
+    "grep",
+    "find",
+    "ls"
+  ],
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 32768,
+    "keepRecentTokens": 30000
+  },
+  "showCacheMissNotices": true,
+  "retry": {
+    "enabled": true,
+    "maxRetries": 3,
+    "provider": {
+      "maxRetries": 0
+    }
+  },
+  "enableInstallTelemetry": false,
+  "enableAnalytics": false,
+  "packages": [],
+  "theme": "light/dark",
+  "tuiMode": "fullscreen",
+  "showHardwareCursor": false,
+  "editorPaddingX": 0,
+  "outputPad": 0,
+  "images": {
+    "blockImages": false
+  },
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "lastChangelogVersion": "1.3.0",
+  "npmCommand": [
+    "npm",
+    "--no-update-notifier"
+  ]
+}
