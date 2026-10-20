@@ -18,7 +18,7 @@ beforeAll(() => {
 	agentDir = join(sb.dir, "agent");
 	cwd = join(sb.dir, "project");
 	Bun.spawnSync(["mkdir", "-p", agentDir, cwd]);
-	for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts"]) {
+	for (const name of ["AGENTS.md", "settings.json", "prompts"]) {
 		symlinkSync(join(CONFIG_DIR, name), join(agentDir, name));
 	}
 	Bun.spawnSync(["mkdir", "-p", join(agentDir, "extensions")]);
@@ -38,7 +38,10 @@ describe("pi's settings loader", () => {
 });
 
 describe("pi's model runtime", () => {
-	test("the default model exists and gets the capped context window from models.json", async () => {
+	// The tracked config pins no model, so pi works with whichever one you pick. pi saves
+	// that pick back into settings.json, so check it only when one is there.
+	test("a default model saved in settings.json is one pi knows", async () => {
+		if (settingsFile.defaultModel === undefined && settingsFile.defaultProvider === undefined) return;
 		const rt = await pi.ModelRuntime.create({
 			modelsPath: join(agentDir, "models.json"),
 			authPath: join(agentDir, "auth.json"),
@@ -46,18 +49,7 @@ describe("pi's model runtime", () => {
 			refreshOnCreate: false,
 		});
 		expect(rt.getError()).toBeUndefined();
-		const model = rt.getModel(settingsFile.defaultProvider, settingsFile.defaultModel);
-		expect(model).toBeTruthy();
-		const override = readJsonConfig<any>("models.json").providers[settingsFile.defaultProvider].modelOverrides[settingsFile.defaultModel];
-		expect(model.contextWindow).toBe(override.contextWindow);
-	});
-
-	test("every overridden model exists in pi's catalog (no stale overrides)", async () => {
-		const rt = await pi.ModelRuntime.create({ modelsPath: join(agentDir, "models.json"), authPath: join(agentDir, "auth.json"), allowModelNetwork: false, refreshOnCreate: false });
-		const providers = readJsonConfig<any>("models.json").providers;
-		for (const [provider, cfg] of Object.entries<any>(providers)) {
-			for (const id of Object.keys(cfg.modelOverrides)) expect(rt.getModel(provider, id), `${provider}/${id}`).toBeTruthy();
-		}
+		expect(rt.getModel(settingsFile.defaultProvider, settingsFile.defaultModel)).toBeTruthy();
 	});
 });
 

@@ -1,4 +1,4 @@
-// settings.json and models.json against the schemas and catalog of the installed pi.
+// settings.json against the schema of the installed pi.
 import { describe, expect, test } from "bun:test";
 import Ajv2020 from "ajv/dist/2020";
 import { readFileSync } from "node:fs";
@@ -8,10 +8,6 @@ import { piPackageDir, readJsonConfig } from "./lib/paths";
 const PI = piPackageDir();
 const schema = (name: string) => JSON.parse(readFileSync(join(PI, "schemas", `${name}.schema.json`), "utf8"));
 const settings = readJsonConfig<Record<string, any>>("settings.json");
-const models = readJsonConfig<Record<string, any>>("models.json");
-
-// xAI bills a request at a higher rate once its prompt passes this many tokens.
-const XAI_PRICE_CLIFF = 200_000;
 
 function validate(name: string, data: unknown) {
 	const ajv = new Ajv2020({ strict: false, allErrors: true });
@@ -46,24 +42,5 @@ describe("settings.json", () => {
 
 	test("npm runs without its update notifier (it prints into pi's output)", () => {
 		expect(settings.npmCommand).toContain("--no-update-notifier");
-	});
-});
-
-describe("models.json", () => {
-	test("is valid against the installed pi's models schema", () => {
-		expect(validate("models", models)).toEqual([]);
-	});
-
-	test("every context window override stays at or under xAI's price cliff", () => {
-		const windows = Object.values(models.providers.xai.modelOverrides).map((o: any) => o.contextWindow);
-		expect(windows.length).toBeGreaterThan(0);
-		for (const w of windows) expect(w).toBeLessThanOrEqual(XAI_PRICE_CLIFF);
-	});
-
-	test("compaction leaves room: reserve plus kept tokens fit inside every capped window", () => {
-		const { reserveTokens, keepRecentTokens } = settings.compaction;
-		for (const o of Object.values(models.providers.xai.modelOverrides) as any[]) {
-			expect(reserveTokens + keepRecentTokens).toBeLessThan(o.contextWindow);
-		}
 	});
 });

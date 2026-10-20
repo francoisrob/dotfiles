@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { CONFIG_DIR, TESTS_DIR } from "./lib/paths";
 import { makeSandbox } from "./lib/sandbox";
 
-type Target = "AGENTS.md" | "settings.json" | "models.json" | "prompts/diagnose.md" | "prompts/fix.md" | "extensions/metrics/metrics.ts" | "extensions/metrics/index.ts";
+type Target = "AGENTS.md" | "settings.json" | "prompts/diagnose.md" | "prompts/fix.md" | "extensions/metrics/metrics.ts" | "extensions/metrics/index.ts";
 type Mutant = { id: string; target: Target; what: string; apply: (text: string) => string; tests: string[] };
 
 const CONFIG_TESTS = ["config.contract.test.ts", "integration.test.ts", "content.lint.test.ts"];
@@ -32,19 +32,14 @@ const dropLineWith = (needle: string) => (text: string) => {
 
 const config: Array<[Target, string, (t: string) => string]> = [
 	["settings.json", "thinking level typo", json((o) => (o.defaultThinkingLevel = "mediun"))],
-	["settings.json", "unknown key (typo of a real one)", json((o) => (o.defaultModell = "grok-4.7"))],
+	["settings.json", "unknown key (typo of a real one)", json((o) => (o.defaultModell = "model-a"))],
 	["settings.json", "a tool that does not exist", json((o) => o.defaultTools.push("grepp"))],
 	["settings.json", "analytics switched on", json((o) => (o.enableAnalytics = true))],
 	["settings.json", "install telemetry switched on", json((o) => (o.enableInstallTelemetry = true))],
 	["settings.json", "provider retries stacked on pi's", json((o) => (o.retry.provider.maxRetries = 2))],
 	["settings.json", "npm update notifier back on", json((o) => (o.npmCommand = ["npm"]))],
-	["settings.json", "default model not in the catalog", json((o) => (o.defaultModel = "grok-9"))],
-	["settings.json", "compaction reserve larger than the window", json((o) => (o.compaction.reserveTokens = 190000))],
+	["settings.json", "default model not in the catalog", json((o) => ((o.defaultProvider = "example"), (o.defaultModel = "no-such-model")))],
 	["settings.json", "broken JSON", (t) => t.replace(/}\s*$/, "")],
-	["models.json", "window above the price cliff", json((o) => (o.providers.xai.modelOverrides["grok-4.7"].contextWindow = 250000))],
-	["models.json", "override for a model pi does not have", json((o) => (o.providers.xai.modelOverrides["grok-4.2"] = { contextWindow: 200000 }))],
-	["models.json", "the cap for the default model removed", json((o) => delete o.providers.xai.modelOverrides["grok-4.7"])],
-	["models.json", "broken JSON", (t) => t.replace(/}\s*$/, "")],
 	["AGENTS.md", "an em dash in the text", swap("## Machine", `## Machine ${String.fromCharCode(0x2014)} setup`)],
 	["AGENTS.md", "a gendered pronoun", swap("the owner wants to understand", "he wants to understand")],
 	["AGENTS.md", "the result line tied to the test bench", swap("`<command>: <N> pass, <N> fail`", "`bun test: 1615 pass, 2 skip, 0 fail`")],

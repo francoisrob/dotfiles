@@ -1,10 +1,5 @@
 {
-  "defaultProvider": "xai",
-  "defaultModel": "grok-4.7",
   "defaultThinkingLevel": "medium",
-  "enabledModels": [
-    "xai/*"
-  ],
   "defaultTools": [
     "read",
     "bash",

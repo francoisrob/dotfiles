@@ -33,7 +33,7 @@ function setup(opts: { mode?: string; settings?: Record<string, unknown>; model?
 	const ctx = {
 		mode: opts.mode ?? "tui",
 		hasUI: (opts.mode ?? "tui") !== "print",
-		model: opts.model ?? { provider: "xai", id: "grok-4.7" },
+		model: opts.model ?? { provider: "example", id: "model-a" },
 		sessionManager: { getBranch: () => entries },
 		getContextUsage: () => ({ tokens: 38_000, contextWindow: 200_000, percent: 19 }),
 		ui: {
@@ -104,7 +104,7 @@ describe("footer status", () => {
 	});
 
 	test("compaction point follows the effective settings, including a per-model override, via pi's own resolver", async () => {
-		const s = tracked(setup({ settings: { compaction: { enabled: true, reserveTokens: 32_768, modelOverrides: { "xai/grok-4.7": { reserveTokens: 50_000 } } } } }));
+		const s = tracked(setup({ settings: { compaction: { enabled: true, reserveTokens: 32_768, modelOverrides: { "example/model-a": { reserveTokens: 50_000 } } } } }));
 		await s.emit("session_start", { reason: "startup" });
 		expect(s.statuses.at(-1)).toContain("compacts at 150k");
 	});

@@ -9,7 +9,7 @@ const live = join(HOME, ".pi/agent");
 const d = UNDER_MUTATION ? describe.skip : describe;
 
 d("stow links", () => {
-	for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts", "extensions/metrics"]) {
+	for (const name of ["AGENTS.md", "settings.json", "prompts", "extensions/metrics"]) {
 		test(`~/.pi/agent/${name} is a link into the dotfiles repo`, () => {
 			expect(lstatSync(join(live, name)).isSymbolicLink()).toBe(true);
 			expect(realpathSync(join(live, name))).toBe(join(REPO, ".pi/agent", name));
@@ -66,7 +66,7 @@ describe("make apply-dotfiles on a fresh home", () => {
 			for (const folder of [".pi", ".pi/agent", ".pi/agent/extensions"]) {
 				expect(lstatSync(join(dir, folder)).isSymbolicLink()).toBe(false);
 			}
-			for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts", "extensions/metrics"]) {
+			for (const name of ["AGENTS.md", "settings.json", "prompts", "extensions/metrics"]) {
 				expect(realpathSync(join(dir, ".pi/agent", name))).toBe(join(REPO, ".pi/agent", name));
 			}
 		} finally {

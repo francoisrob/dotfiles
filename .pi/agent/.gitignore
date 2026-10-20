@@ -7,7 +7,6 @@
 !.gitignore
 !AGENTS.md
 !settings.json
-!models.json
 !prompts/
 !prompts/*.md
 !extensions/

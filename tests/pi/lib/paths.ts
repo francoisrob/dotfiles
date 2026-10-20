@@ -5,7 +5,7 @@ import { dirname, join, resolve } from "node:path";
 export const TESTS_DIR = resolve(import.meta.dir, "..");
 export const REPO = resolve(TESTS_DIR, "../..");
 
-/** The tracked pi config: AGENTS.md, settings.json, models.json, prompts/. */
+/** The tracked pi config: AGENTS.md, settings.json, prompts/, extensions/metrics/. */
 export const CONFIG_DIR = process.env.PI_TEST_CONFIG_DIR ?? join(REPO, ".pi/agent");
 
 /** True when the mutation runner is driving the tests against a mutated copy. */

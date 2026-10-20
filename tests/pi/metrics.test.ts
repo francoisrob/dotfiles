@@ -31,7 +31,7 @@ describe("collectRuns: one run per user message", () => {
 	test("entries before the first user message (system prompt, model change) are not a run", () => {
 		const runs = m.collectRuns([
 			entry(0, { role: "system", content: "", timestamp: T0 }),
-			{ type: "model_change", id: "x", parentId: null, timestamp: at(0), provider: "xai", modelId: "grok-4.7" },
+			{ type: "model_change", id: "x", parentId: null, timestamp: at(0), provider: "example", modelId: "model-a" },
 			{ type: "usage", id: "u", parentId: null, timestamp: at(0), kind: "cache_warm", usage: usage(5, 5) },
 		]);
 		expect(runs).toEqual([]);
