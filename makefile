@@ -61,9 +61,19 @@ clean:
 	@sudo nix-collect-garbage -d
 	@sudo nix-store --optimise
 
+# Where stow links into. Stow's own default is the parent of this repo (~); the
+# tests override it to link into a throwaway folder.
+STOW_TARGET ?= ..
+
+# Stow links a whole folder into the repo when that folder does not exist in the
+# target yet. pi writes its login (auth.json), tokens and sessions into
+# ~/.pi/agent and installs local extensions into ~/.pi/agent/extensions, so both
+# are created as real folders first. Stow then links pi's config file by file,
+# and pi's own files stay out of the repo.
 .PHONY: apply-dotfiles
 apply-dotfiles:
-	@stow .
+	@mkdir -p $(STOW_TARGET)/.pi/agent/extensions
+	@stow -t $(STOW_TARGET) .
 
 # pi coding agent config (.pi/agent). See tests/pi.
 .PHONY: test-pi

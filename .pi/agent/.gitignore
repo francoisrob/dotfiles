@@ -1,0 +1,15 @@
+# Allowlist: track only the hand-written config, ignore everything else.
+# pi writes logins (auth.json), tokens (models-store.json), trust.json, sessions/,
+# npm/ and git/ into this folder. When ~/.pi did not exist before `stow .`, stow
+# links the whole ~/.pi folder into this repo, so those land here. Anything not
+# named below stays ignored, including files a future pi version adds.
+*
+!.gitignore
+!AGENTS.md
+!settings.json
+!models.json
+!prompts/
+!prompts/*.md
+!extensions/
+!extensions/metrics/
+!extensions/metrics/*.ts

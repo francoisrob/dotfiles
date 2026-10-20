@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { existsSync, lstatSync, readFileSync, realpathSync } from "node:fs";
 import { join } from "node:path";
 import { HOME, LOGIN_ENV, REPO, UNDER_MUTATION, piPackageDir } from "./lib/paths";
+import { makeSandbox } from "./lib/sandbox";
 
 const live = join(HOME, ".pi/agent");
 const d = UNDER_MUTATION ? describe.skip : describe;
@@ -32,6 +33,45 @@ d("stow links", () => {
 	test("no links are left pointing at the old ~/hub/pi location", () => {
 		const out = Bun.spawnSync(["find", live, "-maxdepth", "1", "-type", "l", "-lname", "*hub/pi*"]).stdout.toString().trim();
 		expect(out).toBe("");
+	});
+});
+
+// Repo rules, not live state: when stow links the whole ~/.pi folder into the repo,
+// pi's secrets and runtime files must still be invisible to `git add`.
+describe("pi runtime files are gitignored", () => {
+	const ignored = (path: string) => Bun.spawnSync(["git", "-C", REPO, "check-ignore", "-q", "--no-index", path]).exitCode === 0;
+
+	for (const path of ["auth.json", "models-store.json", "trust.json", "sessions/a.jsonl", "npm/x", "git/x", "extensions/local-only/index.js", "some-new-file.json"]) {
+		test(`.pi/agent/${path} is ignored`, () => {
+			expect(ignored(`.pi/agent/${path}`)).toBe(true);
+		});
+	}
+
+	test("every tracked pi config file is still allowed", () => {
+		const tracked = Bun.spawnSync(["git", "-C", REPO, "ls-files", ".pi"]).stdout.toString().split("\n").filter(Boolean);
+		expect(tracked.length).toBeGreaterThan(0);
+		expect(tracked.filter(ignored)).toEqual([]);
+	});
+});
+
+// A new machine has no ~/.pi. `make apply-dotfiles` must still leave ~/.pi/agent and its
+// extensions folder as real folders, so pi's auth.json and sessions land outside the repo.
+describe("make apply-dotfiles on a fresh home", () => {
+	test("links pi's config file by file and keeps ~/.pi/agent a real folder", () => {
+		const { dir, cleanup } = makeSandbox("fresh-home");
+		try {
+			const make = Bun.spawnSync(["make", "-s", "-C", REPO, "apply-dotfiles", `STOW_TARGET=${dir}`]);
+			expect(make.stderr.toString()).toBe("");
+			expect(make.exitCode).toBe(0);
+			for (const folder of [".pi", ".pi/agent", ".pi/agent/extensions"]) {
+				expect(lstatSync(join(dir, folder)).isSymbolicLink()).toBe(false);
+			}
+			for (const name of ["AGENTS.md", "settings.json", "models.json", "prompts", "extensions/metrics"]) {
+				expect(realpathSync(join(dir, ".pi/agent", name))).toBe(join(REPO, ".pi/agent", name));
+			}
+		} finally {
+			cleanup();
+		}
 	});
 });
 

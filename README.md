@@ -31,7 +31,9 @@ see all options:
 
 - **`make apply-dotfiles`**  
   Applies dotfiles by creating symlinks with Stow.  
-  _Command:_ `stow .`
+  _Command:_ `mkdir -p ~/.pi/agent/extensions && stow .` (the folders keep
+  pi's login and session files out of the repo; use this target, not a bare
+  `stow .`, on a new machine)
 
 ## Installation
 
