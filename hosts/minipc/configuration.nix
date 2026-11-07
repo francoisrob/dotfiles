@@ -36,7 +36,17 @@
     ../../modules/packages.nix
     ../../modules/services.nix
     ../../modules/user.nix
+
+    ../../modules/webdav.nix
   ];
+
+  # Never sleep, for nightly backups. Overrides the shared hypridle 50h suspend.
+  systemd.targets = {
+    sleep.enable = false;
+    suspend.enable = false;
+    hibernate.enable = false;
+    hybrid-sleep.enable = false;
+  };
 
   # Wi-Fi. This host is stationary, has no ethernet run to it, and sits at
   # -72 dBm from the nearest Helderspruit AP with ~10% TX retries. Both of
