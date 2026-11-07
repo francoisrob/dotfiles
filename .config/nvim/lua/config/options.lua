@@ -1,13 +1,12 @@
 local opt = vim.opt
 local g = vim.g
 
-opt.laststatus = 3 -- global statusline
+opt.laststatus = 3
 opt.showmode = false
 
 opt.clipboard = "unnamedplus"
 opt.cursorline = true
 
--- Indenting
 opt.expandtab = true
 opt.shiftwidth = 2
 opt.smartindent = true
@@ -23,7 +22,6 @@ opt.number = true
 opt.numberwidth = 2
 opt.ruler = false
 
--- disable nvim intro
 opt.shortmess:append("sI")
 
 opt.signcolumn = "yes"
@@ -57,6 +55,4 @@ for _, provider in ipairs({ "node", "perl", "ruby" }) do
 end
 
 local is_windows = vim.uv.os_uname().sysname == "Windows_NT"
--- Append, never prepend: mason's dynamically-linked binaries must not shadow
--- nix-provided servers (a mason marksman SIGABRTs on NixOS).
 vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath("data") .. "/mason/bin"

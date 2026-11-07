@@ -1,15 +1,13 @@
 local map = vim.keymap.set
 
--- general mappings
 map("n", "<C-s>", "<cmd> w <CR>")
 map("i", "jk", "<ESC>")
-map("n", "<C-c>", "<cmd> %y+ <CR>") -- copy whole filecontent
+map("n", "<C-c>", "<cmd> %y+ <CR>")
 
 map("n", "<C-n>", function()
   Snacks.explorer()
 end)
 
--- bufferline, cycle buffers
 map("n", "<Tab>", "<cmd> BufferLineCycleNext <CR>")
 map("n", "<S-Tab>", "<cmd> BufferLineCyclePrev <CR>")
 map("n", "<C-q>", "<cmd> bd <CR>")

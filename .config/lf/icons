@@ -1,25 +1,3 @@
-# vim:ft=conf
-
-# These examples require Nerd Fonts or a compatible font to be used.
-# See https://www.nerdfonts.com for more information.
-
-# default values from lf (with matching order)
-# ln      l       # LINK
-# or      l       # ORPHAN
-# tw      t       # STICKY_OTHER_WRITABLE
-# ow      d       # OTHER_WRITABLE
-# st      t       # STICKY
-# di      d       # DIR
-# pi      p       # FIFO
-# so      s       # SOCK
-# bd      b       # BLK
-# cd      c       # CHR
-# su      u       # SETUID
-# sg      g       # SETGID
-# ex      x       # EXEC
-# fi      -       # FILE
-
-# file types (with matching order)
 ln             # LINK
 or             # ORPHAN
 tw      t       # STICKY_OTHER_WRITABLE
@@ -35,7 +13,6 @@ sg      g       # SETGID
 ex             # EXEC
 fi             # FILE
 
-# file extensions (vim-devicons)
 *.styl          
 *.sass          
 *.scss          
@@ -158,7 +135,6 @@ fi             # FILE
 *.sol           󰡪
 *.pem           
 
-# file names (vim-devicons) (case-insensitive not supported in lf)
 *gruntfile.coffee       
 *gruntfile.js           
 *gruntfile.ls           
@@ -195,7 +171,6 @@ fi             # FILE
 *cmakelists.txt         
 *robots.txt             󰚩
 
-# file names (case-sensitive adaptations)
 *Gruntfile.coffee       
 *Gruntfile.js           
 *Gruntfile.ls           
@@ -214,18 +189,6 @@ fi             # FILE
 *Makefile               
 *CMakeLists.txt         
 
-# file patterns (vim-devicons) (patterns not supported in lf)
-# .*jquery.*\.js$         
-# .*angular.*\.js$        
-# .*backbone.*\.js$       
-# .*require.*\.js$        
-# .*materialize.*\.js$    
-# .*materialize.*\.css$   
-# .*mootools.*\.js$       
-# .*vimrc.*               
-# Vagrantfile$            
-
-# file patterns (file name adaptations)
 *jquery.min.js          
 *angular.min.js         
 *backbone.min.js        
@@ -236,7 +199,6 @@ fi             # FILE
 *vimrc                  
 Vagrantfile             
 
-# archives or compressed (extensions from dircolors defaults)
 *.tar   
 *.tgz   
 *.arc   
@@ -284,7 +246,6 @@ Vagrantfile             
 *.dwm   
 *.esd   
 
-# image formats (extensions from dircolors defaults)
 *.jpg   
 *.jpeg  
 *.mjpg  
@@ -335,7 +296,6 @@ Vagrantfile             
 *.ogv   
 *.ogx   
 
-# audio formats (extensions from dircolors defaults)
 *.aac   
 *.au    
 *.flac  
@@ -353,5 +313,4 @@ Vagrantfile             
 *.spx   
 *.xspf  
 
-# other formats
 *.pdf   

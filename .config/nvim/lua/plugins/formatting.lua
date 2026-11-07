@@ -1,4 +1,3 @@
--- Smart formatter selection: use biome when a project has biome config, otherwise prettier.
 local function has_biome_config(bufnr)
   local bufname = vim.api.nvim_buf_get_name(bufnr)
   if bufname == "" then

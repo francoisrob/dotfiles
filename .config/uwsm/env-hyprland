@@ -1,11 +1,9 @@
-# Hyprland specific
 export HYPRLAND_TRACE=0
 export HYPRLAND_NO_SD_NOTIFY=1
 export HYPRLAND_NO_SD_VARS=1
 
 export HYPRLAND_NO_RT=0
 
-# aquamarine settings
 export AQ_TRACE=0
 
 export AQ_NO_MODIFIERS=0

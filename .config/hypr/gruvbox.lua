@@ -1,15 +1,4 @@
--- Gruvbox Dark, medium contrast (background bg0 = #282828)
--- Palette: https://github.com/morhetz/gruvbox
---
--- Lua port of gruvbox.conf. Returns a plain table; `require` it and index it:
---   local c = require("gruvbox")
---   c.aqua  --> "rgb(8ec07c)"
---
--- The `*_alpha` entries are the bare hex digits (no rgb() wrapper), kept for
--- parity with the old $fooAlpha variables.
-
 return {
-	-- Backgrounds (dark0_hard .. dark4)
 	bg0_h = "rgb(1d2021)",
 	bg0_h_alpha = "1d2021",
 
@@ -31,11 +20,9 @@ return {
 	bg4 = "rgb(7c6f64)",
 	bg4_alpha = "7c6f64",
 
-	-- Gray
 	gray = "rgb(928374)",
 	gray_alpha = "928374",
 
-	-- Foregrounds (light0 .. light4)
 	fg0 = "rgb(fbf1c7)",
 	fg0_alpha = "fbf1c7",
 
@@ -51,7 +38,6 @@ return {
 	fg4 = "rgb(a89984)",
 	fg4_alpha = "a89984",
 
-	-- Bright accents
 	red = "rgb(fb4934)",
 	red_alpha = "fb4934",
 
@@ -73,7 +59,6 @@ return {
 	orange = "rgb(fe8019)",
 	orange_alpha = "fe8019",
 
-	-- Neutral accents
 	neutral_red = "rgb(cc241d)",
 	neutral_red_alpha = "cc241d",
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-# Step DEFAULT_AUDIO_SINK volume to the next/previous multiple of 5 (0..100).
 dir="$1"
 cur=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2*100 + 0.5)}')
 case "$dir" in

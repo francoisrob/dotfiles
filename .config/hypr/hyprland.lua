@@ -1,17 +1,5 @@
--- Hyprland configuration (Lua).
--- Ported 1:1 from the previous hyprland.conf (hyprlang), which is deprecated
--- since Hyprland 0.55 and will be dropped in a future release.
--- Section order below mirrors the old file so the two can be diffed by eye.
-
 local c = require("gruvbox")
 
-------------------
----- MONITORS ----
-------------------
-
--- Catch-all, kept first so the two explicit rules below win for the desk
--- monitors. This is what lights up anything else that gets plugged in.
--- was: monitor=,highrr,auto,1
 hl.monitor({
 	output = "",
 	mode = "highrr",
@@ -19,29 +7,6 @@ hl.monitor({
 	scale = 1,
 })
 
--- The two desk monitors, keyed by DESCRIPTION rather than connector name.
--- Connector names on this box are NOT stable: the same two panels enumerated as
--- DP-9/DP-11 while daisy-chained over MST, then DP-10/DP-13 after a re-probe
--- mid-session, and are DP-1/DP-5 now that each has its own cable. A rule keyed
--- to "DP-1" would silently stop matching. The description embeds the panel's
--- serial, so it survives re-cabling, re-enumeration and reboots.
---
--- position: these are set explicitly because "auto" ordered them backwards
--- relative to how they physically sit on the desk. This is a compositor-level
--- concern, not a BIOS or early-boot one: nothing before the compositor knows
--- or cares which panel is on your left.
---
--- bitdepth 10: both panels report "Bits per primary color channel: 10" in their
--- EDID. Verified live as currentFormat XRGB2101010.
---
--- vrr 1 (always on): both connectors report vrr_capable=1 now that neither sits
--- behind an MST hub. amdgpu does not expose VRR on MST connectors at all, which
--- is why this did nothing while the pair was daisy-chained. The panels
--- advertise a 48-120 Hz continuous range. Verified live as VRR_ENABLED=1 on
--- both active CRTCs. misc.vrr below stays at 2 as the conservative default for
--- any OTHER monitor; these per-monitor values override it.
-
--- Left: U2724DE, on USB4 (DisplayPort alt mode).
 hl.monitor({
 	output = "desc:Dell Inc. DELL U2724DE BR2DDP3",
 	mode = "2560x1440@120",
@@ -51,7 +16,6 @@ hl.monitor({
 	vrr = 1,
 })
 
--- Right: U2724D, on the physical DP port.
 hl.monitor({
 	output = "desc:Dell Inc. DELL U2724D JCJK9P3",
 	mode = "2560x1440@120",
@@ -61,18 +25,9 @@ hl.monitor({
 	vrr = 1,
 })
 
--------------------
----- AUTOSTART ----
--------------------
-
--- was: exec-once=uwsm finalize
 hl.on("hyprland.start", function()
 	hl.exec_cmd("uwsm finalize")
 end)
-
------------------------
----- LOOK AND FEEL ----
------------------------
 
 hl.config({
 	general = {
@@ -150,34 +105,22 @@ hl.config({
 	},
 })
 
-----------------------
----- ANIMATIONS   ----
-----------------------
-
--- Old `bezier = NAME, x0, y0, x1, y1` becomes hl.curve with the two
--- control points expressed as {x0, y0} and {x1, y1}.
 hl.curve("fluent_decel", { type = "bezier", points = { { 0, 0.2 }, { 0.4, 1 } } })
 hl.curve("easeOutCirc", { type = "bezier", points = { { 0, 0.55 }, { 0.45, 1 } } })
 hl.curve("easeOutCubic", { type = "bezier", points = { { 0.33, 1 }, { 0.68, 1 } } })
 hl.curve("easeinoutsine", { type = "bezier", points = { { 0.37, 0 }, { 0.63, 1 } } })
 
--- Windows
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 2.3, bezier = "easeOutCubic", style = "gnomed" }) -- window open
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "fluent_decel", style = "gnomed" }) -- window close.
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 1.5, bezier = "easeOutCirc", style = "slide" }) -- everything in between, moving, dragging, resizing.
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 2.3, bezier = "easeOutCubic", style = "gnomed" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "fluent_decel", style = "gnomed" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 1.5, bezier = "easeOutCirc", style = "slide" })
 
--- Fade
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 0.1, bezier = "easeOutCubic" }) -- fade in (open) -> layers and windows
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.7, bezier = "easeOutCubic" }) -- fade out (close) -> layers and windows
-hl.animation({ leaf = "fadeSwitch", enabled = false }) -- fade on changing activewindow and its opacity
-hl.animation({ leaf = "fadeShadow", enabled = true, speed = 10, bezier = "easeOutCirc" }) -- fade on changing activewindow for shadows
-hl.animation({ leaf = "fadeDim", enabled = true, speed = 4, bezier = "fluent_decel" }) -- the easing of the dimming of inactive windows
-hl.animation({ leaf = "border", enabled = true, speed = 2.7, bezier = "easeOutCirc" }) -- for animating the border's color switch speed
-hl.animation({ leaf = "workspaces", enabled = true, speed = 2.3, bezier = "easeOutCubic", style = "slidefadevert" }) -- styles: slide, slidevert, fade, slidefade, slidefadevert
-
----------------------------------
----- INPUT / LAYOUT / GROUPS ----
----------------------------------
+hl.animation({ leaf = "fadeIn", enabled = true, speed = 0.1, bezier = "easeOutCubic" })
+hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.7, bezier = "easeOutCubic" })
+hl.animation({ leaf = "fadeSwitch", enabled = false })
+hl.animation({ leaf = "fadeShadow", enabled = true, speed = 10, bezier = "easeOutCirc" })
+hl.animation({ leaf = "fadeDim", enabled = true, speed = 4, bezier = "fluent_decel" })
+hl.animation({ leaf = "border", enabled = true, speed = 2.7, bezier = "easeOutCirc" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 2.3, bezier = "easeOutCubic", style = "slidefadevert" })
 
 hl.config({
 	input = {
@@ -250,7 +193,6 @@ hl.config({
 
 	render = {
 		direct_scanout = 0,
-		-- unload_all_zero_opacity = true,
 	},
 
 	cursor = {
@@ -269,10 +211,6 @@ hl.config({
 	},
 })
 
----------------------
----- KEYBINDINGS ----
----------------------
-
 local mainMod = "SUPER"
 
 hl.bind(
@@ -287,17 +225,12 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("uwsm-app -- chromium"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float())
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session $XDG_SESSION_ID"))
 
--- fuzzel replaces hyprlauncher; see modules/desktop.nix for why. Apps launched
--- from it get their own systemd scope via launch-prefix in fuzzel.ini, rather
--- than sharing the launcher's.
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("uwsm-app -- fuzzel"))
 hl.bind(
 	mainMod .. " + A",
 	hl.dsp.exec_cmd([[uwsm-app -- sh -c 'cliphist list | fuzzel --dmenu | cliphist decode | wl-copy']])
 )
 
--- action = "toggle" is required. Without it fullscreen_state only ever SETS the
--- state, so a second press is a no-op and fullscreen cannot be undone.
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen_state({ internal = 2, client = 0, action = "toggle" }))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen_state({ internal = 0, client = 2, action = "toggle" }))
 
@@ -313,15 +246,11 @@ hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "d" }))
 
 hl.bind(mainMod .. " + Tab", hl.dsp.group.next())
 
--- Workspaces 1-9 plus 0 -> workspace 10. Two loops rather than one, so the
--- resulting bind order matches the old config exactly (all focus binds, then
--- all move binds) and `hyprctl binds` stays diffable against it.
 for i = 1, 10 do
-	local key = i % 10 -- 10 maps to key 0
+	local key = i % 10
 	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
 end
 
--- SHIFT moves the active window there (and follows it, like movetoworkspace).
 for i = 1, 10 do
 	local key = i % 10
 	hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
@@ -353,11 +282,6 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 
--- brightnessctl drives /sys/class/backlight, an internal laptop panel. This
--- machine has none, only two external Dells, so these keys did nothing at all.
--- brightness.sh talks DDC/CI to both panels over I2C instead. Holding the key is
--- safe: the script updates its cache instantly and coalesces the actual ddcutil
--- writes under a lock, so a burst collapses to one write of the final value.
 hl.bind(
 	"XF86MonBrightnessUp",
 	hl.dsp.exec_cmd("~/.config/wayle/scripts/brightness.sh up"),
@@ -369,7 +293,6 @@ hl.bind(
 	{ repeating = true }
 )
 
--- Resize submap
 hl.bind("ALT + R", hl.dsp.submap("resize"))
 hl.define_submap("resize", function()
 	hl.bind("l", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
@@ -379,14 +302,6 @@ hl.define_submap("resize", function()
 	hl.bind("escape", hl.dsp.submap("reset"))
 end)
 
----------------------
----- WINDOW RULES ---
----------------------
-
--- Rules stay anonymous (no `name` field) on purpose: named rules are evaluated
--- before anonymous ones, so adding names would change the precedence order.
-
--- float calculator
 hl.window_rule({
 	match = { class = "(org.gnome.Calculator)", title = "(Calculator)" },
 	float = true,
@@ -394,10 +309,8 @@ hl.window_rule({
 	center = true,
 })
 
--- float wayle settings
 hl.window_rule({ match = { class = "(com.wayle.settings)" }, float = true, size = { 1300, 800 }, center = true })
 
--- float mpv
 hl.window_rule({
 	match = { class = "(mpv)" },
 	float = true,
@@ -405,7 +318,6 @@ hl.window_rule({
 	center = true,
 })
 
--- float pavucontrol
 hl.window_rule({
 	match = { class = "(org.pulseaudio.pavucontrol)", title = "(Volume Control)" },
 	float = true,
@@ -413,7 +325,6 @@ hl.window_rule({
 	center = true,
 })
 
--- float bitwarden
 hl.window_rule({
 	match = { initial_class = "chrome-nngceckbapebfimnlniiiahkandclblb-Default" },
 	float = true,
@@ -440,7 +351,6 @@ hl.window_rule({
 	size = { 800, 600 },
 })
 
--- no border on single window
 hl.window_rule({ match = { workspace = "w[t1]" }, border_size = 0 })
 
 hl.window_rule({ match = { title = "(Picture in picture)" }, float = true })
@@ -449,51 +359,25 @@ hl.window_rule({ match = { pin = true }, opacity = "1 0.7", border_size = 0 })
 
 hl.window_rule({ match = { class = "(kitty)", title = "(Scratchpad)" }, workspace = "special" })
 
--- noshadow on tiled windows (shadows only on floating)
 hl.window_rule({ match = { float = false }, no_shadow = true })
 
--- idleinhibit on fullscreen media
 hl.window_rule({ match = { class = "(mpv)" }, idle_inhibit = "fullscreen" })
 hl.window_rule({ match = { initial_class = "chromium-browser" }, idle_inhibit = "fullscreen" })
 
--- spotlight effect for calculator
 hl.window_rule({ match = { class = "(org.gnome.Calculator)" }, dim_around = true })
 
--- suppress maximize for all apps
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 
---------------------
----- GESTURES  -----
---------------------
-
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
-
---------------------
----- LAYER RULES ---
---------------------
 
 hl.layer_rule({ match = { namespace = "wayle-bar-.*" }, blur = true })
 hl.layer_rule({ match = { namespace = "wayle-bar-.*" }, ignore_alpha = 0.3 })
 hl.layer_rule({ match = { namespace = "wayle-notification-popup" }, blur = true })
 hl.layer_rule({ match = { namespace = "wayle-notification-popup" }, ignore_alpha = 0.5 })
 
---------------------
----- NIGHT LIGHT ---
---------------------
-
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("hyprsunset -t 4500"))
 hl.bind(mainMod .. " + CTRL + N", hl.dsp.exec_cmd("pkill hyprsunset"))
 
----------------
----- PLUGINS --
----------------
-
--- Workspace overview (hyprexpo)
--- hl.bind(mainMod .. " + grave", hl.plugin.hyprexpo.expo({ action = "toggle" }))
-
--- Guarded so a missing plugin does not abort the rest of the config.
--- No plugins are currently loaded, so these blocks are inert, exactly as the
--- old `plugin { ... }` section was.
 if hl.plugin.hyprexpo ~= nil then
 	hl.config({
 		plugin = {

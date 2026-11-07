@@ -2,10 +2,8 @@ set -g fish_greeting ""
 
 set fish_home ~/.config/fish
 
-# Path additions - consolidated for better performance
 fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin" "$HOME/.cargo/bin"
 
-# Load secrets if they exist
 if test -f ~/.secrets.fish
     source ~/.secrets.fish
 end
@@ -24,9 +22,6 @@ if status is-interactive
     end
 end
 
-# mise supplies node, bun and other tools. Full activation at the prompt, shims for
-# scripts and other non-interactive fish (mise's documented fish "auto" layout), so
-# tools such as pi, which run on node, also work from cron, ssh and `fish -c`.
 if type -q mise
     if status is-interactive
         mise activate fish | source
@@ -55,17 +50,11 @@ end
 
 alias cat="bat -p"
 alias ssh="kitten ssh"
-# alias cd="z"
 
-# `cc` opens Claude Code in the ~/hub workspace — that's where the hub-canon MCP
-# server, the scratch dir, and the design context live, so kb.draft's scratch_ref
-# resolves correctly and the agent has the hub repo at hand. Forwards any args
-# (e.g. `cc --resume`). Stays in ~/hub after Claude exits.
 function cc -d "Open Claude Code in the ~/hub workspace"
     cd ~/hub; and claude $argv
 end
 
-# MongoDB management
 function mongo-toggle -d "Toggle MongoDB service"
     if systemctl is-active --quiet mongodb
         sudo systemctl stop mongodb
@@ -86,7 +75,6 @@ function mongo-stop -d "Stop MongoDB service"
     echo "MongoDB stopped"
 end
 
-# TeamViewer management (requires teamviewerd daemon)
 function teamviewer-start -d "Start TeamViewer daemon and app"
     sudo systemctl start teamviewerd
     echo "TeamViewer daemon started"
@@ -99,7 +87,6 @@ function teamviewer-stop -d "Stop TeamViewer daemon"
     echo "TeamViewer daemon stopped"
 end
 
-# Port management
 function port-open -d "Open a TCP port in nftables (runtime)"
     if test (count $argv) -ne 1
         echo "Usage: port-open <port>"

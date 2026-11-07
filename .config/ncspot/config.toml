@@ -1,6 +1,3 @@
-# ncspot configuration
-# https://github.com/hrkfdn/ncspot
-
 use_nerdfont = true
 bitrate = 320
 gapless = true
