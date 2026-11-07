@@ -26,6 +26,7 @@
     # Virtualization
     ../../modules/virtualisation/default.nix
     ../../modules/virtualisation/docker.nix
+    ../../modules/virtualisation/ai-containers.nix
 
     # Desktop
     ../../modules/desktop.nix
