@@ -17,6 +17,7 @@
     mongodb = {
       enable = true;
       package = pkgs.mongodb-ce;
+      replSetName = "rs0";
       extraConfig = ''
         storage:
           wiredTiger:
