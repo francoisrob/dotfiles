@@ -12,12 +12,15 @@
     ../../modules/programs/thunar.nix
 
     ../../modules/system/boot.nix
+    ../../modules/system/core.nix
+    ../../modules/system/nix.nix
+    ../../modules/system/memory.nix
+    ../../modules/system/security.nix
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
     ../../modules/system/networking.nix
 
     ../../modules/virtualisation/default.nix
-    ../../modules/virtualisation/docker.nix
     ../../modules/virtualisation/ai-containers.nix
 
     ../../modules/desktop.nix
@@ -38,11 +41,7 @@
     hybrid-sleep.enable = false;
   };
 
-  networking.wireless.iwd.enable = lib.mkForce false;
-
   networking.networkmanager.wifi = {
-    backend = lib.mkForce "wpa_supplicant";
-
     powersave = false;
 
     scanRandMacAddress = false;

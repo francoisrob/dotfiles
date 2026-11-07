@@ -12,13 +12,16 @@
     ../../modules/programs/thunar.nix
 
     ../../modules/system/boot.nix
+    ../../modules/system/core.nix
+    ../../modules/system/nix.nix
+    ../../modules/system/memory.nix
+    ../../modules/system/security.nix
     ../../modules/system/laptop.nix
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix
     ../../modules/system/networking.nix
 
     ../../modules/virtualisation/default.nix
-    ../../modules/virtualisation/docker.nix
 
     ../../modules/desktop.nix
 

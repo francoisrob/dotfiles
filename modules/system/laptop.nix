@@ -23,6 +23,22 @@ in {
     ];
   };
 
+  networking = {
+    networkmanager.wifi.backend = "iwd";
+    wireless.iwd = {
+      enable = true;
+      settings = {
+        General = {
+          EnableNetworkConfiguration = false;
+          RoamThreshold = -70;
+          RoamThreshold5G = -70;
+          RoamRetryInterval = 60;
+        };
+        Network.EnableIPv6 = true;
+      };
+    };
+  };
+
   services = {
     logind = {
       settings = {
