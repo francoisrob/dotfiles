@@ -58,7 +58,7 @@ in {
 
       evince
       ffmpeg
-      libreoffice-fresh
+      libreoffice
       postman
       obs-studio
       stremio-linux-shell
