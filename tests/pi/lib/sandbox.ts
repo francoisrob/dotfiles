@@ -1,4 +1,3 @@
-// Throwaway test dirs under tests/pi/.sandbox (gitignored), never /tmp.
 import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { TESTS_DIR } from "./paths";

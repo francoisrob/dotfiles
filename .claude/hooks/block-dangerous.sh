@@ -13,14 +13,6 @@ fi
 
 [[ -z "$COMMAND" ]] && exit 0
 
-# A repo opts into trunk-based development (agent pushes main directly) with:
-#   git config claude.trunkBased true
-# Scoped per repo: everywhere else the branch-and-PR discipline still holds.
-# Only the push-to-main block honours it; force push and the destructive
-# blocks below apply regardless.
-# The repo the command targets decides. A `cd /path && ...` or `git -C /path`
-# names the target explicitly and WINS over the session cwd, so sitting in a
-# trunk-based repo grants nothing to commands aimed at another repo.
 TRUNK_BASED=false
 TARGET_DIR=$(printf '%s' "$COMMAND" | grep -oE '(cd|git -C) [^ ;&|]+' | head -1 | awk '{print $NF}' || echo "")
 if [[ -n "$TARGET_DIR" && -d "$TARGET_DIR" ]]; then
@@ -43,7 +35,6 @@ block_if_matches() {
   fi
 }
 
-# Git safety. `git -C <path>` is part of the match so it cannot slip past.
 block_if_matches "(git\s+(-C\s+\S+\s+)?push\s+(.*\s)?(-f|--force|--force-with-lease)(\s|$))" \
   "Force push is destructive" \
   "Use git push without --force"
@@ -58,7 +49,6 @@ block_if_matches "(gh\s+pr\s+merge)" \
   "Auto-merging PRs" \
   "Human reviews and merges PRs"
 
-# Destructive operations
 block_if_matches "(rm\s+-rf\s+(/|~|\*|/\*))" \
   "Catastrophic rm" \
   "Be specific about what to remove"
@@ -67,7 +57,6 @@ block_if_matches "(DROP\s+TABLE|TRUNCATE\s+TABLE)" \
   "Destructive SQL" \
   "Use migrations for schema changes"
 
-# Pipe to shell
 block_if_matches "(curl|wget)\s+.*\|\s*(bash|sh)" \
   "Piping remote script to shell" \
   "Download first, review, then execute"

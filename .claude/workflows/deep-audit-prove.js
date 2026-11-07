@@ -8,11 +8,6 @@ export const meta = {
   ],
 }
 
-// args: {
-//   out, target,
-//   findings: [{ key, title, where, what, proof, reproduce, severity, lenses, needs_three }],
-//   concurrency: number (default 3, refuters run proof commands)
-// }
 const { out, target, findings, concurrency = 3 } = args
 if (!out || !target || !Array.isArray(findings) || !findings.length) {
   throw new Error('deep-audit-prove needs args.out, args.target and a non-empty args.findings array')
@@ -37,7 +32,6 @@ async function pool(items, limit, fn) {
   return results
 }
 
-// Findings in the same file go to the same refuter, so it reads that file once.
 const fileOf = finding => (finding.where[0] || 'unknown').split(':')[0]
 const byFile = new Map()
 for (const finding of findings) {
@@ -100,7 +94,6 @@ const jobs = []
 batches.forEach((batch, index) => {
   const votes = batch.some(finding => finding.needs_three) ? VOTES : 1
   for (let voter = 0; voter < votes; voter++) {
-    // A voter beyond the first only judges the findings that need three votes.
     const scope = voter === 0 ? batch : batch.filter(finding => finding.needs_three)
     jobs.push({ batch: index, voter, scope })
   }
@@ -118,8 +111,6 @@ answers.forEach(answer => {
   }
 })
 
-// Majority of the votes asked for, not of the votes that came back: a refuter
-// that died counts as no vote, so a lost vote can never confirm a finding.
 const decide = finding => {
   const votes = votesByKey.get(finding.key)
   const asked = finding.needs_three ? VOTES : 1

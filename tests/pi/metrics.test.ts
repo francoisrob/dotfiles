@@ -1,4 +1,3 @@
-// Unit tests for extensions/metrics/metrics.ts, on session entries shaped like pi writes them.
 import { describe, expect, test } from "bun:test";
 import { join } from "node:path";
 import { CONFIG_DIR } from "./lib/paths";

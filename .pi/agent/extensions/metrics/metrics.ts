@@ -1,18 +1,11 @@
-// Splits a pi session into runs (one per user message) and formats their usage.
-// No pi imports, so it is unit-tested on plain session entries.
-
 export type Usage = { input: number; output: number; cacheRead: number; cacheWrite: number; cost: number };
 
 export type Run = {
-	/** First non-empty line of the message that started the run. */
 	prompt: string;
-	/** Epoch ms of that message, and of the last entry in the run. NaN when unreadable. */
 	start: number;
 	end: number;
-	/** Model calls (assistant messages), and how many of them errored or were aborted. */
 	calls: number;
 	errors: number;
-	/** Tool calls the model asked for. */
 	toolCalls: number;
 	usage: Usage;
 };
@@ -20,7 +13,6 @@ export type Run = {
 export type ContextUsage = { tokens: number | null; contextWindow: number; percent: number | null };
 export type CompactionSettings = { enabled: boolean; reserveTokens: number };
 
-// Session entries as pi writes them (docs/session-format.md). Only the fields read here.
 type RawUsage = { input?: number; output?: number; cacheRead?: number; cacheWrite?: number; cost?: { total?: number } };
 type Block = { type: string; text?: string };
 type Entry = {
@@ -48,7 +40,6 @@ function promptText(content: string | Block[] | undefined): string {
 	return Array.isArray(content) && content.some((b) => b.type === "image") ? "[image]" : "";
 }
 
-/** One run per user message, in order. Entries before the first user message belong to no run. */
 export function collectRuns(entries: readonly Entry[]): Run[] {
 	const runs: Run[] = [];
 	let run: Run | undefined;
@@ -76,13 +67,11 @@ export function collectRuns(entries: readonly Entry[]): Run[] {
 	return runs;
 }
 
-/** Share of the input that came from the prompt cache, in percent. */
 export function cacheHit(u: Usage): number | undefined {
 	const sent = u.input + u.cacheRead + u.cacheWrite;
 	return sent > 0 ? (u.cacheRead / sent) * 100 : undefined;
 }
 
-/** Same thresholds as pi's own footer, so the two never disagree. */
 export function formatTokens(count: number): string {
 	if (count < 1000) return count.toString();
 	if (count < 10_000) return `${(count / 1000).toFixed(1)}k`;
@@ -110,7 +99,6 @@ export function runSummary(run: Run | undefined, opts: { live: boolean; now?: nu
 	if (!run) return "last run: none yet";
 	const u = run.usage;
 	const hit = cacheHit(u);
-	// Time first: pi cuts the footer at the terminal width, so the most useful parts lead.
 	const time = formatDuration((opts.live ? (opts.now ?? Date.now()) : run.end) - run.start);
 	const parts = [
 		opts.live ? `running ${time}` : `last run ${time}`,
@@ -131,12 +119,10 @@ export function contextSummary(ctx: ContextUsage | undefined, compaction: Compac
 	const used = ctx.tokens === null || ctx.percent === null
 		? `context ?/${window} (known after the next reply)`
 		: `context ${formatTokens(ctx.tokens)}/${window} (${Math.round(ctx.percent)}%)`;
-	// pi compacts once the context passes contextWindow - reserveTokens (shouldCompact in pi).
 	const when = compaction.enabled ? `compacts at ${formatTokens(Math.max(0, ctx.contextWindow - compaction.reserveTokens))}` : "auto-compact off";
 	return `${used}, ${when}`;
 }
 
-/** Plain-text table for /usage: header, one row per run, then the total. */
 export function usageTable(runs: readonly Run[]): string[] {
 	if (runs.length === 0) return ["No messages sent in this session yet."];
 	const total: Run = { prompt: "", start: 0, end: 0, calls: 0, errors: 0, toolCalls: 0, usage: emptyUsage() };

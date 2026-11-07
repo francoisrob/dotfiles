@@ -1,5 +1,3 @@
-// End-to-end: bare `pi` in a fish login shell against the real model (a few cents).
-// Run with PI_E2E=1; PI_E2E_MODEL overrides the model.
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -21,7 +19,6 @@ afterAll(() => cleanup());
 
 const quote = (s: string) => `'${s.replaceAll("'", "\\'")}'`;
 
-/** Run a bare `pi` inside a fish login shell. */
 function fishPi(args: string[], sessionDir: string) {
 	const line = ["pi", ...args.map(quote)].join(" ") + " < /dev/null";
 	const proc = Bun.spawnSync(["fish", "--login", "-c", line], {
@@ -73,19 +70,15 @@ d("pi end to end", () => {
 		};
 		const busy = (s: string) => /Working|esc to interrupt|Retrying/.test(s);
 		const sessionDir = join(dir, "s3");
-		// Command as separate arguments, so tmux execs fish directly and no other shell
-		// re-parses the quoting.
 		tmux("new-session", "-d", "-s", session, "-x", "140", "-y", "40", "-c", dir,
 			"fish", "--login", "-c", ["pi", ...MODEL, "--session-dir", sessionDir].map(quote).join(" "));
 		try {
-			// pi's footer shows the context gauge (for example "7.3%/200k") once it is ready.
 			expect(await waitFor((s) => /\d+(\.\d+)?%\/\d+k/.test(s), 60_000)).toBe(true);
 			tmux("send-keys", "-t", session, "-l", "Reply with the single word: pong");
 			tmux("send-keys", "-t", session, "Enter");
 			await waitFor(busy, 15_000);
 			expect(await waitFor((s) => !busy(s) && /\bpong\b/i.test(s.split("Reply with the single word")[1] ?? ""), 120_000)).toBe(true);
 			expect(screen()).not.toMatch(/Request timed out|Error:/);
-			// The metrics extension's footer line: context in tokens, then the finished run.
 			expect(screen()).toMatch(/context [\d.]+k?\/\d+k \(\d+%\), compacts at \d+k │ last run \d+s · [\d.]+k? in · [\d.]+k? out · [\d.]+k? cached( \(\d+%\))? · \$[\d.]+ · 1 model call · 0 tool calls/);
 			tmux("send-keys", "-t", session, "-l", "/quit");
 			tmux("send-keys", "-t", session, "Enter");

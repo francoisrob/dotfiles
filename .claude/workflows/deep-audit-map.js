@@ -10,12 +10,6 @@ export const meta = {
   ],
 }
 
-// args: {
-//   out: absolute $OUT path, target: absolute TARGET_PATH,
-//   units: [{ id, package, files: [repo-relative paths] }],
-//   stitch: boolean (false for the pilot), hops: [{ id, claim }] (optional),
-//   concurrency: number (default 6)
-// }
 const { out, target, units, stitch = true, hops = [], concurrency = 6 } = args
 if (!out || !target || !Array.isArray(units) || !units.length) {
   throw new Error('deep-audit-map needs args.out, args.target and a non-empty args.units array')
@@ -26,7 +20,6 @@ const OPUS = 'claude-opus-5-5'
 const BRIEF = `Read ${out}/brief.md first and obey every rule in it. You are read-only: never edit the repo, never run a server, never install anything.`
 const SONNET_RULE = 'Do not launch subagents. Run a real check before reporting done. A check that failed to start does not count.'
 
-// Runs at most `limit` agents at once so the machine stays usable.
 async function pool(items, limit, fn) {
   const results = new Array(items.length)
   let next = 0
@@ -81,7 +74,6 @@ phase('Map')
 const firstPass = await pool(units, concurrency, unit =>
   agent(mapPrompt(unit), { label: `map:${unit.id}`, phase: 'Map', model: SONNET, effort: 'medium', schema: MAP_SCHEMA }))
 
-// Coverage is checked here in code, not trusted from the agent.
 phase('Coverage')
 const missingOf = (unit, result) => {
   const read = new Set(result ? result.files_owned_read : [])

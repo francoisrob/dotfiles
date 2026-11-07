@@ -1,4 +1,3 @@
-// Load the config through the installed pi's own loaders, from a sandbox agent dir. Offline.
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync, symlinkSync } from "node:fs";
 import { join } from "node:path";
@@ -38,8 +37,6 @@ describe("pi's settings loader", () => {
 });
 
 describe("pi's model runtime", () => {
-	// The tracked config pins no model, so pi works with whichever one you pick. pi saves
-	// that pick back into settings.json, so check it only when one is there.
 	test("a default model saved in settings.json is one pi knows", async () => {
 		if (settingsFile.defaultModel === undefined && settingsFile.defaultProvider === undefined) return;
 		const rt = await pi.ModelRuntime.create({
@@ -80,7 +77,6 @@ describe("pi's resource loader", () => {
 });
 
 describe("pi's extension loader", () => {
-	// In node, which pi runs on, not inside this bun process.
 	test("loads the metrics extension with no errors, registering /usage and its event handlers", () => {
 		const script = `
 			const pi = await import(${JSON.stringify(join(piPackageDir(), "dist/index.js"))});

@@ -1,4 +1,3 @@
-// settings.json against the schema of the installed pi.
 import { describe, expect, test } from "bun:test";
 import Ajv2020 from "ajv/dist/2020";
 import { readFileSync } from "node:fs";

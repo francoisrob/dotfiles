@@ -39,8 +39,6 @@ async function snapshot($: EngineInterface, repo: string): Promise<RepoSnapshot>
   return { worktrees, branches, untracked }
 }
 
-// The first time a repo is touched, record what was already there, so only
-// what this session adds is reported as a leftover.
 async function watch($: EngineInterface, dirs: string[]): Promise<void> {
   for (const dir of dirs) {
     const repo = await repoRoot($, dir)
@@ -83,8 +81,6 @@ export const register: Register = on => {
   })
 
   on('command.run', { command: 'guard' }, async ($, e) => {
-    // An unknown origin is treated as not the person, so the model can never
-    // grant itself an outward action.
     const origin = e.origin?.kind
     const action = guardAction(e.args, origin === 'composer' || origin === 'bridge', await read($, allowed))
 

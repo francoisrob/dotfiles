@@ -1,5 +1,3 @@
-// Wiring tests for extensions/metrics/index.ts against a recording stand-in for pi's API.
-// The pi modules it imports are mapped to the installed pi, which bun cannot resolve from here.
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { dirname, join } from "node:path";
 import { CONFIG_DIR, piPackageDir } from "./lib/paths";
@@ -55,7 +53,6 @@ function setup(opts: { mode?: string; settings?: Record<string, unknown>; model?
 	return { handlers, commands, statuses, notes, customs, entries, ctx, emit };
 }
 
-// A theme whose colours are no-ops, so rendered lines can be compared as plain text.
 function realTheme() {
 	return { fg: (_c: string, s: string) => s, bold: (s: string) => s };
 }

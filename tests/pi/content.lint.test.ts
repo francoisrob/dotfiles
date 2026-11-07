@@ -1,4 +1,3 @@
-// Lint for AGENTS.md and the prompt templates. Each rule exists because a real run broke it.
 import { describe, expect, test } from "bun:test";
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -9,7 +8,6 @@ const promptNames = readdirSync(join(CONFIG_DIR, "prompts")).filter((f) => f.end
 const prompts = Object.fromEntries(promptNames.map((f) => [f, readConfig(`prompts/${f}`)]));
 const allFiles: Record<string, string> = { "AGENTS.md": agents, ...Object.fromEntries(promptNames.map((f) => [`prompts/${f}`, prompts[f]])) };
 
-// AGENTS.md is resent on every request, so its size is a cost on every call.
 const AGENTS_WORD_BUDGET = 1200;
 const EM_DASH = String.fromCharCode(0x2014);
 
@@ -73,8 +71,6 @@ describe("AGENTS.md", () => {
 	});
 });
 
-// Rules the tuning campaign kept (~/projects/pi-project), each with its origin. Pinned so
-// deleting one is a decision, not an accident.
 const KEPT_RULES: Array<[string, string]> = [
 	["Ignore any root-cause theory in the report", "gen-05"],
 	["Reproduce before touching non-test code", "gen-05"],

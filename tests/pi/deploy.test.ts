@@ -1,4 +1,3 @@
-// Is this machine running the tracked config? Reads live state, so mutation runs skip it.
 import { describe, expect, test } from "bun:test";
 import { existsSync, lstatSync, readFileSync, realpathSync } from "node:fs";
 import { join } from "node:path";
@@ -36,8 +35,6 @@ d("stow links", () => {
 	});
 });
 
-// Repo rules, not live state: when stow links the whole ~/.pi folder into the repo,
-// pi's secrets and runtime files must still be invisible to `git add`.
 describe("pi runtime files are gitignored", () => {
 	const ignored = (path: string) => Bun.spawnSync(["git", "-C", REPO, "check-ignore", "-q", "--no-index", path]).exitCode === 0;
 
@@ -54,8 +51,6 @@ describe("pi runtime files are gitignored", () => {
 	});
 });
 
-// A new machine has no ~/.pi. `make apply-dotfiles` must still leave ~/.pi/agent and its
-// extensions folder as real folders, so pi's auth.json and sessions land outside the repo.
 describe("make apply-dotfiles on a fresh home", () => {
 	test("links pi's config file by file and keeps ~/.pi/agent a real folder", () => {
 		const { dir, cleanup } = makeSandbox("fresh-home");

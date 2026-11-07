@@ -1,5 +1,3 @@
-// Footer line with context and last-run usage (live while pi works), and /usage per message.
-// Numbers are read from the session entries, so they survive /resume and /tree.
 import { type ExtensionAPI, type ExtensionContext, SettingsManager } from "@earendil-works/pi-coding-agent";
 import { matchesKey, truncateToWidth } from "@earendil-works/pi-tui";
 import { collectRuns, contextSummary, formatDuration, runSummary, usageTable } from "./metrics.ts";
@@ -10,7 +8,6 @@ const TICK_MS = 1000;
 export default function (pi: ExtensionAPI) {
 	let timer: ReturnType<typeof setInterval> | undefined;
 	let running = false;
-	/** When pi got the latest user message; the run it starts is saved just after. */
 	let sentAt = Number.NaN;
 
 	const stopTimer = () => {
@@ -19,7 +16,6 @@ export default function (pi: ExtensionAPI) {
 	};
 
 	function status(ctx: ExtensionContext): string {
-		// pi's own resolver: model override, then the setting, then pi's default.
 		const compaction = SettingsManager.inMemory(pi.getSettings()).getCompactionSettings(ctx.model);
 		const runs = collectRuns(ctx.sessionManager.getBranch());
 		const last = runs.at(-1);
@@ -43,7 +39,6 @@ export default function (pi: ExtensionAPI) {
 	pi.on("tool_execution_end", refresh);
 
 	pi.on("before_agent_start", (event, _ctx) => {
-		// Entry timestamps have millisecond precision; allow for the same millisecond.
 		if (event.messageType === "user") sentAt = Date.now() - 1;
 	});
 

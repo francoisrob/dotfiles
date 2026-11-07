@@ -1,5 +1,3 @@
-// Pure rule checks, kept free of the engine so they can be tested directly.
-
 import type { Kind, RepoSnapshot } from '../types'
 
 export const KINDS: readonly Kind[] = ['push', 'github', 'deploy', 'publish']
@@ -18,9 +16,6 @@ export type BashVerdict =
 
 const EM_DASH = '\u2014'
 
-// A rule must not fire on text that only mentions a command: a grep pattern,
-// a commit message, a heredoc that writes a script. So quoted strings and
-// heredoc bodies are removed before matching.
 export function stripQuoted(command: string): string {
   return command
     .replace(/<<-?\s*(['"]?)(\w+)\1[^\n]*\n[\s\S]*?\n\s*\2(?=\s|$)/g, ' ')
@@ -71,8 +66,6 @@ export function checkBash(command: string): BashVerdict {
     return { kind: 'hard', reason: 'No em dashes in commit messages, PRs or releases. Use a period, comma, colon or parentheses.' }
   }
 
-  // A command handed to another shell (bash -c, ssh, eval) is checked with its
-  // quotes kept, because the quoted part is what actually runs.
   const bare = stripQuoted(command)
   const texts = WRAPPER.test(bare) ? [bare, command] : [bare]
   for (const text of texts) {
@@ -94,20 +87,16 @@ function count(text: string, needle: string): number {
   return text.split(needle).length - 1
 }
 
-// Only new em dashes are refused: an edit that keeps an existing one is fine.
 export function addsEmDash(before: string, after: string): boolean {
   return count(after, EM_DASH) > count(before, EM_DASH)
 }
 
-// Scratch work belongs in ~/hub/scratch or a session scratchpad under /tmp,
-// never in a scratch folder inside a project.
 export function isStrayScratch(path: string): boolean {
   if (!/(?:^|\/)scratch(?:\/|$)/.test(path)) return false
   if (path.startsWith('/tmp/')) return false
   return !/^\/home\/[^/]+\/hub\/scratch(?:\/|$)/.test(path)
 }
 
-// Directories a Bash command works in, from `cd <dir>` and `git -C <dir>`.
 export function dirsInCommand(command: string, home: string): string[] {
   const dirs = new Set<string>()
   for (const match of command.matchAll(/(?:\bcd|\bgit\s+-C)\s+(['"]?)([~/][^\s'";&|]*)\1/g)) {
@@ -141,8 +130,6 @@ export type GuardAction =
   | { kind: 'baseline' }
   | { kind: 'refuse'; text: string }
 
-// Decides what a /guard command does. Only the person may open or reset
-// anything; an unknown origin counts as not the person.
 export function guardAction(args: string, isPerson: boolean, allowed: readonly Kind[]): GuardAction {
   const [verb = 'status', target] = args.trim().split(/\s+/).filter(Boolean)
   if (verb !== 'allow' && verb !== 'revoke' && verb !== 'baseline') return { kind: 'show' }

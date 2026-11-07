@@ -8,12 +8,6 @@ export const meta = {
   ],
 }
 
-// args: {
-//   out, target,
-//   assignments: [{ lens: 'A'..'M', package, path }],
-//   seen: [{ key, title, where, what }] (every finding from earlier rounds, confirmed or not),
-//   round: number, concurrency: number (default 6)
-// }
 const { out, target, assignments, seen = [], round = 1, concurrency = 6 } = args
 if (!out || !target || !Array.isArray(assignments) || !assignments.length) {
   throw new Error('deep-audit-find needs args.out, args.target and a non-empty args.assignments array')
@@ -82,9 +76,6 @@ Write your full report to ${out}/2x-${lens}-${pkg}-r${round}.md and return the f
     { label: `find:${lens}:${pkg}`, phase: 'Find', model: isSecurity ? OPUS : SONNET, effort: isSecurity ? 'high' : 'medium', schema: FINDINGS_SCHEMA })
 })
 
-// Code groups findings that cite lines within 5 of each other in the same file
-// (or an earlier round's finding there). Only a group with more than one member
-// goes to a judge, which decides which members make the same claim.
 phase('Merge')
 const RANK = { critical: 0, high: 1, medium: 2, low: 3 }
 const spots = finding => finding.where.map(ref => {
@@ -137,7 +128,6 @@ ${earlier.length ? `\nEarlier findings:\n${earlier.map(old => `${old.key}: ${des
     { label: `merge:${found[members[0]].where[0]}`, phase: 'Merge', model: SONNET, effort: 'low', schema: MERGE_SCHEMA })
   const placed = new Set(answer ? answer.groups.flatMap(group => group.members) : [])
   const valid = answer ? answer.groups.filter(group => group.members.every(index => members.includes(index))) : []
-  // Anything the judge left out or mis-numbered stays its own finding, never dropped.
   const loose = members.filter(index => !placed.has(index) || !valid.some(group => group.members.includes(index)))
   return [...valid, ...loose.map(index => ({ members: [index], same_as_earlier: '' }))]
 })

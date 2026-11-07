@@ -1,6 +1,3 @@
-// Mutation testing: apply one deliberate break at a time to a sandbox copy and expect the
-// tests to fail. Hand-written because StrykerJS cannot mutate JSON or Markdown.
-// Run: bun mutate.ts [ids...]
 import { cpSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { CONFIG_DIR, TESTS_DIR } from "./lib/paths";
@@ -12,7 +9,6 @@ type Mutant = { id: string; target: Target; what: string; apply: (text: string) 
 const CONFIG_TESTS = ["config.contract.test.ts", "integration.test.ts", "content.lint.test.ts"];
 const METRICS_TESTS = ["metrics.test.ts", "metrics.extension.test.ts", "integration.test.ts"];
 
-/** Replace exactly one occurrence, so a mutant whose anchor has gone stale fails loudly. */
 const swap = (from: string, to: string) => (text: string) => {
 	const at = text.indexOf(from);
 	if (at === -1 || text.indexOf(from, at + 1) !== -1) throw new Error(`anchor not found exactly once: ${from}`);
@@ -60,8 +56,6 @@ const config: Array<[Target, string, (t: string) => string]> = [
 	["prompts/fix.md", "no $ARGUMENTS", swap("diagnosis. $ARGUMENTS", "diagnosis.")],
 ];
 
-// Deleting any rule the campaign kept must be caught. One mutant per kept rule, read from
-// the lint test itself so the two lists cannot drift apart.
 const lintSource = readFileSync(join(TESTS_DIR, "content.lint.test.ts"), "utf8");
 const keptRules = [...lintSource.matchAll(/^\t\[("(?:[^"\\]|\\.)*"|'[^']*'), "[^"]*"\],$/gm)].map((m) => (m[1].startsWith("'") ? m[1].slice(1, -1) : JSON.parse(m[1])));
 for (const rule of keptRules) {
@@ -71,7 +65,6 @@ for (const rule of keptRules) {
 	}]);
 }
 
-// The metrics extension: each break is a plausible slip in its logic or wiring.
 const metrics: Array<[Target, string, (t: string) => string]> = [
 	["extensions/metrics/metrics.ts", "runs start on the wrong role", swap('if (msg?.role === "user") {', 'if (msg?.role === "human") {')],
 	["extensions/metrics/metrics.ts", "entries before the first message start a run", swap("\t\tif (!run) continue;\n", "\t\tif (!run) runs.push((run = { prompt: \"\", start: time, end: time, calls: 0, errors: 0, toolCalls: 0, usage: emptyUsage() }));\n")],
@@ -130,7 +123,6 @@ function prepare(label: string) {
 const only = process.argv.slice(2);
 const selected = only.length ? all.filter((m) => only.includes(m.id)) : all;
 
-// The unmutated copy must pass, or every "kill" below would be meaningless.
 const base = prepare("mutation-baseline");
 const baseline = await runTests(base.dir, [...new Set([...CONFIG_TESTS, ...METRICS_TESTS])]);
 base.cleanup();
@@ -140,7 +132,6 @@ if (baseline.code !== 0) {
 }
 console.log(`baseline passes. running ${selected.length} mutants\n`);
 
-// Mutants are independent (each has its own sandbox), so run a few at once.
 const CONCURRENCY = Number(process.env.MUTATE_CONCURRENCY ?? 4);
 const results = new Map<string, boolean>();
 const queue = [...selected];
