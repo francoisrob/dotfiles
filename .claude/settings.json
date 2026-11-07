@@ -19,7 +19,7 @@
       ".claude/docs"
     ]
   },
-  "model": "fable",
+  "model": "opus",
   "hooks": {
     "PreToolUse": [
       {
@@ -58,6 +58,7 @@
       }
     }
   },
+  "feedbackDrafts": "notify",
   "spinnerTipsEnabled": true,
   "effortLevel": "high",
   "modelSettings": {
