@@ -1,47 +1,37 @@
-# Francois's dotfiles
+# dotfiles
 
-Welcome to my dotfiles repo, tailored for NixOS. This setup blends NixOS's
-declarative power with portability for non-Nix systems. I use GNU Stow to
-manage symlinks to my config dirs, ensuring reproducibility across setups.
+NixOS flake for two hosts (`laptop`, `minipc`), a standalone home-manager config, and app configs linked into `~` with GNU Stow.
 
-## Features
+## Layout
 
-- Optimized for NixOS workflows
-- Symlink management with Stow for cross-system use
-- Simple Makefile for common tasks (see below)
+- `flake.nix`: inputs, per-host tuning, outputs
+- `hosts/<host>/`: host config and hardware
+- `modules/`: shared NixOS modules (`system/`, `hardware/`, `programs/`, `virtualisation/`, `development/`)
+- `home-manager/`: user packages and services
+- `.config/`, `.claude/`, `.pi/`, `.profile`, `.gitconfig`: stowed into `~`
 
-## Usage
+## Commands
 
-The `Makefile` provides commands to manage this setup. Run `make help` to
-see all options:
+| Command | Does |
+| --- | --- |
+| `make switch` | Rebuild and switch the system for `$(hostname)` (`HOST=minipc` to override) |
+| `make home` | Build and activate home-manager |
+| `make update` | `nix flake update`, then `switch` and `home` |
+| `make check` | Build every host and home config |
+| `make clean` | Garbage-collect and optimise the store |
+| `make apply-dotfiles` | Stow the dotfiles into `~` |
+| `make test-pi` | Test the pi config |
 
-### Available Commands
+## New machine
 
-- **`make switch`**  
-  Rebuilds and switches to the new NixOS config using the flake here.  
-  _Command:_ `sudo nixos-rebuild switch --flake .`
+1. Clone to `~/dotfiles`.
+2. `make apply-dotfiles`
+3. `make switch HOST=<host>`, then `make home`.
 
-- **`make update`**  
-  Updates flake inputs and rebuilds the system.  
-  _Command:_ `nix flake update && make switch`
+## Secrets kept outside the repo
 
-- **`make clean`**  
-  Cleans the Nix store and optimizes it.  
-  _Command:_ `sudo nix-collect-garbage -d && sudo nix-store --optimise`
+Root-only env files, created by hand before the first `make switch` on `minipc`:
 
-- **`make apply-dotfiles`**  
-  Applies dotfiles by creating symlinks with Stow.  
-  _Command:_ `mkdir -p ~/.pi/agent/extensions && stow .` (the folders keep
-  pi's login and session files out of the repo; use this target, not a bare
-  `stow .`, on a new machine)
-
-## Installation
-
-1. Clone this repo to your desired spot (e.g., `~/dotfiles`).
-2. Run `make apply-dotfiles` to symlink the dotfiles.
-3. For NixOS, use `make switch` to apply the config.
-
-## Notes
-
-- Ensure GNU Stow and Nix is installed.
-- Adjust paths in the dotfiles if your setup varies.
+- `/etc/webdav.env`: `SEEDVAULT_PASSWORD=...`
+- `/etc/freellmapi.env`: `ENCRYPTION_KEY=...`
+- `/etc/open-webui.env`: `OPENAI_API_KEY=...`
