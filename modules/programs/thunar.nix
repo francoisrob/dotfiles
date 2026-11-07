@@ -21,7 +21,7 @@
 
   environment = {
     systemPackages = with pkgs; [
-      file-roller # Needed for zip
+      file-roller
     ];
   };
 }

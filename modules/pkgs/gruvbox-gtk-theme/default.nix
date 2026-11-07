@@ -9,13 +9,7 @@
   themeVariants ? [],
   tweakVariants ? [],
   iconVariants ? [],
-}:
-# Vendored from nixpkgs, which removed gruvbox-gtk-theme in commit 20282c92
-# because it propagated gtk-engine-murrine (a GTK 2 render engine, removed as
-# unmaintained). Murrine only affects how GTK 2 apps *draw* the theme; nothing
-# here needs it at build time, so it is simply dropped. GTK 2 apps fall back
-# to the default engine, everything GTK 3/4 is unaffected.
-let
+}: let
   pname = "gruvbox-gtk-theme";
   colorVariantList = [
     "dark"

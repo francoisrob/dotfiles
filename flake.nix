@@ -6,7 +6,6 @@
       url = "github:nixos/nixpkgs?ref=nixos-unstable";
     };
     home-manager = {
-      # master tracks nixos-unstable; home-manager has no separate unstable branch
       url = "github:nix-community/home-manager/master";
       inputs = {
         nixpkgs = {
@@ -36,9 +35,6 @@
         };
       };
     };
-    # Anthropic ships no Linux build; this repackages the official .deb.
-    # Since its v3.0 the flake exposes only packages + overlays.default (no
-    # NixOS module), so it is wired in as an overlay in modules/overlays.nix.
     claude-desktop = {
       url = "github:aaddrick/claude-desktop-debian";
       inputs = {
@@ -47,9 +43,6 @@
         };
       };
     };
-    # Grok Bot (xAI's desktop agent) ships an amd64 .deb only; this flake
-    # repackages it. Like claude-desktop it exposes packages + overlays.default
-    # and no module, so it is wired in as an overlay in modules/overlays.nix.
     grok-bot = {
       url = "github:jordangarrison/grok-bot-flake";
       inputs = {
@@ -73,27 +66,12 @@
 
     overlays = import ./modules/overlays.nix {inherit inputs;};
 
-    # Home-manager is standalone, so it builds its own package set. Same
-    # overlays and nixpkgs config as the system (modules/system/boot.nix
-    # imports the same file), so user packages see the identical nixpkgs
-    # they did under the NixOS module.
     pkgs = import nixpkgs {
       inherit system overlays;
       config = import ./modules/nixpkgs-config.nix;
     };
 
-    # Per-host tuning. Everything here is a function of the MACHINE -- thread
-    # count, RAM size, and the memory-pressure thresholds derived from them --
-    # rather than of taste. Taste-level settings stay in the shared modules so
-    # both hosts keep behaving the same way.
-    #
-    # The attribute name is also the hostname, so `nixos-rebuild switch
-    # --flake .` resolves the right config by hostname on each machine. There
-    # is deliberately no "nixos" alias: a stale hostname then fails loudly with
-    # "attribute not found" instead of silently building the other host's
-    # config (which would mean nvidia + intel + a LUKS UUID that isn't there).
     hosts = {
-      # i7-1165G7, 4c/8t, 16G RAM, LUKS root, Intel iGPU + NVIDIA MX350
       laptop = {
         maxJobs = 4;
         buildCores = 2;
@@ -103,22 +81,11 @@
         earlyoomMemKillThreshold = 5;
       };
 
-      # Ryzen AI 9 HX 370, 12c/24t, 32G RAM (~27G visible after the iGPU
-      # carve-out), no encryption, Radeon 890M iGPU only.
       minipc = {
-        # Same rule as the laptop: jobs x cores == thread count, so builds can
-        # saturate the box but never oversubscribe it. nix.daemonCPUSchedPolicy
-        # is "idle" in boot.nix, so the desktop still preempts builds.
         maxJobs = 6;
         buildCores = 4;
-        # 25% of 27G is the same ~7G device the laptop gets from 50% of 16G.
-        # memoryPercent is the zram device's UNCOMPRESSED capacity, not the RAM
-        # it consumes -- actual footprint is that divided by the zstd ratio.
         zramPercent = 25;
         swapFileSize = 8 * 1024;
-        # 10% of 27G is ~2.7G, matching the laptop's 15%-of-16G in absolute
-        # terms. earlyoom thresholds are percentages, so they need rescaling
-        # when RAM changes or they fire far too early.
         earlyoomMemThreshold = 10;
         earlyoomMemKillThreshold = 4;
       };
@@ -156,21 +123,15 @@
 
     nixosConfigurations = nixosConfigs;
 
-    # Keyed "user@host" so `home-manager switch --flake .` resolves by
-    # $USER@$HOSTNAME without needing an explicit attribute on either machine.
     homeConfigurations =
       lib.mapAttrs'
       (hostName: cfg: lib.nameValuePair "${user}@${hostName}" cfg)
       homeConfigs;
 
-    # The pinned home-manager CLI, so `make home` works even before the
-    # first activation puts programs.home-manager on PATH.
     packages.${system} = {
       home-manager = home-manager.packages.${system}.default;
     };
 
-    # `nix flake check` builds every host, so a change that breaks the machine
-    # you are NOT sitting at still fails here.
     checks.${system} =
       (lib.mapAttrs'
         (n: c: lib.nameValuePair "nixos-${n}" c.config.system.build.toplevel)

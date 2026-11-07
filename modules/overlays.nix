@@ -1,16 +1,15 @@
 {inputs}: [
   (final: prev: {
     gruvbox-kvantum-medium = final.callPackage ./pkgs/gruvbox-kvantum-medium {};
-    # nixpkgs removed gruvbox-gtk-theme (murrine fallout); vendored locally.
     gruvbox-gtk-theme = final.callPackage ./pkgs/gruvbox-gtk-theme {};
     gruvbox-gtk-morhetz = final.callPackage ./pkgs/gruvbox-gtk-morhetz {};
 
     mpv = prev.mpv.override {
       scripts = with final.mpvScripts; [
         webtorrent-mpv-hook
-        uosc # OSC replacement; needs osc=no/osd-bar=no/border=no in mpv.conf
-        thumbfast # hover thumbnails on the uosc timeline, zero-config pairing
-        mpris # media keys / playerctl integration
+        uosc
+        thumbfast
+        mpris
       ];
     };
 
@@ -28,16 +27,8 @@
 
   inputs.neovim-nightly.overlays.default
 
-  # Adds pkgs.claude-desktop (bare) and pkgs.claude-desktop-fhs (same app in an
-  # FHS sandbox so MCP servers find node/uv on /usr/bin). The overlay calls the
-  # packages with THIS flake's nixpkgs, so the input's own nixpkgs is never
-  # instantiated -- no second package set in the closure.
   inputs.claude-desktop.overlays.default
 
-  # Adds pkgs.grok-bot (plus a `sand` alias binary and grok-bot.desktop, which
-  # registers the sand:// login-redirect scheme). The overlay respects THIS
-  # flake's nixpkgs config, so the unfree licence is covered by allowUnfree in
-  # modules/nixpkgs-config.nix rather than by the input's own package set.
   inputs.grok-bot.overlays.default
 
   (final: prev: {

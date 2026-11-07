@@ -1,23 +1,6 @@
 {...}: let
-  # Nerd Font glyphs live in the Unicode private use area, and Nix strings have no
-  # \u escape. Decoding through JSON keeps them as codepoints in the source rather
-  # than invisible literal characters that are easy to drop in an edit.
   nf = codepoint: builtins.fromJSON ''"\u${codepoint}"'';
 in {
-  # This config used to live in an unmanaged ~/.config/spotify-player/app.toml,
-  # so it was never reproducible. It is ported verbatim here, with two fixes:
-  #
-  #   - The old file asked for theme = "dracula", but spotify-player ships no
-  #     built-in themes at all: they only exist in upstream's examples/theme.toml,
-  #     and there was no theme.toml on disk. The name silently resolved to nothing
-  #     and the player has been rendering its default palette the whole time.
-  #   - "gruvbox_dark" below is upstream's own definition, which is already gruvbox
-  #     medium contrast (bg #282828, fg #ebdbb2) and matches the console palette in
-  #     modules/system/fonts.nix exactly.
-  #
-  # Home Manager now writes both app.toml and theme.toml. The old hand-written
-  # app.toml is moved aside as app.toml.backup on the next switch, per the
-  # `-b backup` flag `make home` passes to home-manager.
   programs.spotify-player = {
     enable = true;
 

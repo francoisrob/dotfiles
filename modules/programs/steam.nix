@@ -1,4 +1,3 @@
-# NEEDS hardware accelaration
 {pkgs, ...}: {
   programs = {
     steam = {

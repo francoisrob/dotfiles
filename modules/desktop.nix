@@ -55,10 +55,6 @@ in {
     pam.services.greetd.enableGnomeKeyring = true;
   };
 
-  # The Thunderbolt-undock display recovery service that used to live here is
-  # now in modules/system/laptop.nix -- it hardcodes eDP-1 and a dock hot-unplug
-  # path, neither of which exists on the mini PC.
-
   xdg = {
     mime = {
       enable = true;
@@ -80,19 +76,13 @@ in {
       SSH_AUTH_SOCK = "\${XDG_RUNTIME_DIR}/keyring/ssh";
     };
     systemPackages = with pkgs; [
-      wayland # Needed for Hyprland
-      libnotify # Needed for notifications
+      wayland
+      libnotify
 
       hyprland-contrib.grimblast
       hyprland-contrib.shellevents
 
       hyprwayland-scanner
-      # fuzzel replaces hyprlauncher. hyprlauncher 0.1.6 has no cosmetic config
-      # at all (it renders straight to Cairo/Pango, no GTK, no stylesheet), and
-      # per the oomd note in modules/system/boot.nix it puts everything it
-      # launches into one shared scope, so an oomd pressure kill took unrelated
-      # apps with it. fuzzel is themeable and its launch-prefix routes each app
-      # through uwsm-app into its own scope.
       fuzzel
       hyprlock
       hyprsunset

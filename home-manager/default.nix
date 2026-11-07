@@ -3,10 +3,6 @@
   user,
   ...
 }: let
-  # One binding so gtk.theme and gtk4.theme can never drift apart.
-  # The package is upstream's theme with its Gruvbox Material accents recolored
-  # to the original morhetz palette; see modules/pkgs/gruvbox-gtk-morhetz. The
-  # "teal" variant is what carries the accent, which is now aqua #8ec07c.
   gruvboxGtk = {
     name = "Gruvbox-Teal-Dark-Medium";
     package = pkgs.gruvbox-gtk-morhetz;
@@ -33,12 +29,9 @@ in {
       age
       yamllint
       shellcheck
-      # markdown LSP — Mason's .NET single-file build SIGABRTs on NixOS, so
-      # nvim is configured with `marksman.mason = false` to use this one
       marksman
       (python3.withPackages (ps: with ps; [pytest]))
       mqttx
-      # aws-sam-cli  # TODO: re-enable when nixpkgs fixes jmespath~=1.0.1 vs 1.1.0 mismatch
 
       gnome-calculator
       grayjay
@@ -47,18 +40,8 @@ in {
       slack
       discord
 
-      # The -fhs variant, not the bare claude-desktop: MCP servers are spawned
-      # by the app as plain `npx`/`uvx` commands against FHS paths, which only
-      # resolve inside the buildFHSEnv. It pulls in qemu_kvm + virtiofsd + OVMF
-      # for Cowork's VM gate, so the closure is ~1.5G larger than the bare one.
-      # The package comes from the claude-desktop flake input via
-      # modules/overlays.nix, which this standalone pkgs set also imports.
       claude-desktop-fhs
 
-      # xAI's desktop agent, from the grok-bot flake input via
-      # modules/overlays.nix. Login redirects use sand:// links, which only
-      # route back to the app once grok-bot.desktop is on XDG_DATA_DIRS, i.e.
-      # once it is installed here rather than run via `nix run`.
       grok-bot
 
       font-manager
@@ -151,42 +134,17 @@ in {
     hyprpolkitagent.enable = true;
     hypridle.enable = true;
     cliphist.enable = true;
-    # hyprpaper replaced by wayle wallpaper engine
   };
 
   gtk = {
     enable = true;
-    # Gruvbox Dark, medium contrast: the "medium" tweak sets the background to
-    # #282828, and the accent is aqua #8ec07c, matching hyprland/kitty/wayle.
     theme = gruvboxGtk;
 
-    # Drives gtk-application-prefer-dark-theme for GTK 3. GTK 4 is handled
-    # separately below, since home-manager writes keys GTK 4 rejects.
     colorScheme = "dark";
 
     gtk4 = {
-      # Since home-manager 26.05, gtk4.theme no longer defaults to gtk.theme,
-      # so at stateVersion 26.05 it is null and GTK 4 apps get no theme at all.
-      # Setting it writes ~/.config/gtk-4.0/gtk.css, which @imports the theme.
-      # That is the only route that works for libadwaita apps
-      # (gnome-calculator), since they ignore gtk-theme-name entirely.
       theme = gruvboxGtk;
 
-      # home-manager's colorScheme puts two keys GTK 4 rejects into
-      # gtk-4.0/settings.ini (mkGtkSettings, modules/misc/gtk/lib.nix:78-79):
-      #
-      #   gtk-application-prefer-dark-theme=true
-      #     line 78 has no gtkVersion guard, so this GTK 3 key lands in the
-      #     GTK 4 file too, and libadwaita warns that it is unsupported.
-      #   gtk-interface-color-scheme=2
-      #     the settings.ini parser wants the enum nick, so GTK 4.22 rejects
-      #     the integer with "value that cannot be interpreted".
-      #
-      # null emits neither key, and extraConfig writes the correct one.
-      # Dark still applies everywhere: GTK 4 reads the key below, and
-      # libadwaita reads org/gnome/desktop/interface color-scheme, set to
-      # prefer-dark in the dconf block further down. Drop this override once
-      # home-manager fixes lib.nix.
       colorScheme = null;
       extraConfig = {
         gtk-interface-color-scheme = "dark";
@@ -196,9 +154,6 @@ in {
     iconTheme = {
       name = "Gruvbox-Plus-Dark";
       package = pkgs.gruvbox-plus-icons.override {
-        # Ignore the names: this pack's "jade" is gruvbox blue (#076678/#458588)
-        # and its "green" is the aqua ramp (#427b58/#689d6a/#8ec07c), which is the
-        # accent used across hyprland, kitty, wayle and Kvantum.
         folder-color = "green";
       };
     };
@@ -208,10 +163,6 @@ in {
     };
   };
 
-  # Qt goes through Kvantum rather than following GTK, so Qt apps get the same
-  # gruvbox medium background and aqua accent as everything else instead of
-  # adwaita-dark's blue. platformTheme "qtct" sets QT_QPA_PLATFORMTHEME=qt5ct,
-  # which qt6ct also answers to, so Qt5 and Qt6 apps (gwenview) both follow.
   qt = {
     enable = true;
     platformTheme = {
@@ -230,8 +181,6 @@ in {
       };
     };
 
-    # qt5ct/qt6ct own the icon theme and the widget style for Qt apps; without
-    # this they fall back to their own default style and ignore Kvantum.
     qt5ctSettings = {
       Appearance = {
         style = "kvantum";
@@ -303,7 +252,6 @@ in {
       };
     };
 
-    # Let Home Manager install and manage itself.
     home-manager = {
       enable = true;
     };

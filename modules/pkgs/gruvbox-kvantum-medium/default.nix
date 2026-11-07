@@ -4,10 +4,6 @@
   python3,
   gruvbox-kvantum,
 }:
-# gruvbox-kvantum ships exactly one theme, "Gruvbox-Dark-Brown" (a partial
-# re-color of KvAdapta with brown highlights). It has no medium-contrast variant
-# and no aqua accent, so this derives one. See recolor.py for the mapping and why
-# each color was chosen.
 runCommand "gruvbox-kvantum-medium-${gruvbox-kvantum.version}" {
   nativeBuildInputs = [python3];
 

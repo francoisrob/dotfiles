@@ -1,15 +1,9 @@
-# Seedvault (phone backup) WebDAV target, Tailscale only. HTTPS because
-# Seedvault refuses plain HTTP. Seedvault URL: https://minipc.taile52872.ts.net:8080/
-#
-# Password file, created by hand:
-#   echo 'SEEDVAULT_PASSWORD=<password>' | sudo install -m 0600 /dev/stdin /etc/webdav.env
 {
   config,
   pkgs,
   hostName,
   ...
 }: let
-  # Changes only if the box is re-enrolled in Tailscale.
   tailscaleIp = "100.116.70.67";
   domain = "${hostName}.taile52872.ts.net";
   port = 8080;
@@ -18,7 +12,6 @@
 in {
   services.webdav = {
     enable = true;
-    # A string, not a path: a path would copy the secret into the Nix store.
     environmentFile = "/etc/webdav.env";
     settings = {
       address = tailscaleIp;
@@ -45,13 +38,11 @@ in {
   networking.firewall.interfaces.${config.services.tailscale.interfaceName}.allowedTCPPorts = [port];
 
   systemd.services.webdav = {
-    # Retry until tailscale0 has its address.
     after = ["tailscaled.service" "webdav-cert.service"];
     wants = ["tailscaled.service" "webdav-cert.service"];
     serviceConfig.RestartSec = "10s";
   };
 
-  # Renew the ts.net certificate daily; restart webdav only if it changed.
   systemd.services.webdav-cert = {
     description = "Fetch the Tailscale TLS certificate for WebDAV";
     after = ["tailscaled.service"];

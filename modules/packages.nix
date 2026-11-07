@@ -13,12 +13,6 @@
       btop
       icu
 
-      # Hardware forensics. These belong on the machine BEFORE something goes
-      # wrong, not after: diagnosing the 2026-09-20 hard resets on minipc
-      # needed all three and none were installed, so they had to be fetched
-      # by hand mid-incident. nvme-cli carries the unsafe_shutdowns counter,
-      # which is the only durable record of how many times a host has lost
-      # power uncleanly once journald has rotated the evidence away.
       nvme-cli
       smartmontools
       dmidecode
@@ -37,21 +31,11 @@
       lutris
 
       scrcpy
-      # Developer
       chafa
       gnumake
       mongosh
       mongodb-tools
 
-      # System-level rather than in home-manager so it is on PATH straight
-      # after `nixos-rebuild switch`, without waiting for a home activation.
-      # That matters on a fresh machine, where it would otherwise be the one
-      # tool you need to bootstrap the machine but cannot run yet. Unfree, but
-      # modules/nixpkgs-config.nix already sets allowUnfree.
-      # git was previously only present via home-manager's programs.git, so a
-      # freshly installed host had no git until after `make home` -- awkward,
-      # since cloning this repo is what gets you there. home-manager still owns
-      # the *config* (user, aliases, lfs); this is just the binary.
       git
 
       mono

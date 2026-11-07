@@ -1,100 +1,32 @@
-{gruvbox-gtk-theme}:
-# Gruvbox-GTK-Theme ships Gruvbox *Material* accents (sainnhe's newer, softer
-# fork): teal #89b482, red #c14a4a, green #6c782e. Every other surface on this
-# machine (hyprland, kitty, wayle, btop, tmux, nvim, Kvantum) uses the original
-# morhetz palette, where the accent is aqua #8ec07c and red is #fb4934.
-#
-# The theme is compiled from sass at install time and its accent shades are all
-# derived from the palette file with mix()/darken(), so recoloring the palette
-# source is enough: every hover/active/disabled variant follows automatically.
-# Patching the generated CSS instead would catch the base colors and miss the
-# ~20 derived shades.
-#
-# Both the accents and the backgrounds are remapped, so every surface the dark
-# theme paints is an official morhetz value. The only colors left untouched are:
-#
-#   - greys 900/950 (#0f0e0e, #0d0907): shadows and scrims. gruvbox defines no
-#     shadow color, and a shadow is meant to be near-black rather than a palette
-#     entry, so recoloring these would invent a color rather than restore one.
-#   - greys 250/450 (#ccbeb8, #868686): light-theme only, never painted here
-#     (verified: zero occurrences in the built dark CSS). Mapping them would
-#     collide with neighbouring greys for no visible gain.
-#   - the GNOME app palette (#1c71d8, #e01b24, ...) baked into the libadwaita
-#     app stylesheets: those are specific apps' own brand colors, not the theme.
-let
-  # Material -> morhetz medium. The "-light" colors are the ones the light theme
-  # uses (morhetz's neutral set) and "-dark" are for the dark theme (the bright
-  # set). No target value appears as a source, so the order here cannot cascade.
+{gruvbox-gtk-theme}: let
   palette = {
-    # red
     "#c14a4a" = "#cc241d";
     "#ea6962" = "#fb4934";
-    # purple (morhetz has no distinct pink and purple; both map to its purple.
-    # The theme's "pink" is already morhetz purple, so it is left untouched.)
     "#ab62b1" = "#b16286";
     "#d386cd" = "#d3869b";
-    # blue
     "#45707a" = "#458588";
     "#7daea3" = "#83a598";
-    # teal -> aqua. #8ec07c is the accent used across the rest of the system.
     "#4c7a5d" = "#689d6a";
     "#89b482" = "#8ec07c";
-    # green
     "#6c782e" = "#98971a";
     "#a9b665" = "#b8bb26";
-    # yellow
     "#b47109" = "#d79921";
     "#d8a657" = "#fabd2f";
-    # orange
     "#c35e0a" = "#d65d0e";
     "#e78a4e" = "#fe8019";
 
-    # Backgrounds. Greys 050-650 are already morhetz verbatim (#fbf1c7, #ebdbb2,
-    # #d5c4a1, #bdae93, #a89984, #928374, #7c6f64, #665c54, #504945, #3c3836)
-    # and $black is already #282828, so only the dark end below bg0 is Material.
-    #
-    # grey-700 is $base (text entries, lists, cards) and was #282524, a warm
-    # near-black that is not a gruvbox color at all. Official Gruvbox Dark uses
-    # bg0 #282828 for the normal background, so base becomes bg0 and matches the
-    # window, which is the flat look the palette actually specifies.
-    #
-    # grey-750 is $surface and grey-850 is $menu: both sit *below* the window in
-    # the theme's depth model. morhetz defines exactly one background darker
-    # than bg0, the hard variant #1d2021, so all three recessed levels collapse
-    # onto it. That keeps every painted surface a real gruvbox color at the cost
-    # of one step of depth between surface and menu.
-    "#282524" = "#282828"; # grey-700 -> bg0
-    "#242220" = "#1d2021"; # grey-750 -> bg0_hard
-    "#211f1e" = "#1d2021"; # grey-800 -> bg0_hard (blackness tweak only)
-    "#141617" = "#1d2021"; # grey-850 -> bg0_hard
+    "#282524" = "#282828";
+    "#242220" = "#1d2021";
+    "#211f1e" = "#1d2021";
+    "#141617" = "#1d2021";
   };
 
-  # GTK 2 needs its own map, because its template is not painted the way it
-  # looks. gtkrc.sh treats certain hex values in themes/src/main/gtk-2.0 as
-  # placeholder *tokens* and substitutes the real color at build time
-  # (s/#1d2021/$background_dark/, s/#7daea3/$theme_color/, ...). Those
-  # substitutions are lowercase while the template is uppercase (#1D2021,
-  # #7DAEA3), so upstream's patterns never match and every one is a silent
-  # no-op: the installed gtkrc is the template verbatim. Two consequences:
-  #
-  #   - The Teal build's selection stays Material *blue* #7DAEA3, because the
-  #     token that was meant to become the accent is never substituted. So the
-  #     accent has to be written into the template directly.
-  #   - Reusing the map above here is actively harmful. It rewrites the tokens
-  #     inside gtkrc.sh's own sed patterns, which turns those dormant no-ops
-  #     into live substitutions. That is not hypothetical: mapping #282524 to
-  #     #282828 rewrote `s/#282524/$titlebar_dark/` into `s/#282828/...`, and
-  #     because #282828 is digits-only (case cannot save it) it then ate the
-  #     window background and replaced it with #1d2021.
-  #
-  # So: write final colors into the template, and never touch a token.
   gtk2Palette = {
-    "#F9F5D7" = "#fbf1c7"; # fg -> light0, matching theme_fg_color in GTK 3/4
-    "#1D2021" = "#282828"; # bg and base -> bg0 (this is the medium variant)
-    "#7DAEA3" = "#8ec07c"; # selection -> aqua, the accent upstream fails to set
-    "#80AA9E" = "#689d6a"; # selection variant -> neutral aqua
-    "#D386CD" = "#d3869b"; # purple
-    # #282828 (titlebar), #504945 (tooltip) and #3C3836 are already morhetz.
+    "#F9F5D7" = "#fbf1c7";
+    "#1D2021" = "#282828";
+    "#7DAEA3" = "#8ec07c";
+    "#80AA9E" = "#689d6a";
+    "#D386CD" = "#d3869b";
   };
 
   mkSed = args: builtins.concatStringsSep " " (builtins.attrValues args);
@@ -103,10 +35,6 @@ let
 
   gtk2SedArgs = mkSed (builtins.mapAttrs (from: to: "-e 's/${from}/${to}/gI'") gtk2Palette);
 
-  # For gtkrc.sh itself: recolor only its value assignments and skip any line
-  # that is a sed command, so the placeholder tokens in its patterns survive.
-  # The values are unused today (the patterns no-op), but this keeps the file
-  # self-consistent if upstream ever fixes the casing.
   gtkrcSedArgs = mkSed (
     builtins.mapAttrs (from: to: "-e '/sed -i/!s/${from}/${to}/gI'") palette
   );
@@ -142,8 +70,6 @@ in
         find themes/src/assets -name '*.svg' -exec sed -i ${sedArgs} {} +
       '';
 
-    # sass derives the shades, so the build can only be trusted if the compiled
-    # CSS actually changed. A green build otherwise proves nothing.
     postInstall =
       (old.postInstall or "")
       + ''
