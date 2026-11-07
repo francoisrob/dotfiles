@@ -53,29 +53,17 @@ in
     postPatch =
       (old.postPatch or "")
       + ''
-        # GTK 3 and GTK 4: sassc compiles these from the palette at install
-        # time, and every shade is derived from it with mix(), so this one file
-        # recolors the whole stylesheet including hover and active states.
         sed -i ${sedArgs} themes/src/sass/_color-palette-medium.scss
 
-        # GTK 2 is not built from sass; see gtk2Palette above for why it needs a
-        # different map and why the tokens must be left alone.
         find themes/src/main/gtk-2.0 -type f -exec sed -i ${gtk2SedArgs} {} +
         sed -i ${gtkrcSedArgs} themes/gtkrc.sh
 
-        # The gtk-3.0/gtk-4.0 assets carry no accent (verified: they are grey
-        # and black only), but the cinnamon/gnome-shell toggle and checkbox
-        # SVGs do. Neither desktop is installed, so this is only to stop the
-        # package shipping two different gruvboxes.
         find themes/src/assets -name '*.svg' -exec sed -i ${sedArgs} {} +
       '';
 
     postInstall =
       (old.postInstall or "")
       + ''
-        # Check the whole installed theme, not just the stylesheets: GTK 2 has
-        # its own hardcoded palette and was missed by an earlier version of this
-        # patch that only looked at the sass.
         for dead in 89b482 4c7a5d c14a4a ea6962 6c782e a9b665 b47109 d8a657 \
                     c35e0a e78a4e 45707a 7daea3 ab62b1 d386cd \
                     282524 242220 211f1e 141617; do
@@ -86,7 +74,6 @@ in
           fi
         done
 
-        # And the colors that should have replaced them must actually be there.
         for f in gtk-2.0/gtkrc gtk-3.0/gtk.css gtk-4.0/gtk.css; do
           for want in 8ec07c 282828; do
             if ! grep -qi "#$want" "$out/share/themes/${theme}/$f"; then

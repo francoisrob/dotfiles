@@ -17,7 +17,6 @@ from pathlib import Path
 
 NAME = "Gruvbox-Dark-Medium"
 
-# Gruvbox Dark, medium contrast (morhetz palette).
 BG0_H = "#1d2021"
 BG0 = "#282828"
 BG0_S = "#32302f"
@@ -27,18 +26,6 @@ BG3 = "#665c54"
 FG1 = "#ebdbb2"
 AQUA = "#8ec07c"
 
-# Surfaces drawn by the SVG. Only these four are retargeted:
-#   #232323  titlebar/menubar/dock chrome        (off-palette grey)
-#   #2e2e2e  button/lineedit/tooltip interiors   (off-palette grey)
-#   #665c54  accent surfaces ONLY, never generic borders: itemview-pressed and
-#            -toggled, button-toggled, combo-focused and -pressed, header-toggled,
-#            menubaritem-pressed, tab-toggled, slider-toggled, progress-normal,
-#            scrollbarslider-*, lineedit-focused, dial-handle
-#   #cfd8dc  menubaritem-focused, a KvAdapta leftover that is not a gruvbox color
-#
-# #b74aff is deliberately untouched: Kvantum reads menu-shadow-hint-* as a shadow
-# marker rather than a color to paint. The white fills on itemview-focused and
-# header-focused are 5% hover tints, not surfaces, so they stay too.
 SVG_COLORS = {
     "#232323": BG0,
     "#2e2e2e": BG1,
@@ -46,8 +33,6 @@ SVG_COLORS = {
     "#cfd8dc": AQUA,
 }
 
-# Qt palette roles, as a monotonic gruvbox ladder: dark < mid < button < midlight < light.
-# Upstream shipped mid.color as "##202324" (a double-hash typo Kvantum cannot parse).
 GENERAL_COLORS = {
     "window.color": BG0,
     "base.color": BG0,
@@ -62,8 +47,6 @@ GENERAL_COLORS = {
     "highlight.text.color": BG0,
 }
 
-# Text painted on a surface that is now aqua. Upstream set these light because the
-# accent used to be a dark brown; on light aqua they would be near-invisible.
 ON_ACCENT_TEXT = {
     "PanelButtonCommand": ["text.toggle.color"],
     "ComboBox": ["text.focus.color", "text.press.color"],
@@ -73,7 +56,6 @@ ON_ACCENT_TEXT = {
     "MenuBarItem": ["text.focus.color", "text.press.color"],
 }
 
-# Leftover KvAdapta color used as a text color rather than a surface.
 OTHER_TEXT = {
     "Progressbar": {"text.toggle.color": FG1},
 }
@@ -83,12 +65,10 @@ META = {
     "comment": "Gruvbox Dark, medium contrast (bg0 #282828) with aqua (#8ec07c) accents",
 }
 
-
 def recolor_svg(text):
     for old, new in SVG_COLORS.items():
         text = re.sub(re.escape(old), new, text, flags=re.IGNORECASE)
     return text
-
 
 def edit_kvconfig(text):
     """Rewrite the ini section-aware: the same key means different things per section."""
@@ -108,7 +88,6 @@ def edit_kvconfig(text):
     for line in text.splitlines():
         header = re.match(r"\[(.+)\]\s*$", line)
         if header:
-            # Flush any key the previous section was missing before leaving it.
             if section is not None:
                 for k, v in pending(section).items():
                     out.append(f"{k}={v}")
@@ -139,7 +118,6 @@ def edit_kvconfig(text):
             out.append(f"{k}={v}")
     return "\n".join(out) + "\n"
 
-
 def main():
     src, out = Path(sys.argv[1]), Path(sys.argv[2])
     out.mkdir(parents=True, exist_ok=True)
@@ -150,14 +128,12 @@ def main():
     (out / f"{NAME}.svg").write_text(recolor_svg(svg.read_text()))
     (out / f"{NAME}.kvconfig").write_text(edit_kvconfig(cfg.read_text()))
 
-    # Fail the build rather than ship a theme that silently lost its accent.
     written = (out / f"{NAME}.svg").read_text()
     for dead in SVG_COLORS:
         if re.search(re.escape(dead), written, re.IGNORECASE):
             sys.exit(f"recolor.py: {dead} survived in the SVG")
     if AQUA not in written:
         sys.exit("recolor.py: no aqua in the recolored SVG")
-
 
 if __name__ == "__main__":
     main()

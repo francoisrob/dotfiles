@@ -76,9 +76,6 @@ in {
         for dir in /tmp/hypr/*/; do
           hs=$(basename "$dir")
           if [ -S "/tmp/hypr/$hs/.socket.sock" ]; then
-            # Hyprland 0.56 dropped `hyprctl keyword` entirely ("unknown request")
-            # and made `hyprctl dispatch` evaluate its argument as Lua. Both calls
-            # go through the Lua API now.
             HYPRLAND_INSTANCE_SIGNATURE="$hs" \
               ${hyprland.hyprland}/bin/hyprctl eval 'hl.monitor({ output = "eDP-1", mode = "2560x1600@60", position = "0x0", scale = 1 })'
             HYPRLAND_INSTANCE_SIGNATURE="$hs" \

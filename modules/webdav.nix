@@ -64,7 +64,6 @@ in {
       chmod 0640 cert.pem.new key.pem.new
       mv -f key.pem.new key.pem
       mv -f cert.pem.new cert.pem
-      # --no-block: webdav is ordered after this unit, blocking would deadlock.
       systemctl try-restart --no-block webdav.service
     '';
   };
