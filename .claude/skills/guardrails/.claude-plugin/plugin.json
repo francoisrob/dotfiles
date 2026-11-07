@@ -1,0 +1,6 @@
+{
+  "name": "guardrails",
+  "version": "0.1.0",
+  "description": "Blocks outward actions until allowed, gate bypasses, env file moves, em dashes and stray scratch dirs; reports leftover worktrees and files",
+  "types": "./types/index.d.ts"
+}
