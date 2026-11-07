@@ -1,0 +1,1 @@
+Copied from paperclipai/paperclip tag nightly/v2026.1010.0-nightly.0 (ce024457f3d747657501fbcfe8eac71f6772150f), the version running on Tselio. Refresh when the server is upgraded.
