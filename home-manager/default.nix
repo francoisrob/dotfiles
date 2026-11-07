@@ -15,6 +15,7 @@ in {
   imports = [
     ./claude-remote-control.nix
     ./spotify-player.nix
+    ./ai.nix
   ];
 
   home = {
