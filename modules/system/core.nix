@@ -26,7 +26,6 @@
       MANPAGER = "nvim +Man!";
     };
     pathsToLink = ["/libexec"];
-    localBinInPath = true;
   };
 
   fileSystems."/".options = [

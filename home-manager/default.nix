@@ -12,6 +12,7 @@ in {
     ./claude-remote-control.nix
     ./spotify-player.nix
     ./ai.nix
+    ./session.nix
   ];
 
   home = {
@@ -93,6 +94,9 @@ in {
         enable = true;
       };
       package = pkgs.bibata-cursors;
+      hyprcursor = {
+        enable = true;
+      };
       name = "Bibata-Modern-Classic";
       size = 24;
     };

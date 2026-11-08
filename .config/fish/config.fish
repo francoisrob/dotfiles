@@ -2,7 +2,9 @@ set -g fish_greeting ""
 
 set fish_home ~/.config/fish
 
-fish_add_path --move --prepend --path "$HOME/.local/bin" "$HOME/.local/share/bin" "$HOME/.bun/bin" "$HOME/.pub-cache/bin" "$HOME/.cache/.bun/bin" "$HOME/.cargo/bin"
+if test -f ~/.nix-profile/etc/profile.d/hm-session-vars.fish
+    source ~/.nix-profile/etc/profile.d/hm-session-vars.fish
+end
 
 if test -f ~/.secrets.fish
     source ~/.secrets.fish
@@ -22,12 +24,8 @@ if status is-interactive
     end
 end
 
-if type -q mise
-    if status is-interactive
-        mise activate fish | source
-    else
-        mise activate fish --shims | source
-    end
+if status is-interactive; and type -q mise
+    mise activate fish | source
 end
 
 function dev-api -d "npm run dev-api in current directory"
