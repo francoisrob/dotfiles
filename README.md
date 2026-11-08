@@ -8,7 +8,7 @@ NixOS flake for two hosts (`laptop`, `minipc`), a standalone home-manager config
 - `hosts/<host>/`: host config and hardware
 - `modules/`: shared NixOS modules (`system/`, `hardware/`, `programs/`, `virtualisation/`, `development/`)
 - `home-manager/`: user packages and services
-- `.config/`, `.claude/`, `.pi/`, `.profile`, `.gitconfig`: stowed into `~`
+- `.config/`, `.claude/`, `.pi/`, `.profile`: stowed into `~`
 
 ## Commands
 

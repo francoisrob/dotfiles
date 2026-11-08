@@ -67,7 +67,6 @@ in {
       wl-clipboard
 
       ncdu
-      gh
       lazygit
       just
       uv
@@ -222,8 +221,21 @@ in {
         pull.rebase = true;
         push.autoSetupRemote = true;
       };
-      lfs = {
-        enable = true;
+      lfs.enable = true;
+      ignores = [
+        "**/.claude/settings.local.json"
+        "**/.claude/plans/"
+        "**/.claude/worktrees/"
+      ];
+    };
+    gh = {
+      enable = true;
+      gitCredentialHelper.enable = true;
+      settings = {
+        git_protocol = "https";
+        aliases = {
+          co = "pr checkout";
+        };
       };
     };
     mise = {
