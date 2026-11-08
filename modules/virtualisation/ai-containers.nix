@@ -8,24 +8,13 @@
         environment = {
           NODE_ENV = "production";
           PORT = "3001";
-          HOST_BIND = "127.0.0.1";
+          # HOST_BIND only applies to published Docker ports; with host networking HOST sets the listener.
+          HOST = "127.0.0.1";
+          ALLOWED_HOSTS = "freellmapi.francoisrob.me";
         };
         environmentFiles = ["/etc/freellmapi.env"];
         volumes = ["freellmapi_freellmapi-data:/app/server/data"];
         extraOptions = ["--network=host"];
-      };
-
-      open-webui = {
-        image = "ghcr.io/open-webui/open-webui:main";
-        environment = {
-          HOST = "127.0.0.1";
-          PORT = "3003";
-          OPENAI_API_BASE_URL = "http://127.0.0.1:3001/v1";
-        };
-        environmentFiles = ["/etc/open-webui.env"];
-        volumes = ["open-webui:/app/backend/data"];
-        extraOptions = ["--network=host"];
-        dependsOn = ["freellmapi"];
       };
     };
   };

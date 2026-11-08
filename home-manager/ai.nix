@@ -60,6 +60,42 @@
       done
     '';
   };
+
+  homeDir = config.home.homeDirectory;
+  isHub = hostName == "minipc";
+
+  # systemd user services start with a bare PATH; herdr panes and the Ovis plugin build need the login one.
+  agentPath = lib.concatStringsSep ":" (
+    map (d: "${homeDir}/${d}") [
+      ".pi/agent/bin"
+      ".local/share/mise/installs/bun/latest/bin"
+      ".local/share/mise/installs/node/latest/bin"
+      ".local/share/mise/shims"
+      ".local/bin"
+      ".local/share/bun/bin"
+      ".local/share/npm/bin"
+      ".cargo/bin"
+      ".nix-profile/bin"
+    ]
+    ++ [
+      "/run/wrappers/bin"
+      "/etc/profiles/per-user/${config.home.username}/bin"
+      "/nix/var/nix/profiles/default/bin"
+      "/run/current-system/sw/bin"
+    ]
+  );
+
+  # Push channel for Hermes. Users and tokens come from ~/.config/ntfy/secrets.env.
+  ntfyConfig = (pkgs.formats.yaml {}).generate "ntfy-server.yml" {
+    base-url = "https://ntfy.francoisrob.me";
+    listen-http = "127.0.0.1:2586";
+    behind-proxy = true;
+    cache-file = "${homeDir}/.local/state/ntfy-server/cache.db";
+    auth-file = "${homeDir}/.local/state/ntfy-server/user.db";
+    auth-default-access = "deny-all";
+    auth-access = ["francois:hermes:rw"];
+    enable-signup = false;
+  };
 in {
   imports = [inputs.hermes-agent.homeManagerModules.default];
 
@@ -68,12 +104,14 @@ in {
   services.hermes-agent = {
     enable = true;
     package = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.messaging;
-    # One Telegram bot can only be polled from one machine.
-    gateway.enable = hostName == "minipc";
+    # A messaging channel can only be served from one machine.
+    gateway.enable = isHub;
     settings = {
       model = {
         provider = "llamacpp";
         default = "Ornith-1.5-9B-Q5_K_M";
+        # llama-server's ctx-size; Hermes otherwise reads 262144 from the GGUF metadata.
+        context_length = 65536;
       };
       providers.llamacpp = {
         base_url = "http://127.0.0.1:3080/v1";
@@ -82,7 +120,7 @@ in {
       };
       memory.provider = "axiom";
     };
-    # TELEGRAM_BOT_TOKEN and TELEGRAM_ALLOWED_USERS, kept out of the repo.
+    # NTFY_* settings and token, kept out of the repo.
     environmentFiles = ["${config.home.homeDirectory}/.config/hermes/secrets.env"];
   };
 
@@ -94,7 +132,34 @@ in {
     pkgs.llama-cpp-vulkan
     pkgs.python3Packages.huggingface-hub
     scratchClean
+    pkgs.herdr
+    pkgs.ntfy-sh
   ];
+
+  # herdr server at boot without login; Ovis runs inside it as a herdr plugin.
+  systemd.user.services.herdr = lib.mkIf isHub {
+    Unit.Description = "herdr server (agent panes, Ovis plugin)";
+    Service = {
+      ExecStart = "${pkgs.herdr}/bin/herdr server";
+      WorkingDirectory = "%h/hub";
+      Environment = ["PATH=${agentPath}"];
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install.WantedBy = ["default.target"];
+  };
+
+  systemd.user.services.ntfy = lib.mkIf isHub {
+    Unit.Description = "ntfy push server (127.0.0.1:2586, tailnet via tailscale serve :9443)";
+    Service = {
+      ExecStart = "${pkgs.ntfy-sh}/bin/ntfy serve --config ${ntfyConfig}";
+      EnvironmentFile = "%h/.config/ntfy/secrets.env";
+      StateDirectory = "ntfy-server";
+      Restart = "on-failure";
+      RestartSec = 5;
+    };
+    Install.WantedBy = ["default.target"];
+  };
 
   systemd.user.tmpfiles.rules = ["d %h/hub/scratch/tmp 0700 - - -"];
 

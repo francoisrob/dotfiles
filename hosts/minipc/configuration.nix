@@ -32,6 +32,7 @@
     ../../modules/user.nix
 
     ../../modules/webdav.nix
+    ../../modules/web-proxy.nix
   ];
 
   systemd.targets = {
