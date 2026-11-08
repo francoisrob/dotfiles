@@ -12,10 +12,6 @@
     };
     supportedFilesystems = ["ntfs"];
     consoleLogLevel = 0;
-    initrd = {
-      verbose = false;
-      systemd.enable = true;
-    };
     kernel.sysctl."kernel.sysrq" = 1;
     kernelParams = [
       "quiet"
