@@ -36,9 +36,13 @@
   "terminal": {
     "showTerminalProgress": true
   },
-  "lastChangelogVersion": "1.3.0",
+  "lastChangelogVersion": "1.4.0",
   "npmCommand": [
     "npm",
     "--no-update-notifier"
-  ]
+  ],
+  "defaultProvider": "openrouter",
+  "defaultModel": "anthropic/claude-opus-5.5",
+  "steeringMode": "all",
+  "followUpMode": "all"
 }
