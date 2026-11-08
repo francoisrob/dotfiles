@@ -35,3 +35,14 @@ Root-only env files, created by hand before the first `make switch` on `minipc`:
 - `/etc/webdav.env`: `SEEDVAULT_PASSWORD=...`
 - `/etc/freellmapi.env`: `ENCRYPTION_KEY=...`
 - `/etc/open-webui.env`: `OPENAI_API_KEY=...`
+
+User-owned, created by hand when needed:
+
+- `~/.config/hermes/secrets.env`: messaging platform tokens for the Hermes gateway (`KEY=value` lines). `make home` merges it into `~/.hermes/.env`; a missing file only prints a warning.
+- `~/.config/axiom/tokens/hermes.token`: Hermes' axiom access token, minted on terraria (see `~/hub/README.md`).
+
+## AI services (`home-manager/ai.nix`)
+
+- `llama-server`: local models on `127.0.0.1:3080`.
+- `hermes-agent`: Hermes Agent gateway from the `hermes-agent` flake input (its home-manager module). The gateway runs on `minipc` only. `~/.hermes/config.yaml` is generated, so change settings here, not with `hermes config set`.
+- `scratch-clean`: daily timer that deletes `~/hub/scratch` entries not written for 60 days. Run `scratch-clean` for a dry run.

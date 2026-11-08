@@ -38,8 +38,6 @@
 
       authentication = lib.mkForce ''
         local all postgres            peer map=postgres
-        local all +axiom_login        scram-sha-256
-        host  all +axiom_login all    reject
         local all all                 peer
         host  all all 127.0.0.1/32    scram-sha-256
         host  all all ::1/128         scram-sha-256

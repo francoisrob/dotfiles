@@ -1,8 +1,13 @@
 {
   config,
+  lib,
   pkgs,
+  inputs,
+  hostName,
   ...
 }: let
+  scratchTmp = "${config.home.homeDirectory}/hub/scratch/tmp";
+
   modelsDir = "${config.home.homeDirectory}/.local/share/models";
 
   presets = pkgs.writeText "llama-models.ini" ''
@@ -37,7 +42,8 @@
       [ "''${1:-}" = "--delete" ] && delete=1
 
       units() {
-        find "$root" -mindepth 1 -maxdepth 1 ! -name claude-tmp ! -name tmp -print0
+        # README.md and .gitkeep are tracked in the hub repo.
+        find "$root" -mindepth 1 -maxdepth 1 ! -name claude-tmp ! -name tmp ! -name README.md ! -name .gitkeep -print0
         [ -d "$root/claude-tmp" ] && find "$root/claude-tmp" -mindepth 3 -maxdepth 3 -print0
         [ -d "$root/tmp" ] && find "$root/tmp" -mindepth 1 -maxdepth 1 -print0
         true
@@ -55,9 +61,39 @@
     '';
   };
 in {
+  imports = [inputs.hermes-agent.homeManagerModules.default];
+
+  programs.hermes-agent.enable = true;
+
+  services.hermes-agent = {
+    enable = true;
+    package = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.messaging;
+    # One Telegram bot can only be polled from one machine.
+    gateway.enable = hostName == "minipc";
+    settings = {
+      model = {
+        provider = "llamacpp";
+        default = "Ornith-1.5-9B-Q5_K_M";
+      };
+      providers.llamacpp = {
+        base_url = "http://127.0.0.1:3080/v1";
+        api_key = "local";
+        model = "Ornith-1.5-9B-Q5_K_M";
+      };
+      memory.provider = "axiom";
+    };
+    # TELEGRAM_BOT_TOKEN and TELEGRAM_ALLOWED_USERS, kept out of the repo.
+    environmentFiles = ["${config.home.homeDirectory}/.config/hermes/secrets.env"];
+  };
+
+  systemd.user.services.hermes-agent = lib.mkIf config.services.hermes-agent.gateway.enable {
+    Service.Environment = ["TMPDIR=${scratchTmp}"];
+  };
+
   home.packages = [
     pkgs.llama-cpp-vulkan
     pkgs.python3Packages.huggingface-hub
+    scratchClean
   ];
 
   systemd.user.tmpfiles.rules = ["d %h/hub/scratch/tmp 0700 - - -"];
