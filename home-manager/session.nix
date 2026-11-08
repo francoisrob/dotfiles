@@ -35,9 +35,9 @@ in {
   home.sessionVariables = variables;
   home.packages = [fishSessionVars];
 
-  systemd.user.sessionVariables =
-    variables
-    // {
-      PATH = "${lib.concatStringsSep ":" path}:$PATH";
-    };
+  systemd.user.sessionVariables = variables;
+
+  xdg.configFile."environment.d/60-home-manager-path.conf".text = ''
+    PATH=${lib.concatStringsSep ":" path}:$PATH
+  '';
 }
