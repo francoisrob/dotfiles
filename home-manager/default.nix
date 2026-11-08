@@ -244,22 +244,18 @@ in {
     };
     mise = {
       enable = true;
-      enableFishIntegration = true;
     };
     fzf = {
       enable = true;
-      enableFishIntegration = true;
       defaultCommand = "fd --type file --follow --hidden --exclude .git";
       changeDirWidget.command = "fd --type directory --follow --hidden --exclude .git";
       fileWidget.command = "fd --type file --follow --hidden --exclude .git";
     };
     zoxide = {
       enable = true;
-      enableFishIntegration = true;
     };
     starship = {
       enable = true;
-      enableFishIntegration = true;
     };
     direnv = {
       enable = true;
