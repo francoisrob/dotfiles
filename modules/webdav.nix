@@ -4,7 +4,7 @@
   hostName,
   ...
 }: let
-  tailscaleIp = "100.116.70.67";
+  tailscaleIp = config.custom.tailnetIp;
   domain = "${hostName}.taile52872.ts.net";
   port = 8080;
   certDir = "/var/lib/webdav-cert";
