@@ -16,16 +16,15 @@
       MaxUse = "2G";
     };
     tmpfiles.rules = ["w /sys/kernel/mm/lru_gen/min_ttl_ms - - - - 1000"];
-    oomd = {
-      enable = true;
-      enableRootSlice = false;
-      enableSystemSlice = false;
-      enableUserSlices = false;
-      settings.OOM.SwapUsedLimit = "70%";
-    };
-    slices."-".sliceConfig.ManagedOOMSwap = "kill";
+    # earlyoom is the only memory killer. systemd-oomd kills a whole service at once, so one
+    # runaway test inside herdr.service took every agent pane down with it.
+    oomd.enable = false;
   };
 
+  # Kills one process at a time, picked by the kernel's badness score (which already includes each
+  # unit's OOMScoreAdjust), adjusted by these lists. The lists match the process name (comm, at most
+  # 15 characters) and cover system daemons and the desktop. Agents are protected by OOMScoreAdjust
+  # on their units (herdr, claude-remote-control, hermes-agent), not by name.
   services.earlyoom = {
     enable = true;
     freeMemThreshold = tuning.earlyoomMemThreshold;
@@ -34,10 +33,14 @@
     freeSwapKillThreshold = 25;
     enableNotifications = true;
     extraArgs = [
+      # Never killed: herdr keeps the agent panes, tailscale and ntfy are how the phone reaches this machine.
+      "--ignore"
+      "^(herdr|[.]tailscaled-wra|ntfy)$"
+      # Killed last: system daemons and the desktop.
       "--avoid"
-      "^(systemd|systemd-oomd|earlyoom|dbus-broker|sshd|greetd|\\.Hyprland-wrapp|\\.kitty-wrapped)$"
+      "^(systemd|earlyoom|dbus-broker|sshd|greetd|[.]Hyprland-wrapp|[.]kitty-wrapped)$"
       "--prefer"
-      "^(chromium|node|electron|\\.electron-wrappe|java|rustc|cargo|clangd|mongod)$"
+      "^(chromium|node|electron|[.]electron-wrappe|java|rustc|cargo|clangd|mongod)$"
     ];
   };
 

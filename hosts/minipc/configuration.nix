@@ -15,6 +15,7 @@
     ../../modules/system/core.nix
     ../../modules/system/nix.nix
     ../../modules/system/memory.nix
+    ../../modules/system/kill-alerts.nix
     ../../modules/system/security.nix
     ../../modules/system/fonts.nix
     ../../modules/system/graphics.nix

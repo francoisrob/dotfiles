@@ -18,6 +18,11 @@ in {
 
       Restart = "always";
       RestartSec = 10;
+      # A memory kill of one remote session must not stop the server and every other session.
+      OOMPolicy = "continue";
+      # The lowest a user unit can go (the user manager itself runs at 100, services default to 200).
+      # Every session this server starts inherits it, so earlyoom picks other processes first.
+      OOMScoreAdjust = 100;
     };
 
     Install = {
