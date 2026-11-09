@@ -11,8 +11,6 @@
   modelsDir = "${config.home.homeDirectory}/.local/share/models";
 
   serverCtx = 65536;
-  # Hermes counts tokens approximately and a reply needs room: it plans for a smaller window than the server's.
-  hermesCtx = serverCtx - 8192;
 
   presets = pkgs.writeText "llama-models.ini" ''
     version = 1
@@ -130,7 +128,7 @@ in {
         provider = "llamacpp";
         default = "Ornith-1.5-9B-Q5_K_M";
         # Hermes otherwise reads 262144 from the GGUF metadata.
-        context_length = hermesCtx;
+        context_length = serverCtx;
       };
       providers.llamacpp = {
         base_url = "http://127.0.0.1:3080/v1";
@@ -154,7 +152,8 @@ in {
           idempotent_no_progress = 5;
         };
       };
-      # Compress at 42000 tokens (of hermesCtx), well before the server's window fills.
+      # Hermes requires a window of at least 64000, so the margin comes from compressing at 42000 tokens,
+      # well before the server window fills.
       compression = {
         threshold_tokens = 42000;
         context_timeout_seconds = 300;
