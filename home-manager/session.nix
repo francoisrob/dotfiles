@@ -13,6 +13,7 @@
     "${data}/bun/bin"
     "${data}/npm/bin"
     "${home}/.cargo/bin"
+    "${home}/.grok/bin"
   ];
 
   variables = {
