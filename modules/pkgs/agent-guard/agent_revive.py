@@ -13,6 +13,9 @@ It never touches a chat that ended any other way (you quit it, it crashed on its
 that was closed, or a pane where something else is already running. A pane that keeps getting
 killed is given up on after a few tries, so it cannot loop.
 
+It also links Hermes chats to their session (see hermes_link), since herdr's Hermes plugin cannot
+while the Hermes gateway runs the sessions. That is what gives Hermes panes a session to resume.
+
 Outcomes go to the journal with a syslog priority prefix; kill-alerts forwards the notices.
 """
 
@@ -20,13 +23,14 @@ import argparse
 import json
 import os
 import select
-import socket
 import subprocess
 import sys
 import threading
 import time
 from dataclasses import dataclass, field
 
+from herdr_api import HerdrClient, HerdrError
+from hermes_link import HermesLinker
 from oomkill import JOURNAL_FILTERS, parse_kill
 
 # Resume arguments per herdr agent kind, from herdr's native session restore table.
@@ -67,42 +71,6 @@ NO_RELAUNCH = {
 
 def log(level, text):
     print(f"{level}{text}", flush=True)
-
-
-class HerdrError(Exception):
-    pass
-
-
-class HerdrClient:
-    """Minimal client for herdr's JSON-lines socket API."""
-
-    def __init__(self, path):
-        self.path = path
-        self._seq = 0
-
-    def request(self, method, params=None, timeout=10.0):
-        self._seq += 1
-        req = {"id": f"agent-revive:{os.getpid()}:{self._seq}", "method": method, "params": params or {}}
-        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
-            s.settimeout(timeout)
-            try:
-                s.connect(self.path)
-                s.sendall((json.dumps(req) + "\n").encode())
-                data = b""
-                while not data.endswith(b"\n"):
-                    chunk = s.recv(65536)
-                    if not chunk:
-                        break
-                    data += chunk
-            except OSError as err:
-                raise HerdrError(f"{method}: {err}") from err
-        try:
-            reply = json.loads(data)
-        except json.JSONDecodeError as err:
-            raise HerdrError(f"{method}: unreadable reply") from err
-        if "error" in reply:
-            raise HerdrError(f"{method}: {reply['error'].get('message', reply['error'])}")
-        return reply.get("result", {})
 
 
 @dataclass(frozen=True)
@@ -156,8 +124,9 @@ class Tracker:
         self.by_pid = {}
         self.lock = threading.Lock()
 
-    def refresh(self):
-        agents = self.herdr.request("agent.list").get("agents", [])
+    def refresh(self, agents=None):
+        if agents is None:
+            agents = self.herdr.request("agent.list").get("agents", [])
         now = self.clock()
         found = {}
         for agent in agents:
@@ -373,6 +342,7 @@ def handle_line(line, tracker, start_revive):
 def run(args):
     herdr = HerdrClient(args.socket)
     tracker = Tracker(herdr)
+    linker = HermesLinker(herdr, os.path.join(args.hermes_home, "terminal-sessions"), log=log)
     reviver = Reviver(herdr, Settings(min_available=args.min_available))
 
     def start_revive(target, kill):
@@ -385,7 +355,8 @@ def run(args):
         now = time.monotonic()
         if now >= next_refresh:
             try:
-                tracker.refresh()
+                agents = herdr.request("agent.list").get("agents", [])
+                tracker.refresh(linker.sync(agents))
                 if herdr_down:
                     log(INFO, "herdr is reachable again")
                 herdr_down = False
@@ -412,6 +383,11 @@ def main(argv=None):
     parser.add_argument(
         "--socket",
         default=os.environ.get("HERDR_SOCKET_PATH") or os.path.expanduser("~/.config/herdr/herdr.sock"),
+    )
+    parser.add_argument(
+        "--hermes-home",
+        default=os.environ.get("HERMES_HOME") or os.path.expanduser("~/.hermes"),
+        help="Hermes home directory, for its per-terminal session breadcrumbs",
     )
     parser.add_argument("--refresh", type=float, default=3.0, help="seconds between agent map refreshes")
     parser.add_argument("--min-available", type=float, default=0.20, help="free memory fraction to wait for")

@@ -15,6 +15,6 @@ in
     passthru.python = python3;
   } ''
     cp ${src}/*.py .
-    python3 -B -m unittest -v test_kill_alerts test_agent_revive
-    install -Dm644 -t $out/lib oomkill.py kill_alerts.py agent_revive.py
+    python3 -B -m unittest -v test_kill_alerts test_agent_revive test_hermes_link
+    install -Dm644 -t $out/lib oomkill.py herdr_api.py hermes_link.py kill_alerts.py agent_revive.py
   ''

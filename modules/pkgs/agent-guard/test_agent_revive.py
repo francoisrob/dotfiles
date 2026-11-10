@@ -66,6 +66,13 @@ class TrackerTest(unittest.TestCase):
         self.starts = {}
         self.tracker = ar.Tracker(self.herdr, clock=self.clock, linger=300, start_of=lambda pid: self.starts.get(pid, 1))
 
+    def test_uses_given_agent_list_such_as_one_with_linked_hermes_sessions(self):
+        self.herdr.agents = []  # agent.list would report nothing
+        self.herdr.panes = {"wV:p1": [proc_info(77, "hermes")]}
+        given = [agent("wV:p1", name="hermes", kind="hermes", session="local-abc")]
+        self.assertEqual(self.tracker.refresh(given), 1)
+        self.assertEqual(self.tracker.lookup(77).resume_args(), ["--resume", "local-abc"])
+
     def test_maps_agent_process_to_its_chat(self):
         self.herdr.agents = [agent("wF:p1")]
         self.herdr.panes = {"wF:p1": [proc_info(4242, "claude")]}
