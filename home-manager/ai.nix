@@ -160,6 +160,8 @@ in {
         context_total_ceiling_seconds = 1200;
       };
       plugins.enabled = ["herdr-agent-state"];
+      # Nix supplies every tool Hermes runs; its own downloads (e.g. a Chromium) cannot run on NixOS.
+      security.allow_lazy_installs = false;
       # The full default bundle on both channels. Set explicitly: the config merge keeps old keys.
       platform_toolsets = {
         cli = ["hermes-cli"];
