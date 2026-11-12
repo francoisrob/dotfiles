@@ -121,6 +121,8 @@ in {
   services.hermes-agent = {
     enable = true;
     package = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.messaging;
+    # Local speech-to-text (faster-whisper); lazy installs are off, so Nix must supply it.
+    extraDependencyGroups = ["stt-whisper"];
     # A messaging channel can only be served from one machine.
     gateway.enable = isHub;
     settings = {
@@ -185,6 +187,13 @@ in {
       SuccessExitStatus = [1 75];
       RestartForceExitStatus = [75];
     };
+  };
+
+  # A stable path to Nix's bun for Ovis' Claude status-line capture helper. Ovis bakes the bun path
+  # into ~/.claude/herdr-statusline/statusline-tee.sh when the helper is installed; a store path
+  # would break once bun updates and the old one is garbage-collected.
+  home.file.".local/share/ovis/bun" = lib.mkIf isHub {
+    source = "${pkgs.bun}/bin/bun";
   };
 
   home.packages = [
